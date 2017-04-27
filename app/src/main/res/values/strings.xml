@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">honsulnamnye</string>
+    <string name="fb_login_protocol_scheme">fblogin</string>
+
+    <string name="app_name">혼술남녀</string>
     <string name="action_settings">Settings</string>
 
     <string name="facebook_app_id">745752162261014</string>
+    <string name="hint_input_email">이메일을 입력하세요</string>
+    <string name="hint_input_pwd">패스워드를 입력하세요</string>
+
+    <string name="sign_in_with_email">이메일로 로그인</string>
+    <string name="sign_in_with_facebook">페이스북으로 로그인</string>
+    <string name="sign_in_with_google">구글로 로그인</string>
 </resources>

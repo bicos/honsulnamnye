@@ -4,14 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <fragment
+        android:id="@+id/container_splash"
+        android:name="com.obppamanse.honsulnamnye.user.SignInFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="혼술남녀"
-        android:textSize="50sp"
-        android:textStyle="bold" />
-
-
+        android:layout_height="match_parent" />
 
 </LinearLayout>
