@@ -1,13 +1,18 @@
 package com.obppamanse.honsulnamnye.user;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.AuthCredential;
+import com.obppamanse.honsulnamnye.MainActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 
 /**
@@ -51,5 +56,25 @@ public class SignInFragment extends Fragment implements SignInContract.View {
         if (model != null) {
             model.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public void startMainActivity() {
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showUserNotFoundAlertDialog(DialogInterface.OnClickListener positiveClickListener) {
+        new AlertDialog.Builder(getActivity())
+                .setMessage("해당 유저는 혼술남녀에 가입되어 있지 않습니다. 가입 화면으로 이동하시겠습니까?")
+                .setPositiveButton("확인", positiveClickListener)
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+    @Override
+    public void startSignUpActivity(AuthCredential credential) {
+
     }
 }

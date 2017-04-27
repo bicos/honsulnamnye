@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -15,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,7 +27,7 @@ import java.util.Arrays;
  * Created by raehyeong.park on 2017. 4. 26..
  */
 
-public class SignInModel implements SignInContract.Model, OnCompleteListener<AuthResult> {
+public class SignInModel implements SignInContract.Model {
 
     private String email;
 
@@ -57,14 +60,14 @@ public class SignInModel implements SignInContract.Model, OnCompleteListener<Aut
             @Override
             public void onCancel() {
                 if (listener != null) {
-                    listener.onFailed(new FacebookOperationCanceledException());
+                    listener.onFailed(null, new FacebookOperationCanceledException());
                 }
             }
 
             @Override
             public void onError(FacebookException error) {
                 if (listener != null) {
-                    listener.onFailed(error);
+                    listener.onFailed(null, error);
                 }
             }
         });
@@ -94,6 +97,24 @@ public class SignInModel implements SignInContract.Model, OnCompleteListener<Aut
     @Override
     public void signInWithEmail(SignInCompleteListener listener) {
         this.listener = listener;
+
+        if (TextUtils.isEmpty(email)) {
+            listener.onFailed(null, new SignInContract.EmailIsEmptyException());
+            return;
+        }
+
+        if (TextUtils.isEmpty(password)) {
+            listener.onFailed(null, new SignInContract.PasswordIdEmptyException());
+            return;
+        }
+
+        if (!email.contains("@")) {
+            listener.onFailed(null, new SignInContract.EmailNotValidException());
+            return;
+        }
+
+        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        requestSignIn(credential);
     }
 
     @Override
@@ -101,27 +122,27 @@ public class SignInModel implements SignInContract.Model, OnCompleteListener<Aut
         manager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void requestSignIn(AuthCredential authCredential) {
-        auth.signInWithCredential(authCredential).addOnCompleteListener(fragment.getActivity(), this);
-    }
+    private void requestSignIn(final AuthCredential authCredential) {
+        auth.signInWithCredential(authCredential).addOnCompleteListener(fragment.getActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (listener == null) {
+                    return;
+                }
 
-    @Override
-    public void onComplete(@NonNull Task<AuthResult> task) {
-        if (listener == null) {
-            return;
-        }
-
-        if (task.isSuccessful()) {
-            listener.onSuccess();
-        } else {
-            listener.onFailed(task.getException());
-        }
+                if (task.isSuccessful()) {
+                    listener.onSuccess();
+                } else {
+                    listener.onFailed(authCredential, task.getException());
+                }
+            }
+        });
     }
 
     public interface SignInCompleteListener {
 
         void onSuccess();
 
-        void onFailed(Exception e);
+        void onFailed(AuthCredential authCredential, Exception e);
     }
 }
