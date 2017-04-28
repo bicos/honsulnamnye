@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuthException;
 
 /**
@@ -35,21 +34,20 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
         }
     }
 
-    public void clickLoginWithEmail(){
-        model.signInWithEmail(this);
+    public void clickLoginWithEmail() {
+        model.signInWithEmail(view.getFragment(), this);
     }
 
-    public void clickLoginWithFacebook(){
-        model.signInWithFacebook(this);
+    public void clickLoginWithFacebook() {
+        model.signInWithFacebook(view.getFragment(), this);
     }
 
-    public void clickLoginWithGoogle(){
-        model.signInWithGoogle(this);
+    public void clickLoginWithGoogle() {
+        model.signInWithGoogle(view.getFragment(), this);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // facebook callback listener
-        model.onActivityResult(requestCode, resultCode, data);
+        model.onActivityResult(view.getFragment(), requestCode, resultCode, data);
     }
 
     /**
@@ -66,17 +64,17 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
      * @param e
      */
     @Override
-    public void onFailed(final AuthCredential credential, Exception e) {
+    public void onFailed(Exception e) {
         if (e instanceof FirebaseAuthException) {
             switch (((FirebaseAuthException) e).getErrorCode()) {
                 case "ERROR_USER_NOT_FOUND":
                     view.showUserNotFoundAlertDialog(new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            view.startSignUpActivity(credential);
+                            view.startSignUpActivity();
                         }
                     });
-                break;
+                    break;
             }
         }
         Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();

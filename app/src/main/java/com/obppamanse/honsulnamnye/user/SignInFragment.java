@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.user;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.AuthCredential;
 import com.obppamanse.honsulnamnye.MainActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 
@@ -40,7 +38,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentSignInBinding binding = FragmentSignInBinding.inflate(inflater, container, false);
 
-        model = new SignInViewModel(this, new SignInModel(this));
+        model = new SignInViewModel(this, new SignInModel());
         binding.setViewModel(model);
 
         return binding.getRoot();
@@ -74,7 +72,12 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     @Override
-    public void startSignUpActivity(AuthCredential credential) {
+    public void startSignUpActivity() {
 
+    }
+
+    @Override
+    public Fragment getFragment() {
+        return this;
     }
 }

@@ -11,7 +11,9 @@ import android.view.ViewGroup;
  * Created by raehyeong.park on 2017. 4. 27..
  */
 
-public class SignUpFragment extends Fragment {
+public class SignUpFragment extends Fragment implements SignUpContract.View {
+
+    private static final String ARG_AUTH_INFO = "auth_info";
 
     public static SignUpFragment newInstance() {
 

@@ -3,6 +3,7 @@ package com.obppamanse.honsulnamnye.user;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 import com.google.firebase.auth.AuthCredential;
 
@@ -20,7 +21,9 @@ public class SignInContract {
 
         void showUserNotFoundAlertDialog(DialogInterface.OnClickListener positiveClickListener);
 
-        void startSignUpActivity(AuthCredential credential);
+        void startSignUpActivity();
+
+        Fragment getFragment();
     }
 
     public interface Model {
@@ -29,13 +32,13 @@ public class SignInContract {
 
         void setPassword(String password);
 
-        void signInWithFacebook(SignInModel.SignInCompleteListener listener);
+        void signInWithFacebook(Fragment fragment, SignInModel.SignInCompleteListener listener);
 
-        void signInWithGoogle(SignInModel.SignInCompleteListener listener);
+        void signInWithGoogle(Fragment fragment, SignInModel.SignInCompleteListener listener);
 
-        void signInWithEmail(SignInModel.SignInCompleteListener listener);
+        void signInWithEmail(Fragment fragment, SignInModel.SignInCompleteListener listener);
 
-        void onActivityResult(int requestCode, int resultCode, Intent data);
+        void onActivityResult(Fragment fragment, int requestCode, int resultCode, Intent data);
     }
 
     public static class EmailNotValidException extends Exception {
@@ -56,6 +59,27 @@ public class SignInContract {
         @Override
         public String getMessage() {
             return "패스워드를 입력해주세요.";
+        }
+    }
+
+    public static class SignInCancelException extends Exception {
+        @Override
+        public String getMessage() {
+            return "로그인을 취소하였습니다.";
+        }
+    }
+
+    public static class SignInFailedException extends Exception {
+
+        private String extraInfo;
+
+        public SignInFailedException(String extraInfo) {
+            this.extraInfo = extraInfo;
+        }
+
+        @Override
+        public String getMessage() {
+            return "로그인을 실패하였습니다. 원인[" + extraInfo + "]";
         }
     }
 }
