@@ -9,8 +9,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.MainActivity;
+import com.obppamanse.honsulnamnye.SignUpActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 
 /**
@@ -73,11 +75,17 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @Override
     public void startSignUpActivity() {
-
+        Intent intent = new Intent(getActivity(), SignUpActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public Fragment getFragment() {
         return this;
+    }
+
+    @Override
+    public void showException(Exception e) {
+        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by raehyeong.park on 2017. 4. 25..
@@ -24,6 +25,8 @@ public class SignInContract {
         void startSignUpActivity();
 
         Fragment getFragment();
+
+        void showException(Exception e);
     }
 
     public interface Model {
@@ -39,6 +42,10 @@ public class SignInContract {
         void signInWithEmail(Fragment fragment, SignInModel.SignInCompleteListener listener);
 
         void onActivityResult(Fragment fragment, int requestCode, int resultCode, Intent data);
+
+        void requestSignUp(Fragment fragment, SignInModel.SignInCompleteListener listener);
+
+        void isUserSignedUp(ValueEventListener listener);
     }
 
     public static class EmailNotValidException extends Exception {

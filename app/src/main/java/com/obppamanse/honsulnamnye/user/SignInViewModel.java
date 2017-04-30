@@ -3,9 +3,11 @@ package com.obppamanse.honsulnamnye.user;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by raehyeong.park on 2017. 4. 26..
@@ -50,12 +52,30 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
         model.onActivityResult(view.getFragment(), requestCode, resultCode, data);
     }
 
+    private void startSignUp(){
+        model.requestSignUp(view.getFragment(), this);
+    }
+
     /**
-     * 로그인 성공
+     * 로그인 및 간이 회원가입 성공
      */
     @Override
     public void onSuccess() {
-        view.startMainActivity();
+        model.isUserSignedUp(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    view.startMainActivity();
+                } else {
+                    view.startSignUpActivity();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                view.startSignUpActivity();
+            }
+        });
     }
 
     /**
@@ -71,12 +91,13 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
                     view.showUserNotFoundAlertDialog(new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            view.startSignUpActivity();
+                            startSignUp();
                         }
                     });
                     break;
             }
+        } else {
+            view.showException(e);
         }
-        Toast.makeText(view.getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

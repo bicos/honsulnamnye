@@ -23,8 +23,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.R;
+import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 
 import java.util.Arrays;
 
@@ -168,19 +172,50 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
     private void requestSignIn(Fragment fragment, final AuthCredential authCredential) {
         auth.signInWithCredential(authCredential)
                 .addOnCompleteListener(fragment.getActivity(), new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (listener == null) {
-                    return;
-                }
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (listener == null) {
+                            return;
+                        }
 
-                if (task.isSuccessful()) {
-                    listener.onSuccess();
-                } else {
-                    listener.onFailed(task.getException());
-                }
-            }
-        });
+                        if (task.isSuccessful()) {
+                            listener.onSuccess();
+                        } else {
+                            listener.onFailed(task.getException());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void requestSignUp(Fragment fragment, final SignInCompleteListener listener) {
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(fragment.getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (listener != null) {
+                            if (task.isSuccessful()) {
+                                listener.onSuccess();
+                            } else {
+                                listener.onFailed(task.getException());
+                            }
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void isUserSignedUp(ValueEventListener listener) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            FirebaseUtils.getUserRef()
+                    .child(user.getUid())
+                    .addListenerForSingleValueEvent(listener);
+        } else {
+            listener.onCancelled(DatabaseError.fromException(
+                    new SignInContract.SignInFailedException("일시적 오류")
+            ));
+        }
     }
 
     @Override
