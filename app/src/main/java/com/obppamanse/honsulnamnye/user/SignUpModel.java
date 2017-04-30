@@ -60,17 +60,17 @@ public class SignUpModel implements SignUpContract.Model {
     }
 
     private void requestUpdateOptionalData(Activity activity, final SignUpContract.SignUpCompleteListener listener) {
-        FirebaseUtils.getUserRef().child(firebaseUser.getUid()).push()
-                .setValue(userInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    listener.onSuccess();
-                } else {
-                    listener.onFailed(task.getException());
-                }
-            }
-        });
+        FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(userInfo)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            listener.onSuccess();
+                        } else {
+                            listener.onFailed(task.getException());
+                        }
+                    }
+                });
     }
 
     @Override
