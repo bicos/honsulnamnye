@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -32,23 +33,44 @@ public class SignUpModel implements SignUpContract.Model {
     }
 
     @Override
-    public void requestSignUp(Activity activity, final SignUpContract.SignUpCompleteListener listener) {
+    public void requestSignUp(final Activity activity, final SignUpContract.SignUpCompleteListener listener) {
+        if (TextUtils.isEmpty(userInfo.nickName)) {
+            listener.onFailed(new SignUpContract.NotSignedUpException());
+            return;
+        }
 
         UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder()
-                .setDisplayName(userInfo.nickName)
-                .setPhotoUri(Uri.parse(userInfo.profileUri));
+                .setDisplayName(userInfo.nickName);
+
+        if (!TextUtils.isEmpty(userInfo.profileUri)) { // 필수정보는 아님
+            builder.setPhotoUri(Uri.parse(userInfo.profileUri));
+        }
 
         firebaseUser.updateProfile(builder.build())
                 .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            listener.onSuccess();
+                            requestUpdateOptionalData(activity, listener);
                         } else {
                             listener.onFailed(task.getException());
                         }
                     }
                 });
+    }
+
+    private void requestUpdateOptionalData(Activity activity, final SignUpContract.SignUpCompleteListener listener) {
+        FirebaseUtils.getUserRef().child(firebaseUser.getUid()).push()
+                .setValue(userInfo).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    listener.onSuccess();
+                } else {
+                    listener.onFailed(task.getException());
+                }
+            }
+        });
     }
 
     @Override

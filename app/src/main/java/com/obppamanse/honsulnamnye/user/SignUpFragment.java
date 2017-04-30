@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.user;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.obppamanse.honsulnamnye.MainActivity;
+import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignUpBinding;
 
 /**
@@ -18,7 +19,11 @@ import com.obppamanse.honsulnamnye.databinding.FragmentSignUpBinding;
 
 public class SignUpFragment extends Fragment implements SignUpContract.View {
 
+    public static final int REQUEST_CODE_PICK_IMAGE = 1000;
+
     private static final String ARG_AUTH_INFO = "auth_info";
+
+    private SignUpViewModel signUpViewModel;
 
     public static SignUpFragment newInstance() {
 
@@ -36,7 +41,10 @@ public class SignUpFragment extends Fragment implements SignUpContract.View {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentSignUpBinding binding = FragmentSignUpBinding.inflate(inflater, container, false);
-        binding.setViewModel(new SignUpViewModel(this));
+
+        signUpViewModel = new SignUpViewModel(this);
+        binding.setViewModel(signUpViewModel);
+
         return binding.getRoot();
     }
 
@@ -52,7 +60,27 @@ public class SignUpFragment extends Fragment implements SignUpContract.View {
 
     @Override
     public void startMainActivity() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        SplashActivity.startMainActivity(getActivity());
+    }
+
+    @Override
+    public void chooseProfileImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "이미지 선택"), REQUEST_CODE_PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_PICK_IMAGE) {
+            if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+                signUpViewModel.setProfileImage(data.getData());
+            } else {
+                Toast.makeText(getContext(), "프로필 이미지 불러오기를 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

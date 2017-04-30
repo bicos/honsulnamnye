@@ -17,6 +17,8 @@ public class SignUpContract {
         void showException(Exception e);
 
         void startMainActivity();
+
+        void chooseProfileImage();
     }
 
     public interface Model {
@@ -39,6 +41,13 @@ public class SignUpContract {
         void onSuccess();
 
         void onFailed(Exception e);
+    }
+
+    public static class NickNameIsEmptyException extends Exception {
+        @Override
+        public String getMessage() {
+            return "닉네임을 입력하여 주세요.";
+        }
     }
 
     public static class NotSignedUpException extends Exception {

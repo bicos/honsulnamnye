@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.MainActivity;
 import com.obppamanse.honsulnamnye.SignUpActivity;
+import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 
 /**
@@ -60,8 +61,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @Override
     public void startMainActivity() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        startActivity(intent);
+        SplashActivity.startMainActivity(getActivity());
     }
 
     @Override

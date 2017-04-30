@@ -1,10 +1,13 @@
 package com.obppamanse.honsulnamnye.user;
 
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.net.Uri;
 import android.widget.ImageView;
 
+import com.android.databinding.library.baseAdapters.BR;
 import com.bumptech.glide.Glide;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
@@ -57,6 +60,10 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
         model.requestSignUp(view.getActivity(), this);
     }
 
+    public void clickProfileImage() {
+        view.chooseProfileImage();
+    }
+
     @Override
     public void onSuccess() {
         view.startMainActivity();
@@ -65,5 +72,10 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
     @Override
     public void onFailed(Exception e) {
         view.showException(e);
+    }
+
+    public void setProfileImage(Uri profileImage) {
+        model.setProfileUri(profileImage.toString());
+        notifyPropertyChanged(BR.profileUri);
     }
 }

@@ -76,7 +76,6 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
     @Override
     public void signInWithFacebook(final Fragment fragment, final SignInCompleteListener listener) {
         this.listener = listener;
-        facebookLoginManager.logInWithReadPermissions(fragment, Arrays.asList("email", "public_profile"));
         facebookLoginManager.registerCallback(manager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -98,6 +97,7 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
                 }
             }
         });
+        facebookLoginManager.logInWithReadPermissions(fragment, Arrays.asList("email", "public_profile"));
     }
 
     @Override

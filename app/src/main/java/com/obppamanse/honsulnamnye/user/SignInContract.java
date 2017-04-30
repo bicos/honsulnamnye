@@ -1,11 +1,9 @@
 package com.obppamanse.honsulnamnye.user;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.database.ValueEventListener;
 
 /**
@@ -15,8 +13,6 @@ import com.google.firebase.database.ValueEventListener;
 public class SignInContract {
 
     public interface View {
-
-        Context getContext();
 
         void startMainActivity();
 
