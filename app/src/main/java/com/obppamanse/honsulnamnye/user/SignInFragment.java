@@ -34,6 +34,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     public SignInFragment() {
+
     }
 
     @Nullable

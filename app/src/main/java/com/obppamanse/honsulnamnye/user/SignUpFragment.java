@@ -40,11 +40,9 @@ public class SignUpFragment extends Fragment implements SignUpContract.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentSignUpBinding binding = FragmentSignUpBinding.inflate(inflater, container, false);
-
-        signUpViewModel = new SignUpViewModel(this);
+        final FragmentSignUpBinding binding = FragmentSignUpBinding.inflate(inflater, container, false);
+        signUpViewModel = new SignUpViewModel(this, new SignUpModel());
         binding.setViewModel(signUpViewModel);
-
         return binding.getRoot();
     }
 

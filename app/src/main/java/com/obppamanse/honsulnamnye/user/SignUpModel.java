@@ -10,6 +10,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
@@ -23,13 +25,14 @@ public class SignUpModel implements SignUpContract.Model {
 
     private UserInfo userInfo;
 
-    public SignUpModel(SignUpContract.SignUpCompleteListener listener) {
-        this.firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        this.userInfo = new UserInfo(firebaseUser);
+    private StorageReference profileStorage;
 
-        if (listener != null && firebaseUser == null) {
-            listener.onFailed(new SignUpContract.NotSignedUpException());
-        }
+    private Uri localUri;
+
+    public SignUpModel() {
+        this.firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.profileStorage = FirebaseUtils.getProfileStorageRef();
+        this.userInfo = new UserInfo(firebaseUser);
     }
 
     @Override
@@ -61,7 +64,7 @@ public class SignUpModel implements SignUpContract.Model {
 
     private void requestUpdateOptionalData(Activity activity, final SignUpContract.SignUpCompleteListener listener) {
         FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(userInfo)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -91,14 +94,29 @@ public class SignUpModel implements SignUpContract.Model {
     }
 
     @Override
-    public void setProfileUri(String profileUri) {
-        if (!TextUtils.isEmpty(profileUri)) {
-            userInfo.profileUri = profileUri;
+    public void setProfileUri(Uri profileUri) {
+        if (profileUri != null) {
+            localUri = profileUri;
         }
     }
 
     @Override
     public String getProfileUri() {
-        return userInfo.profileUri;
+        return localUri != null ? localUri.toString() : null;
+    }
+
+    @Override
+    public void setProfileImageUrl(Uri downloadUrl) {
+        if (downloadUrl != null) {
+            userInfo.profileUri = downloadUrl.toString();
+        }
+    }
+
+    @Override
+    public void uploadProfile(Uri imageUri, Activity activity, OnCompleteListener<UploadTask.TaskSnapshot> completeListener) {
+        profileStorage
+                .child(userInfo.email + ".jpg")
+                .putFile(imageUri)
+                .addOnCompleteListener(activity, completeListener);
     }
 }

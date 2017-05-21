@@ -2,6 +2,8 @@ package com.obppamanse.honsulnamnye.firebase;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * Created by raehyeong.park on 2017. 4. 30..
@@ -13,5 +15,15 @@ public class FirebaseUtils {
 
     public static DatabaseReference getUserRef(){
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);
+    }
+
+    private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";
+
+    public static StorageReference getStorageRef(){
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF);
+    }
+
+    public static StorageReference getProfileStorageRef(){
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("profile");
     }
 }

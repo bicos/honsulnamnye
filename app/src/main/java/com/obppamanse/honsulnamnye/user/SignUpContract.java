@@ -1,7 +1,13 @@
 package com.obppamanse.honsulnamnye.user;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.Uri;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -14,6 +20,8 @@ public class SignUpContract {
 
         Activity getActivity();
 
+        Context getContext();
+
         void showException(Exception e);
 
         void startMainActivity();
@@ -25,15 +33,19 @@ public class SignUpContract {
 
         void requestSignUp(Activity activity, SignUpContract.SignUpCompleteListener listener);
 
+        void uploadProfile(Uri imageUri, Activity activity, OnCompleteListener<UploadTask.TaskSnapshot> listener);
+
         void setNickName(CharSequence nickName);
 
         void setGender(UserInfo.Gender gender);
 
-        void setProfileUri(String profileUri);
+        void setProfileUri(Uri profileUri);
 
         String getProfileName();
 
         String getProfileUri();
+
+        void setProfileImageUrl(Uri downloadUrl);
     }
 
     public interface SignUpCompleteListener {

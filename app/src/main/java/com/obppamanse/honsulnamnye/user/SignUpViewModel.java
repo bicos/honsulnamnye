@@ -5,10 +5,15 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
@@ -22,9 +27,9 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
 
     private SignUpContract.Model model;
 
-    public SignUpViewModel(SignUpContract.View view) {
+    public SignUpViewModel(SignUpContract.View view, SignUpContract.Model model) {
         this.view = view;
-        this.model = new SignUpModel(this);
+        this.model = model;
     }
 
     public void inputNickName(CharSequence nickName){
@@ -49,10 +54,12 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
         return model.getProfileUri();
     }
 
-    @BindingAdapter("bind:loadImage")
+    @BindingAdapter("loadImage")
     public static void loadImage(ImageView imageView, String url) {
-        if (url != null) {
+        if (!TextUtils.isEmpty(url)) {
             Glide.with(imageView.getContext()).load(url).into(imageView);
+        } else {
+            Glide.with(imageView.getContext()).load(R.drawable.profile_blank).into(imageView);
         }
     }
 
@@ -74,8 +81,21 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
         view.showException(e);
     }
 
-    public void setProfileImage(Uri profileImage) {
-        model.setProfileUri(profileImage.toString());
-        notifyPropertyChanged(BR.profileUri);
+    public void setProfileImage(final Uri profileImage) {
+        if (profileImage != null) {
+            model.uploadProfile(profileImage, view.getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        model.setProfileUri(profileImage);
+                        model.setProfileImageUrl(task.getResult().getDownloadUrl());
+                        notifyPropertyChanged(BR.profileUri);
+                    } else {
+                        view.showException(task.getException());
+                    }
+                }
+            });
+
+        }
     }
 }
