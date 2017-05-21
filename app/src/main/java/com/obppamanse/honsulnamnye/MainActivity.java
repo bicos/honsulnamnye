@@ -9,12 +9,24 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.obppamanse.honsulnamnye.personal.PersonalFragment;
+import com.obppamanse.honsulnamnye.search.SearchFragment;
+import com.obppamanse.honsulnamnye.timeline.TimeLineFragment;
+import com.obppamanse.honsulnamnye.util.ActivityUtils;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final int INDEX_TIMELINE = 0;
+    private static final int INDEX_PERSONAL = 1;
+    private static final int INDEX_SEARCH = 2;
+
+    int currentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -26,27 +38,45 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (savedInstanceState != null) {
+            selectTab(savedInstanceState.getInt("current_index"));
+        } else {
+            selectTab(INDEX_TIMELINE);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("current_index", currentIndex);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void selectTab(int index) {
+        if (INDEX_TIMELINE == index) {
+            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                    TimeLineFragment.newInstance(),
+                    R.id.container_main);
+        } else if (INDEX_PERSONAL == index) {
+            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                    PersonalFragment.newInstance(),
+                    R.id.container_main);
+        } else if (INDEX_SEARCH == index) {
+            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                    SearchFragment.newInstance(),
+                    R.id.container_main);
+        }
+    }
+
+    public void clickTimeLine(View view) {
+        selectTab(INDEX_TIMELINE);
+    }
+
+    public void clickPersonal(View view) {
+        selectTab(INDEX_PERSONAL);
+    }
+
+    public void clickSearch(View view) {
+        selectTab(INDEX_SEARCH);
     }
 }
