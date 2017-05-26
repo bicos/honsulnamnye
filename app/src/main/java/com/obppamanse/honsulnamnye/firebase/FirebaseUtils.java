@@ -13,8 +13,14 @@ public class FirebaseUtils {
 
     private static final String USER_REF = "user";
 
+    private static final String POST_REF = "post";
+
     public static DatabaseReference getUserRef(){
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);
+    }
+
+    public static DatabaseReference getPostRef(){
+        return FirebaseDatabase.getInstance().getReference().child(POST_REF);
     }
 
     private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";

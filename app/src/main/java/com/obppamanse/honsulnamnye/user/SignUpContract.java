@@ -5,8 +5,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
