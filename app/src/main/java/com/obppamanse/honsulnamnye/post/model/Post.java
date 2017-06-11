@@ -19,7 +19,10 @@ public class Post {
     private String desc;
 
     // 글 쓴 시간
-    private long time;
+    private long writeTime;
+
+    // 만날 시간
+    private long dueDateTime;
 
     public Post() {
     }
@@ -56,11 +59,19 @@ public class Post {
         this.desc = desc;
     }
 
-    public long getTime() {
-        return time;
+    public long getWriteTime() {
+        return writeTime;
     }
 
-    public void setTime(long time) {
-        this.time = time;
+    public void setWriteTime(long writeTime) {
+        this.writeTime = writeTime;
+    }
+
+    public long getDueDateTime() {
+        return dueDateTime;
+    }
+
+    public void setDueDateTime(long dueDateTime) {
+        this.dueDateTime = dueDateTime;
     }
 }

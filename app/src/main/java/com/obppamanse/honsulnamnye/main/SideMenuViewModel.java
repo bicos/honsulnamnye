@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 /**
  * Created by Ravy on 2017. 6. 11..
  */
@@ -36,6 +38,7 @@ public class SideMenuViewModel extends BaseObservable {
         Glide.with(image.getContext())
                 .using(new FirebaseImageLoader())
                 .load(ref)
+                .bitmapTransform(new CropCircleTransformation(image.getContext()))
                 .into(image);
     }
 

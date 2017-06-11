@@ -5,38 +5,53 @@
 
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.post.PostViewModel" />
+            type="com.obppamanse.honsulnamnye.post.write.PostWriteViewModel" />
     </data>
 
-
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/default_margin">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="@dimen/default_margin">
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/default_margin"
+            android:layout_weight="1">
 
-            <EditText
-                android:id="@+id/et_input_title"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="제목을 입력해주세요."
-                android:layout_marginBottom="@dimen/default_margin"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/default_margin">
 
-            <EditText
-                android:id="@+id/et_input_desc"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="top"
-                android:hint="내용을 입력해주세요." />
+                <EditText
+                    android:id="@+id/et_input_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:hint="제목을 입력해주세요."
+                    android:onTextChanged="@{(title,a,b,c) -> viewModel.updateTitle(title)}" />
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/et_input_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:hint="내용을 입력해주세요."
+                    android:onTextChanged="@{(desc,a,b,c) -> viewModel.updateDesc(desc)}" />
 
-    </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <Button
+            android:id="@+id/btn_write_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{view -> viewModel.clickWritePost(view)}"
+            android:text="write post" />
+    </LinearLayout>
 
 </layout>
