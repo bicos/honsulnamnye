@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.obppamanse.honsulnamnye.MainActivity;
 import com.obppamanse.honsulnamnye.SignUpActivity;
 import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;

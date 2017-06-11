@@ -115,7 +115,7 @@ public class SignUpModel implements SignUpContract.Model {
     @Override
     public void uploadProfile(Uri imageUri, Activity activity, OnCompleteListener<UploadTask.TaskSnapshot> completeListener) {
         profileStorage
-                .child(userInfo.email + ".jpg")
+                .child(userInfo.email)
                 .putFile(imageUri)
                 .addOnCompleteListener(activity, completeListener);
     }

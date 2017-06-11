@@ -25,6 +25,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.R;
@@ -205,16 +206,23 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
     }
 
     @Override
-    public void isUserSignedUp(ValueEventListener listener) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    public void isUserSignedUp(final SignedUpCompleteListener listener) {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseUtils.getUserRef()
-                    .child(user.getUid())
-                    .addListenerForSingleValueEvent(listener);
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            listener.onSuccess(dataSnapshot.hasChild(user.getUid()));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            listener.onFailed(databaseError.toException());
+                        }
+                    });
         } else {
-            listener.onCancelled(DatabaseError.fromException(
-                    new SignInContract.SignInFailedException("일시적 오류")
-            ));
+            listener.onSuccess(false);
         }
     }
 
@@ -225,6 +233,12 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
         }
 
         listener.onFailed(new SignInContract.SignInFailedException(connectionResult.getErrorMessage()));
+    }
+
+    public interface SignedUpCompleteListener {
+        void onSuccess(boolean isSignedUp);
+
+        void onFailed(Exception e);
     }
 
     public interface SignInCompleteListener {

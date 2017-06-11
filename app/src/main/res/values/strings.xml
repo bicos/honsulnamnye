@@ -11,4 +11,6 @@
     <string name="sign_in_with_email">이메일로 로그인</string>
     <string name="sign_in_with_facebook">페이스북으로 로그인</string>
     <string name="sign_in_with_google">구글로 로그인</string>
+    <string name="open_drawer">사이드메뉴 열기</string>
+    <string name="close_drawer">사이드메뉴 닫기</string>
 </resources>

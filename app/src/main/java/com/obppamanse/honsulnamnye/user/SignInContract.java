@@ -41,7 +41,7 @@ public class SignInContract {
 
         void requestSignUp(Fragment fragment, SignInModel.SignInCompleteListener listener);
 
-        void isUserSignedUp(ValueEventListener listener);
+        void isUserSignedUp(SignInModel.SignedUpCompleteListener listener);
     }
 
     public static class EmailNotValidException extends Exception {

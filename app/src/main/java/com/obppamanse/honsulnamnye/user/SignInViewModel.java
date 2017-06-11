@@ -4,12 +4,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by raehyeong.park on 2017. 4. 26..
@@ -63,10 +59,10 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
      */
     @Override
     public void onSuccess() {
-        model.isUserSignedUp(new ValueEventListener() {
+        model.isUserSignedUp(new SignInModel.SignedUpCompleteListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
+            public void onSuccess(boolean isSignedUp) {
+                if (isSignedUp) {
                     view.startMainActivity();
                 } else {
                     view.startSignUpActivity();
@@ -74,8 +70,8 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                view.startSignUpActivity();
+            public void onFailed(Exception e) {
+                view.showException(e);
             }
         });
     }
