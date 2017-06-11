@@ -40,6 +40,7 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     @Override
     public void successWritePost() {
         Toast.makeText(getContext(), "글쓰기를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+        getActivity().finish();
     }
 
     @Override

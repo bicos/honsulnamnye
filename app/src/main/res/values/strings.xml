@@ -13,4 +13,5 @@
     <string name="sign_in_with_google">구글로 로그인</string>
     <string name="open_drawer">사이드메뉴 열기</string>
     <string name="close_drawer">사이드메뉴 닫기</string>
+    <string name="action_delete">삭제</string>
 </resources>

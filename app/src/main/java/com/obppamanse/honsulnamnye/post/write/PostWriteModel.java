@@ -45,6 +45,7 @@ public class PostWriteModel implements PostContract.WriteModel {
             throw new PostContract.FailureWritePostException();
         }
 
+        post.setKey(key);
         post.setWriteTime(System.currentTimeMillis());
 
         postRef.child(key).setValue(post).addOnCompleteListener(activity, listener);

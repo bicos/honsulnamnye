@@ -4,6 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 
+import com.obppamanse.honsulnamnye.post.detail.PostDetailActivity;
 import com.obppamanse.honsulnamnye.post.model.Post;
 
 /**
@@ -33,6 +34,6 @@ public class PostItemViewModel extends BaseObservable {
     }
 
     public void clickListItem(View view) {
-
+        PostDetailActivity.startPostDetailActivity(view.getContext(), post);
     }
 }

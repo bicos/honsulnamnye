@@ -38,6 +38,10 @@
             android:label="글쓰기" />
 
         <activity
+            android:name=".post.detail.PostDetailActivity"
+            android:label="" />
+
+        <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>

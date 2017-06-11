@@ -23,6 +23,18 @@ public class PostContract {
         void setDueDate(long timeMill);
     }
 
+    public interface GetModel {
+        String getTitle();
+
+        String getDesc();
+
+        Location getLocation();
+
+        long getDueDate();
+
+        long getWriteDate();
+    }
+
     public interface WriteModel extends Model {
         void writePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
@@ -31,7 +43,7 @@ public class PostContract {
         void modifyPost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
 
-    public interface DetailModel {
+    public interface DetailModel extends GetModel{
         void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
 
@@ -55,7 +67,7 @@ public class PostContract {
 
         void successDeletePost();
 
-        void failureDeletePost();
+        void failureDeletePost(Exception e);
     }
 
     public static class NotExistAuthUserException extends Exception {
