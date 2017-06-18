@@ -86,12 +86,16 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
         viewModel = new PostDetailViewModel(this, new PostDetailModel(post));
         binding.setViewModel(viewModel);
+        invalidateOptionsMenu();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_post_detail, menu);
-        return true;
+        if (viewModel != null && viewModel.getIsWriter()) {
+            getMenuInflater().inflate(R.menu.menu_post_detail, menu);
+            return true;
+        }
+        return false;
     }
 
     @Override
