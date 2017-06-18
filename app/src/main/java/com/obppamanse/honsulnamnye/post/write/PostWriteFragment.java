@@ -47,4 +47,14 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     public void failureWritePost(Exception e) {
         Toast.makeText(getContext(), "글쓰기를 실패하였습니다. 원인 : ["+e.toString()+"]", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void dismissProgress() {
+
+    }
 }

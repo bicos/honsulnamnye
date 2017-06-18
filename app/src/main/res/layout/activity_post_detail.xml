@@ -101,7 +101,16 @@
             android:layout_alignParentBottom="true"
             android:onClick="@{(view) -> viewModel.clickJoinGroup(context)}"
             android:text="Join this group"
-            android:visibility="@{viewModel.isWriter == false &amp;&amp; viewModel.alreadyJoinThisGroup == false ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewModel.isWriter == false &amp;&amp; viewModel.isMember == false ? View.VISIBLE : View.GONE}" />
+
+        <Button
+            android:id="@+id/btn_withdrawal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="withdrawal this group"
+            android:layout_alignParentBottom="true"
+            android:onClick="@{view -> viewModel.clickWithdrawalGroup(context)}"
+            android:visibility="@{viewModel.isWriter == false &amp;&amp; viewModel.isMember == true ? View.VISIBLE : View.GONE}"/>
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/loading_progress"

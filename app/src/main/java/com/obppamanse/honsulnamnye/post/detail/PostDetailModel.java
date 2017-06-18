@@ -5,7 +5,10 @@ import android.app.Activity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Location;
@@ -84,5 +87,50 @@ public class PostDetailModel implements PostContract.DetailModel {
                 .child(participant.getUid())
                 .setValue(participant)
                 .addOnCompleteListener(activity, listener);
+    }
+
+    @Override
+    public void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            throw new PostContract.NotExistAuthUserException();
+        }
+
+        Participant participant = new Participant(user.getUid(),
+                user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null,
+                user.getDisplayName());
+
+        reference.child(FirebaseUtils.PARTICIPANT_LIST_REF)
+                .child(participant.getUid())
+                .removeValue()
+                .addOnCompleteListener(activity, listener);
+    }
+
+    public void requestIsMember(Activity activity, final MemberExistListener listener) {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            listener.isMember(false);
+            return;
+        }
+
+        DatabaseReference ref = FirebaseUtils.getParticipantListRef(post.getKey());
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listener.isMember(dataSnapshot.hasChild(user.getUid()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.isMember(false);
+            }
+        });
+    }
+
+    public interface MemberExistListener {
+        void isMember(boolean isMember);
     }
 }

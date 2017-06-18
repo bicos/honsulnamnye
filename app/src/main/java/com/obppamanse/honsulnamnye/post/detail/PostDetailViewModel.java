@@ -11,9 +11,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
 
@@ -23,13 +22,25 @@ import com.obppamanse.honsulnamnye.post.PostContract;
 
 public class PostDetailViewModel extends BaseObservable {
 
-    PostContract.DeleteView view;
+    PostContract.DetailView view;
 
     PostContract.DetailModel model;
 
-    public PostDetailViewModel(PostContract.DeleteView view, PostContract.DetailModel model) {
+    private boolean isMember;
+
+    public PostDetailViewModel(final PostContract.DetailView view, PostContract.DetailModel model) {
         this.view = view;
         this.model = model;
+
+        view.showProgress();
+        model.requestIsMember((Activity) view.getContext(), new PostDetailModel.MemberExistListener() {
+            @Override
+            public void isMember(boolean isMember) {
+                view.dismissProgress();
+                PostDetailViewModel.this.isMember = isMember;
+                notifyPropertyChanged(BR.isMember);
+            }
+        });
     }
 
     @Bindable
@@ -53,20 +64,8 @@ public class PostDetailViewModel extends BaseObservable {
     }
 
     @Bindable
-    public boolean getAlreadyJoinThisGroup() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user == null) {
-            return false;
-        }
-
-        DatabaseReference ref = getParticipantListRef();
-
-        if (ref == null) {
-            return false; // 참여자가 없는 상태
-        }
-
-        return ref.child(user.getUid()) != null;
+    public boolean getIsMember() {
+        return isMember;
     }
 
     @Bindable
@@ -96,7 +95,33 @@ public class PostDetailViewModel extends BaseObservable {
             model.joinGroup((Activity) context, new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    view.successJoinGroup();
+                    if (task.isSuccessful()) {
+                        isMember = true;
+                        view.successJoinGroup();
+                    } else {
+                        isMember = false;
+                        view.failureJoinGroup(task.getException());
+                    }
+                    notifyChange();
+                }
+            });
+        } catch (Exception e) {
+            view.failureJoinGroup(e);
+        }
+    }
+
+    public void clickWithdrawalGroup(Context context) {
+        try {
+            model.withdrawalGroup((Activity) context, new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        isMember = false;
+                        view.successWithdrawalGroup();
+                    } else {
+                        isMember = true;
+                        view.failureWithdrawalGroup(task.getException());
+                    }
                     notifyChange();
                 }
             });

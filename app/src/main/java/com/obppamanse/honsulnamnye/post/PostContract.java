@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Location;
 import com.obppamanse.honsulnamnye.post.model.Participant;
 
@@ -55,10 +56,18 @@ public class PostContract {
         void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
         void joinGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+
+        void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+
+        void requestIsMember(Activity activity, final PostDetailModel.MemberExistListener listener);
     }
 
     public interface View {
         Context getContext();
+
+        void showProgress();
+
+        void dismissProgress();
     }
 
     public interface WriteView extends View {
@@ -73,7 +82,7 @@ public class PostContract {
         void failureModifyPost();
     }
 
-    public interface DeleteView extends View {
+    public interface DetailView extends View {
 
         void successDeletePost();
 
@@ -82,6 +91,10 @@ public class PostContract {
         void successJoinGroup();
 
         void failureJoinGroup(Exception e);
+
+        void successWithdrawalGroup();
+
+        void failureWithdrawalGroup(Exception e);
     }
 
     public static class NotExistAuthUserException extends Exception {

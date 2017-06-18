@@ -25,13 +25,15 @@ import com.obppamanse.honsulnamnye.post.model.Post;
  * Created by Ravy on 2017. 6. 11..
  */
 
-public class PostDetailActivity extends AppCompatActivity implements PostContract.DeleteView {
+public class PostDetailActivity extends AppCompatActivity implements PostContract.DetailView {
 
     public static final String PARAM_POST = "post";
 
     public static final String PARAM_POST_KEY = "post_key";
 
     private PostDetailViewModel viewModel;
+
+    private ActivityPostDetailBinding binding;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,14 +56,17 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
                 return;
             }
 
+            showProgress();
             FirebaseUtils.getPostRef().child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    dismissProgress();
                     populatePostDetail(dataSnapshot.getValue(Post.class));
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
+                    dismissProgress();
                     showToastError();
                 }
             });
@@ -77,7 +82,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     private void populatePostDetail(Post post) {
         setTitle(post.getTitle());
 
-        ActivityPostDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
 
         viewModel = new PostDetailViewModel(this, new PostDetailModel(post));
         binding.setViewModel(viewModel);
@@ -116,6 +121,16 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     }
 
     @Override
+    public void showProgress() {
+        binding.loadingProgress.show();
+    }
+
+    @Override
+    public void dismissProgress() {
+        binding.loadingProgress.hide();
+    }
+
+    @Override
     public void successDeletePost() {
         Toast.makeText(this, "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
         finish();
@@ -133,6 +148,16 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void failureJoinGroup(Exception e) {
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successWithdrawalGroup() {
+        Toast.makeText(this, "그룹 탈퇴에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void failureWithdrawalGroup(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
