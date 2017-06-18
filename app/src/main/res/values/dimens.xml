@@ -3,4 +3,5 @@
     <dimen name="fab_margin_bottom">56dp</dimen>
 
     <dimen name="default_margin">16dp</dimen>
+    <dimen name="default_margin_half">8dp</dimen>
 </resources>

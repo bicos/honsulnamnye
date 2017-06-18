@@ -3,10 +3,13 @@ package com.obppamanse.honsulnamnye.post.detail;
 import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Location;
+import com.obppamanse.honsulnamnye.post.model.Participant;
 import com.obppamanse.honsulnamnye.post.model.Post;
 
 /**
@@ -50,7 +53,36 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     @Override
+    public boolean isWriter() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        return user != null && user.getUid().equals(post.getUid());
+    }
+
+    @Override
+    public String getPostKey() {
+        return post.getKey();
+    }
+
+    @Override
     public void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception {
         reference.removeValue().addOnCompleteListener(activity, listener);
+    }
+
+    @Override
+    public void joinGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user == null) {
+            throw new PostContract.NotExistAuthUserException();
+        }
+
+        Participant participant = new Participant(user.getUid(),
+                user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null,
+                user.getDisplayName());
+
+        reference.child(FirebaseUtils.PARTICIPANT_LIST_REF)
+                .child(participant.getUid())
+                .setValue(participant)
+                .addOnCompleteListener(activity, listener);
     }
 }

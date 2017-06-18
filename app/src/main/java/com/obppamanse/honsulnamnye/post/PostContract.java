@@ -5,6 +5,9 @@ import android.content.Context;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.obppamanse.honsulnamnye.post.model.Location;
+import com.obppamanse.honsulnamnye.post.model.Participant;
+
+import java.util.List;
 
 /**
  * Created by raehyeong.park on 2017. 5. 25..
@@ -12,7 +15,7 @@ import com.obppamanse.honsulnamnye.post.model.Location;
 
 public class PostContract {
 
-    public interface Model {
+    public interface SetModel {
 
         void setTitle(String title);
 
@@ -24,6 +27,7 @@ public class PostContract {
     }
 
     public interface GetModel {
+
         String getTitle();
 
         String getDesc();
@@ -33,18 +37,24 @@ public class PostContract {
         long getDueDate();
 
         long getWriteDate();
+
+        boolean isWriter();
+
+        String getPostKey();
     }
 
-    public interface WriteModel extends Model {
+    public interface WriteModel extends SetModel {
         void writePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
 
-    public interface ModifyModel extends Model {
+    public interface ModifyModel extends GetModel, SetModel {
         void modifyPost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
 
-    public interface DetailModel extends GetModel{
+    public interface DetailModel extends GetModel {
         void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+
+        void joinGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
     }
 
     public interface View {
@@ -68,6 +78,10 @@ public class PostContract {
         void successDeletePost();
 
         void failureDeletePost(Exception e);
+
+        void successJoinGroup();
+
+        void failureJoinGroup(Exception e);
     }
 
     public static class NotExistAuthUserException extends Exception {
@@ -82,6 +96,15 @@ public class PostContract {
 
     public static class FailureWritePostException extends Exception {
         private static final String MSG = "글쓰기를 실패하였습니다. 다시 시도해주세요.";
+
+        @Override
+        public String getMessage() {
+            return MSG;
+        }
+    }
+
+    public static class FailureJoinGroupException extends Exception {
+        private static final String MSG = "그룹 가입을 실패하였습니다. 다시 시도해주세요.";
 
         @Override
         public String getMessage() {

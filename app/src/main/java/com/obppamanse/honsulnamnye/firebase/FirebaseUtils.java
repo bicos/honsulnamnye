@@ -15,12 +15,18 @@ public class FirebaseUtils {
 
     private static final String POST_REF = "post";
 
+    public static final String PARTICIPANT_LIST_REF = "participantList";
+
     public static DatabaseReference getUserRef(){
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);
     }
 
     public static DatabaseReference getPostRef(){
         return FirebaseDatabase.getInstance().getReference().child(POST_REF);
+    }
+
+    public static DatabaseReference getParticipantListRef(String postKey){
+        return getPostRef().child(postKey).child(PARTICIPANT_LIST_REF);
     }
 
     private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";

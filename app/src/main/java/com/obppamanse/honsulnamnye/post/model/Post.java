@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by raehyeong.park on 2017. 5. 25..
  */
 
-public class Post implements Parcelable{
+public class Post implements Parcelable {
 
     // 글 id
     private String key;
