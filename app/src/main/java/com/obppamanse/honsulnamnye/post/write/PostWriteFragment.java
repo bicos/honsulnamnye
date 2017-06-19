@@ -49,6 +49,11 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     }
 
     @Override
+    public void showErrorWrongDueDate() {
+        Toast.makeText(getContext(), "잘못된 약속 날짜입니다. 오늘 날짜 이상을 선택해주세요.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showProgress() {
 
     }

@@ -8,6 +8,7 @@ import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Location;
 import com.obppamanse.honsulnamnye.post.model.Participant;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -46,6 +47,12 @@ public class PostContract {
 
     public interface WriteModel extends SetModel {
         void writePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+
+        void setDueDateTxt(String dueDateTxt);
+
+        String getDueDateTxt();
+
+        Calendar getDueDateCalendar();
     }
 
     public interface ModifyModel extends GetModel, SetModel {
@@ -74,6 +81,8 @@ public class PostContract {
         void successWritePost();
 
         void failureWritePost(Exception e);
+
+        void showErrorWrongDueDate();
     }
 
     public interface ModifyView extends View {

@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
+import com.obppamanse.honsulnamnye.util.DateUtils;
 
 /**
  * Created by Ravy on 2017. 6. 11..
@@ -66,6 +67,15 @@ public class PostDetailViewModel extends BaseObservable {
     @Bindable
     public boolean getIsMember() {
         return isMember;
+    }
+
+    @Bindable
+    public String getDueDateTxt(){
+        if (model.getDueDate() == 0L) {
+            return "미정";
+        } else {
+            return DateUtils.getDateStr(model.getDueDate());
+        }
     }
 
     @Bindable
