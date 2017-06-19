@@ -97,7 +97,6 @@ public class PostWriteViewModel extends BaseObservable {
                     return;
                 }
 
-
                 mModel.setDueDateTxt(DateUtils.getDateStr(selectDate.getTimeInMillis()));
                 mModel.setDueDate(selectDate.getTimeInMillis());
                 notifyPropertyChanged(BR.dueDateTxt);
