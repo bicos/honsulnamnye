@@ -83,6 +83,8 @@ public class PostContract {
         void failureWritePost(Exception e);
 
         void showErrorWrongDueDate();
+
+        void startSelectLocation();
     }
 
     public interface ModifyView extends View {

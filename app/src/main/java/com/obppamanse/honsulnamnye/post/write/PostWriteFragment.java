@@ -1,5 +1,7 @@
 package com.obppamanse.honsulnamnye.post.write;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,8 @@ import com.obppamanse.honsulnamnye.post.PostContract;
 
 public class PostWriteFragment extends Fragment implements PostContract.WriteView {
 
+    private static final int REQUEST_SELECT_LOCATION = 1000;
+
     public PostWriteFragment() {
     }
 
@@ -29,10 +33,12 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
         return fragment;
     }
 
+    private FragmentPostWriteBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentPostWriteBinding binding = FragmentPostWriteBinding.inflate(inflater, container, false);
+        binding = FragmentPostWriteBinding.inflate(inflater, container, false);
         binding.setViewModel(new PostWriteViewModel(this, new PostWriteModel()));
         return binding.getRoot();
     }
@@ -51,6 +57,19 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     @Override
     public void showErrorWrongDueDate() {
         Toast.makeText(getContext(), "잘못된 약속 날짜입니다. 오늘 날짜 이상을 선택해주세요.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startSelectLocation() {
+        startActivityForResult(new Intent(getContext(), MapsActivity.class), REQUEST_SELECT_LOCATION);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK) {
+
+        }
     }
 
     @Override

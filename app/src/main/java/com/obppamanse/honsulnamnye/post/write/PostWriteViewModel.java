@@ -104,4 +104,8 @@ public class PostWriteViewModel extends BaseObservable {
         }, prevSelectDate.get(Calendar.YEAR), prevSelectDate.get(Calendar.MONTH), prevSelectDate.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
+
+    public void clickSelectLocation() {
+        mView.startSelectLocation();
+    }
 }
