@@ -28,7 +28,7 @@ public class Post implements Parcelable {
     private long dueDateTime;
 
     // 만나는 장소
-    private Location location;
+    private Place place;
 
     public Post() {
     }
@@ -40,7 +40,7 @@ public class Post implements Parcelable {
         desc = in.readString();
         writeTime = in.readLong();
         dueDateTime = in.readLong();
-        location = in.readParcelable(Location.class.getClassLoader());
+        place = in.readParcelable(Place.class.getClassLoader());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Post implements Parcelable {
         dest.writeString(desc);
         dest.writeLong(writeTime);
         dest.writeLong(dueDateTime);
-        dest.writeParcelable(location, flags);
+        dest.writeParcelable(place, flags);
     }
 
     @Override
@@ -117,5 +117,13 @@ public class Post implements Parcelable {
 
     public void setDueDateTime(long dueDateTime) {
         this.dueDateTime = dueDateTime;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 }

@@ -28,15 +28,12 @@ public class FooterBehavior extends CoordinatorLayout.Behavior {
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target, int dx, int dy, int[] consumed) {
-//        totalDy += dy;
         if (dy > 0) {
             // scroll down
             totalDy = Math.min(totalDy + dy, child.getMeasuredHeight());
-//            child.animate().translationY(Math.max(totalDy, (child.getMeasuredHeight())));
         } else if (dy < 0) {
             // scroll up
             totalDy = Math.max(totalDy + dy, 0);
-//            child.animate().translationY(Math.min(totalDy, 0));
         }
 
         child.animate().setDuration(0).translationY(totalDy);

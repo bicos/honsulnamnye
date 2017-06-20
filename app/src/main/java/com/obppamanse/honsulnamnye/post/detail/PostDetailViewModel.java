@@ -9,12 +9,20 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
+import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
 /**
@@ -81,6 +89,11 @@ public class PostDetailViewModel extends BaseObservable {
     @Bindable
     public DatabaseReference getParticipantListRef(){
         return FirebaseUtils.getParticipantListRef(model.getPostKey());
+    }
+
+    @Bindable
+    public Place getPlace(){
+        return model.getPlace();
     }
 
     public void clickDeletePost(Activity activity) {
@@ -154,6 +167,17 @@ public class PostDetailViewModel extends BaseObservable {
 
         if (adapter == null) {
             recyclerView.setAdapter(new ParticipantListAdapter(reference));
+        }
+    }
+
+    public void updateGoogleMap(GoogleMap googleMap) {
+        Place place = model.getPlace();
+        if (place != null) {
+            LatLng latLng = new LatLng(place.getLat(), place.getLon());
+            googleMap.getUiSettings().setAllGesturesEnabled(false);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17.5f));
+            googleMap.addMarker(new MarkerOptions().title(place.getName())
+                    .position(latLng).visible(true));
         }
     }
 }

@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.databinding.FragmentPostWriteBinding;
 import com.obppamanse.honsulnamnye.post.PostContract;
+import com.obppamanse.honsulnamnye.post.model.Place;
 
 /**
  * Created by raehyeong.park on 2017. 5. 26..
  */
 
 public class PostWriteFragment extends Fragment implements PostContract.WriteView {
+
+    public static final String PARAM_SELECT_PLACE = "select_place";
 
     private static final int REQUEST_SELECT_LOCATION = 1000;
 
@@ -67,8 +70,10 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK) {
-
+        if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK && data != null) {
+            if (data.hasExtra(PARAM_SELECT_PLACE)) {
+                binding.getViewModel().updatePlace((Place) data.getParcelableExtra(PARAM_SELECT_PLACE));
+            }
         }
     }
 

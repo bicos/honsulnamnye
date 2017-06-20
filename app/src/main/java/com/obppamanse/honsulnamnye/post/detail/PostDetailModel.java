@@ -11,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
-import com.obppamanse.honsulnamnye.post.model.Location;
+import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Participant;
 import com.obppamanse.honsulnamnye.post.model.Post;
 
@@ -41,8 +41,8 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     @Override
-    public Location getLocation() {
-        return null;
+    public Place getPlace() {
+        return post.getPlace();
     }
 
     @Override

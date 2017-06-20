@@ -5,11 +5,9 @@ import android.content.Context;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
-import com.obppamanse.honsulnamnye.post.model.Location;
-import com.obppamanse.honsulnamnye.post.model.Participant;
+import com.obppamanse.honsulnamnye.post.model.Place;
 
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by raehyeong.park on 2017. 5. 25..
@@ -23,7 +21,7 @@ public class PostContract {
 
         void setDesc(String desc);
 
-        void setLocation(Location location);
+        void setPlace(Place place);
 
         void setDueDate(long timeMill);
     }
@@ -34,7 +32,7 @@ public class PostContract {
 
         String getDesc();
 
-        Location getLocation();
+        Place getPlace();
 
         long getDueDate();
 
@@ -48,11 +46,9 @@ public class PostContract {
     public interface WriteModel extends SetModel {
         void writePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
-        void setDueDateTxt(String dueDateTxt);
+        String getPlaceName();
 
-        String getDueDateTxt();
-
-        Calendar getDueDateCalendar();
+        long getDueDate();
     }
 
     public interface ModifyModel extends GetModel, SetModel {

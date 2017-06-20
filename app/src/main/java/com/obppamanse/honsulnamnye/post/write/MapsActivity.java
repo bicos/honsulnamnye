@@ -1,14 +1,21 @@
 package com.obppamanse.honsulnamnye.post.write;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,37 +27,37 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.obppamanse.honsulnamnye.R;
+import com.obppamanse.honsulnamnye.post.detail.PostDetailActivity;
+import com.obppamanse.honsulnamnye.post.model.Place;
+import com.obppamanse.honsulnamnye.post.model.Post;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapLongClickListener {
 
     private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
 
-    // The entry point to Google Play services, used by the Places API and Fused Location Provider.
+    // The entry point to Google Play services, used by the Places API and Fused Place Provider.
     private GoogleApiClient mGoogleApiClient;
 
-    private final LatLng mDefaultLocation = new LatLng(37.58263686542338, 127.0003135635749);
+    private final LatLng mDefaultLocation = new LatLng(37.566535, 126.97796919999996);
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
 
     // The geographical location where the device is currently located. That is, the last-known
-    // location retrieved by the Fused Location Provider.
+    // location retrieved by the Fused Place Provider.
     private Location mLastKnownLocation;
 
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    // Used for selecting the current place.
-    private final int mMaxEntries = 5;
-    private String[] mLikelyPlaceNames = new String[mMaxEntries];
-    private String[] mLikelyPlaceAddresses = new String[mMaxEntries];
-    private String[] mLikelyPlaceAttributions = new String[mMaxEntries];
-    private LatLng[] mLikelyPlaceLatLngs = new LatLng[mMaxEntries];
+    private Marker selectMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +72,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
 
-        // Build the Play services client for use by the Fused Location Provider and the Places API.
-        // Use the addApi() method to request the Google Places API and the Fused Location Provider.
+        // Build the Play services client for use by the Fused Place Provider and the Places API.
+        // Use the addApi() method to request the Google Places API and the Fused Place Provider.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */,
                         this /* OnConnectionFailedListener */)
@@ -96,6 +103,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
+            asyncMap();
         } else {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
@@ -118,6 +126,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
 
+        asyncMap();
+    }
+
+    private void asyncMap() {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -131,6 +143,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         updateLocationUI();
 
         getDeviceLocation();
+
+        Toast.makeText(getApplicationContext(), "약속 장소를 길게 눌러주세요.", Toast.LENGTH_SHORT).show();
     }
 
     private void getDeviceLocation() {
@@ -174,6 +188,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             mMap.getUiSettings().setMyLocationButtonEnabled(false);
             mLastKnownLocation = null;
         }
+
+        mMap.setOnMapLongClickListener(this);
     }
 
     @Override
@@ -185,4 +201,64 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         // do nothing
     }
+
+    @Override
+    public void onMapLongClick(final LatLng latLng) {
+        if (mMap == null) {
+            return;
+        }
+
+        FrameLayout container = new FrameLayout(this);
+        container.setPadding(getResources().getDimensionPixelSize(R.dimen.default_margin),
+                getResources().getDimensionPixelSize(R.dimen.default_margin),
+                getResources().getDimensionPixelSize(R.dimen.default_margin),
+                getResources().getDimensionPixelSize(R.dimen.default_margin));
+
+        final EditText editText = new EditText(this);
+        editText.setHint("만날 장소 설명을 입력해주세요.");
+        container.addView(editText);
+
+        new AlertDialog.Builder(this)
+                .setTitle("위치 입력")
+                .setView(container)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mMap.clear();
+                        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        selectMarker = mMap.addMarker(new MarkerOptions()
+                                .position(latLng)
+                                .title(editText.getText().toString()));
+                    }
+                })
+                .setNegativeButton("취소", null)
+                .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (selectMarker != null) {
+            new AlertDialog.Builder(this).setTitle("알림")
+                    .setMessage("해당 위치로 선택하시겠습니까?")
+                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Place place = new Place(selectMarker.getTitle(),
+                                    selectMarker.getPosition().latitude,
+                                    selectMarker.getPosition().longitude);
+
+                            Intent intent = new Intent();
+                            intent.putExtra(PostWriteFragment.PARAM_SELECT_PLACE, place);
+                            setResult(RESULT_OK, intent);
+                            MapsActivity.super.onBackPressed();
+                        }
+                    })
+                    .setNegativeButton("취소", null)
+                    .show();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
 }

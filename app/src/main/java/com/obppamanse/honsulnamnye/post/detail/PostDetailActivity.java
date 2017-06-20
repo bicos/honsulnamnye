@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.post.detail;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -25,7 +29,7 @@ import com.obppamanse.honsulnamnye.post.model.Post;
  * Created by Ravy on 2017. 6. 11..
  */
 
-public class PostDetailActivity extends AppCompatActivity implements PostContract.DetailView {
+public class PostDetailActivity extends AppCompatActivity implements PostContract.DetailView, OnMapReadyCallback {
 
     public static final String PARAM_POST = "post";
 
@@ -83,9 +87,16 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         setTitle(post.getTitle());
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
-
         viewModel = new PostDetailViewModel(this, new PostDetailModel(post));
         binding.setViewModel(viewModel);
+
+        if (viewModel.getPlace() != null) {
+            Fragment fragment = getFragmentManager().findFragmentById(R.id.place_desc);
+            if (fragment != null && fragment instanceof MapFragment) {
+                ((MapFragment) fragment).getMapAsync(this);
+            }
+        }
+
         invalidateOptionsMenu();
     }
 
@@ -175,5 +186,10 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         Intent intent = new Intent(context, PostDetailActivity.class);
         intent.putExtra(PARAM_POST_KEY, postKey);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        viewModel.updateGoogleMap(googleMap);
     }
 }
