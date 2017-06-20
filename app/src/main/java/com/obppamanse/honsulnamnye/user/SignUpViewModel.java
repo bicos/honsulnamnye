@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.user;
 
-import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -16,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by raehyeong.park on 2017. 4. 28..
@@ -57,9 +58,15 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
     @BindingAdapter("loadImage")
     public static void loadImage(ImageView imageView, String url) {
         if (!TextUtils.isEmpty(url)) {
-            Glide.with(imageView.getContext()).load(url).into(imageView);
+            Glide.with(imageView.getContext())
+                    .load(url)
+                    .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                    .into(imageView);
         } else {
-            Glide.with(imageView.getContext()).load(R.drawable.profile_blank).into(imageView);
+            Glide.with(imageView.getContext())
+                    .load(R.drawable.profile_blank)
+                    .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                    .into(imageView);
         }
     }
 
