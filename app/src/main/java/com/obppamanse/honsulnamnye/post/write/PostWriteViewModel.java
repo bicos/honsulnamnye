@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
+import com.obppamanse.honsulnamnye.util.ActivityUtils;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
 import java.util.Calendar;
@@ -64,9 +65,9 @@ public class PostWriteViewModel extends BaseObservable {
         notifyPropertyChanged(BR.placeName);
     }
 
-    public void clickWritePost(View view) {
+    public void clickWritePost(Context context) {
         try {
-            mModel.writePost((Activity) view.getContext(), new OnCompleteListener<Void>() {
+            mModel.writePost(ActivityUtils.getActivity(context), new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {

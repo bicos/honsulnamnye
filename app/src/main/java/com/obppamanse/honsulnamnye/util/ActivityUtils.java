@@ -1,5 +1,8 @@
 package com.obppamanse.honsulnamnye.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -23,5 +26,15 @@ public class ActivityUtils {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(frameId, fragment);
         transaction.commit();
+    }
+
+    public static Activity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity)context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 }
