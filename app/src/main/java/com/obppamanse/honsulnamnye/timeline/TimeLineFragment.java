@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseError;
 import com.obppamanse.honsulnamnye.R;
 
 /**
@@ -43,6 +44,13 @@ public class TimeLineFragment extends Fragment {
         adapter = new TimeLineRecyclerAdapter() {
             @Override
             protected void onDataChanged() {
+                if (progressBar.isShown()) {
+                    progressBar.hide();
+                }
+            }
+
+            @Override
+            protected void onCancelled(DatabaseError error) {
                 if (progressBar.isShown()) {
                     progressBar.hide();
                 }

@@ -1,10 +1,7 @@
 package com.obppamanse.honsulnamnye.timeline;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.widget.Toast;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.Query;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.model.Post;
@@ -17,6 +14,10 @@ public class TimeLineRecyclerAdapter extends FirebaseRecyclerAdapter<Post, PostI
 
     public TimeLineRecyclerAdapter() {
         super(Post.class, R.layout.item_post, PostItemViewHolder.class, FirebaseUtils.getPostRef());
+    }
+
+    public TimeLineRecyclerAdapter(Query q) {
+        super(Post.class, R.layout.item_post, PostItemViewHolder.class, q);
     }
 
     @Override
