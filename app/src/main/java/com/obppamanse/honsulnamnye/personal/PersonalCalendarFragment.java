@@ -67,7 +67,7 @@ public class PersonalCalendarFragment extends Fragment {
             if (TYPE_GROUP_CREATOR.equals(type)) {
                 q = FirebaseUtils.getPostRef().orderByChild("uid").equalTo(user.getUid());
             } else {
-                q = FirebaseUtils.getPostRef().orderByChild("participantList/" + user.getUid()).equalTo(user.getUid());
+                q = FirebaseUtils.getPostRef().orderByChild("participantList/"+user.getUid()+"/uid").equalTo(user.getUid());
             }
 
             adapter = new TimeLineRecyclerAdapter(q) {
