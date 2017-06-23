@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_centerInParent="true"
-        android:text="search page"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <data>
 
-</RelativeLayout>
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.obppamanse.honsulnamnye.search.SearchViewModel" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/input_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:layout_toLeftOf="@+id/btn_search"
+            android:hint="검색어를 입력하세요"
+            android:maxLines="1"
+            android:onTextChanged="@{(keyword, a,b,c) -> viewModel.changeSearchKeyword(keyword)}" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/input_search"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/input_search"
+            android:layout_marginRight="@dimen/default_margin"
+            android:onClick="@{view -> viewModel.clickSearchButton()}"
+            android:text="검색"
+            android:visibility="@{viewModel.isSearchKeywordEmpty ? View.GONE : View.VISIBLE}" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/input_search"
+            bind:setSearchList="@{viewModel.viewModel}" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/loading_progress"
+            style="@style/Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            bind:showProgress="@{viewModel.isShowProgress}"/>
+
+    </RelativeLayout>
+</layout>
