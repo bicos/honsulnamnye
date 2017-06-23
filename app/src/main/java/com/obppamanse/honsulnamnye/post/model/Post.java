@@ -3,6 +3,8 @@ package com.obppamanse.honsulnamnye.post.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
+
 /**
  * Created by raehyeong.park on 2017. 5. 25..
  */
@@ -29,6 +31,9 @@ public class Post implements Parcelable {
 
     // 만나는 장소
     private Place place;
+
+    // 가입자
+    private Map<String, Participant> participantList;
 
     public Post() {
     }
@@ -125,5 +130,13 @@ public class Post implements Parcelable {
 
     public void setPlace(Place place) {
         this.place = place;
+    }
+
+    public Map<String, Participant> getParticipantList() {
+        return participantList;
+    }
+
+    public void setParticipantList(Map<String, Participant> participantList) {
+        this.participantList = participantList;
     }
 }
