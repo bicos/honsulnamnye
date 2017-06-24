@@ -21,7 +21,7 @@ public class SearchModel implements SearchContract.Model {
 
     @Override
     public Query getSearchQuery() {
-        return TextUtils.isEmpty(keyword) ? null : FirebaseUtils.getPostRef().orderByChild("title").startAt(keyword);
+        return TextUtils.isEmpty(keyword) ? null : FirebaseUtils.getPostRef().orderByChild("title").startAt(keyword).endAt(keyword + "\uf8ff");
     }
 
     @Override
