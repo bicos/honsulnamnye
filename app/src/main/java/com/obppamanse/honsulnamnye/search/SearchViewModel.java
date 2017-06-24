@@ -18,14 +18,11 @@ import com.obppamanse.honsulnamnye.timeline.TimeLineRecyclerAdapter;
 
 public class SearchViewModel extends BaseObservable {
 
-    private SearchContract.View view;
-
     private SearchContract.Model model;
 
     private boolean isShowProgress;
 
     public SearchViewModel(SearchContract.View view, SearchContract.Model model) {
-        this.view = view;
         this.model = model;
     }
 

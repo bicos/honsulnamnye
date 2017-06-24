@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int INDEX_PERSONAL = 1;
     private static final int INDEX_SEARCH = 2;
 
-    int currentIndex = 0;
+    private int currentIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     SearchFragment.newInstance(),
                     R.id.container_main);
         }
+        currentIndex = index;
     }
 
     public void clickTimeLine(View view) {

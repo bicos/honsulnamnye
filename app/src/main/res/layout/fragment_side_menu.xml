@@ -23,7 +23,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/default_margin"
-            bind:setProfileImage="@{viewModel.profileStorageReference}" />
+            bind:setProfileImage="@{viewModel.profileStorageReference}"
+            android:onClick="@{view -> viewModel.clickProfileImage(context)}"/>
 
         <TextView
             android:id="@+id/tv_email"

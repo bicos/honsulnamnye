@@ -26,12 +26,10 @@ public class SearchFragment extends Fragment implements SearchContract.View {
         return fragment;
     }
 
-    private FragmentSearchBinding binding;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        FragmentSearchBinding binding = FragmentSearchBinding.inflate(inflater, container, false);
         binding.setViewModel(new SearchViewModel(this, new SearchModel()));
         return binding.getRoot();
     }

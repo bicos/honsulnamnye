@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.main;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
+import com.obppamanse.honsulnamnye.user.UserProfileActivity;
+import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -30,6 +33,20 @@ public class SideMenuViewModel extends BaseObservable {
     public void clickLogoutButton() {
         request.requestLogout();
         view.successLogout();
+    }
+
+    public void clickProfileImage(final Context context) {
+        request.getUserInfo(new SideMenuContract.RequestUserInfoListener() {
+            @Override
+            public void onSuccess(UserInfo userInfo) {
+                UserProfileActivity.startUserProfileActivity(context, userInfo);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                view.failedGetUserInfo(e);
+            }
+        });
     }
 
     @BindingAdapter("setProfileImage")
