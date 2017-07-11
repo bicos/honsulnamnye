@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignUpBinding;
+import com.obppamanse.honsulnamnye.main.MainActivity;
 
 /**
  * Created by raehyeong.park on 2017. 4. 27..
@@ -58,7 +59,8 @@ public class SignUpFragment extends Fragment implements SignUpContract.View {
 
     @Override
     public void startMainActivity() {
-        SplashActivity.startMainActivity(getActivity());
+        startActivity(new Intent(getContext(), MainActivity.class));
+        getActivity().finish();
     }
 
     @Override

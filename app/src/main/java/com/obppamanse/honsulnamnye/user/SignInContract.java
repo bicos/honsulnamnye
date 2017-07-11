@@ -23,6 +23,10 @@ public class SignInContract {
         Fragment getFragment();
 
         void showException(Exception e);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     public interface Model {

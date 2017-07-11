@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
+import com.obppamanse.honsulnamnye.util.Validator;
 
 import java.util.Arrays;
 
@@ -135,7 +136,7 @@ public class SignInModel implements SignInContract.Model, GoogleApiClient.OnConn
             return;
         }
 
-        if (!email.contains("@")) {
+        if (!Validator.validateId(email)) {
             listener.onFailed(new SignInContract.EmailNotValidException());
             return;
         }

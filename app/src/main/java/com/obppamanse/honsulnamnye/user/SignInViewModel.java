@@ -35,14 +35,17 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
     }
 
     public void clickLoginWithEmail() {
+        view.showProgress();
         model.signInWithEmail(view.getFragment(), this);
     }
 
     public void clickLoginWithFacebook() {
+        view.showProgress();
         model.signInWithFacebook(view.getFragment(), this);
     }
 
     public void clickLoginWithGoogle() {
+        view.showProgress();
         model.signInWithGoogle(view.getFragment(), this);
     }
 
@@ -59,6 +62,7 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
      */
     @Override
     public void onSuccess() {
+        view.hideProgress();
         model.isUserSignedUp(new SignInModel.SignedUpCompleteListener() {
             @Override
             public void onSuccess(boolean isSignedUp) {
@@ -83,6 +87,7 @@ public class SignInViewModel implements SignInModel.SignInCompleteListener {
      */
     @Override
     public void onFailed(Exception e) {
+        view.hideProgress();
         if (e instanceof FirebaseAuthInvalidUserException) {
             view.showUserNotFoundAlertDialog(new DialogInterface.OnClickListener() {
                 @Override

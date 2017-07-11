@@ -21,7 +21,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SignUpActivity"
-            android:label="회원가입" />
+            android:label="회원가입"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".post.write.PostWriteActivity"
             android:label="글쓰기" />

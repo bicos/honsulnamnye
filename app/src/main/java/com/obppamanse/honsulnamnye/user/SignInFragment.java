@@ -37,10 +37,13 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     }
 
+    FragmentSignInBinding binding;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentSignInBinding binding = FragmentSignInBinding.inflate(inflater, container, false);
+        binding = FragmentSignInBinding.inflate(inflater, container, false);
+        binding.loadingProgress.hide();
 
         model = new SignInViewModel(this, new SignInModel());
         binding.setViewModel(model);
@@ -88,5 +91,15 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     @Override
     public void showException(Exception e) {
         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showProgress() {
+        binding.loadingProgress.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        binding.loadingProgress.hide();
     }
 }
