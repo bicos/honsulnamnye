@@ -14,13 +14,13 @@ import com.obppamanse.honsulnamnye.databinding.FragmentPostWriteBinding;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
 
+import static com.obppamanse.honsulnamnye.post.write.MapsActivity.PARAM_SELECT_PLACE;
+
 /**
  * Created by raehyeong.park on 2017. 5. 26..
  */
 
 public class PostWriteFragment extends Fragment implements PostContract.WriteView {
-
-    public static final String PARAM_SELECT_PLACE = "select_place";
 
     private static final int REQUEST_SELECT_LOCATION = 1000;
 

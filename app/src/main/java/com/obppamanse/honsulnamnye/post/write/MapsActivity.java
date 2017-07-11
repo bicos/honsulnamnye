@@ -37,6 +37,8 @@ import com.obppamanse.honsulnamnye.post.model.Post;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapLongClickListener {
 
+    public static final String PARAM_SELECT_PLACE = "select_place";
+
     private static final String TAG = MapsActivity.class.getSimpleName();
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
@@ -248,7 +250,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     selectMarker.getPosition().longitude);
 
                             Intent intent = new Intent();
-                            intent.putExtra(PostWriteFragment.PARAM_SELECT_PLACE, place);
+                            intent.putExtra(PARAM_SELECT_PLACE, place);
                             setResult(RESULT_OK, intent);
                             MapsActivity.super.onBackPressed();
                         }

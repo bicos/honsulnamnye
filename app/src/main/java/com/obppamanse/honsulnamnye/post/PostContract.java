@@ -23,7 +23,7 @@ public class PostContract {
 
         void setPlace(Place place);
 
-        void setDueDate(long timeMill);
+        void setDueDate(long timeMillisecond);
     }
 
     public interface GetModel {
@@ -87,6 +87,10 @@ public class PostContract {
         void successModifyPost();
 
         void failureModifyPost();
+
+        void showErrorWrongDueDate();
+
+        void startSelectLocation();
     }
 
     public interface DetailView extends View {

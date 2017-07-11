@@ -73,7 +73,12 @@
         <activity
             android:name=".post.write.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".user.UserProfileActivity" />
+        <activity
+            android:name=".user.UserProfileActivity"
+            android:label="@string/title_profile" />
+        <activity
+            android:name=".post.modify.PostModifyActivity"
+            android:label="@string/title_modify_post" />
     </application>
 
 </manifest>

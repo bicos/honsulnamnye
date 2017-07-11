@@ -24,6 +24,7 @@ import com.obppamanse.honsulnamnye.databinding.ActivityPostDetailBinding;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Post;
+import com.obppamanse.honsulnamnye.post.modify.PostModifyActivity;
 
 /**
  * Created by Ravy on 2017. 6. 11..
@@ -39,11 +40,25 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     private ActivityPostDetailBinding binding;
 
+    private Post post;
+
+    private ValueEventListener listener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            dismissProgress();
+            populatePostDetail(dataSnapshot.getValue(Post.class));
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            dismissProgress();
+            showToastError();
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Post post;
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -54,29 +69,24 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         }
 
         if (post == null) {
+            post = new Post();
             String postKey = intent.getStringExtra(PARAM_POST_KEY);
             if (postKey == null) {
                 showToastError();
                 return;
             }
-
-            showProgress();
-            FirebaseUtils.getPostRef().child(postKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    dismissProgress();
-                    populatePostDetail(dataSnapshot.getValue(Post.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    dismissProgress();
-                    showToastError();
-                }
-            });
-        } else {
-            populatePostDetail(post);
+            post.setKey(postKey);
         }
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
+        showProgress();
+        FirebaseUtils.getPostRef().child(post.getKey()).addValueEventListener(listener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        FirebaseUtils.getPostRef().child(post.getKey()).removeEventListener(listener);
+        super.onDestroy();
     }
 
     private void showToastError(){
@@ -86,7 +96,6 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     private void populatePostDetail(Post post) {
         setTitle(post.getTitle());
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         viewModel = new PostDetailViewModel(this, new PostDetailModel(post));
         binding.setViewModel(viewModel);
 
@@ -125,6 +134,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
                         .setNegativeButton("취소", null)
                         .show();
                 return true;
+            case R.id.action_modify:
+                PostModifyActivity.start(this, post);
             default:
                 return super.onOptionsItemSelected(item);
         }

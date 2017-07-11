@@ -4,15 +4,30 @@
     <string name="app_name">다리</string>
     <string name="action_settings">Settings</string>
 
+    <string name="txt_ok">확인</string>
+    <string name="txt_cancel">취소</string>
+
     <string name="facebook_app_id">745752162261014</string>
     <string name="hint_input_email">이메일을 입력하세요</string>
     <string name="hint_input_pwd">패스워드를 입력하세요</string>
 
-    <string name="sign_in_with_email">이메일로 로그인</string>
-    <string name="sign_in_with_facebook">페이스북으로 로그인</string>
-    <string name="sign_in_with_google">구글로 로그인</string>
+    <string name="sign_in_with_email">이메일로 시작하기</string>
+    <string name="sign_in_with_facebook">페이스북으로 시작하기</string>
+    <string name="sign_in_with_google">구글로 시작하기</string>
     <string name="open_drawer">사이드메뉴 열기</string>
     <string name="close_drawer">사이드메뉴 닫기</string>
     <string name="action_delete">삭제</string>
     <string name="title_activity_maps">위치 선택</string>
+
+    <string name="msg_guide_move_sign_up">해당 유저는 혼술남녀에 가입되어 있지 않습니다. 가입 화면으로 이동하시겠습니까?</string>
+    <string name="hint_input_title">제목을 입력해주세요.</string>
+    <string name="hint_input_desc">내용을 입력해주세요.</string>
+    <string name="title_due_date">약속 날짜</string>
+    <string name="title_location">만날 장소</string>
+    <string name="success_modify_post">글 수정을 성공하였습니다.</string>
+    <string name="failure_modify_post">글 수정을 실패하였습니다.</string>
+    <string name="error_wrong_due_date">잘못된 약속 날짜입니다. 오늘 날짜 이상을 선택해주세요.</string>
+    <string name="title_modify_post">글 수정</string>
+    <string name="title_profile">프로필</string>
+    <string name="action_modify">수정</string>
 </resources>

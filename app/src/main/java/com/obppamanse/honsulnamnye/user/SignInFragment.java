@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.SignUpActivity;
 import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
@@ -67,9 +68,9 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     @Override
     public void showUserNotFoundAlertDialog(DialogInterface.OnClickListener positiveClickListener) {
         new AlertDialog.Builder(getActivity())
-                .setMessage("해당 유저는 혼술남녀에 가입되어 있지 않습니다. 가입 화면으로 이동하시겠습니까?")
-                .setPositiveButton("확인", positiveClickListener)
-                .setNegativeButton("취소", null)
+                .setMessage(R.string.msg_guide_move_sign_up)
+                .setPositiveButton(R.string.txt_ok, positiveClickListener)
+                .setNegativeButton(R.string.txt_cancel, null)
                 .show();
     }
 
