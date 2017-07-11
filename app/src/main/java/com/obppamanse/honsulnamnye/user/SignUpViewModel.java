@@ -71,6 +71,12 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
     }
 
     public void clickSignUp() {
+
+        if (TextUtils.isEmpty(model.getProfileName())) {
+            view.showException(new SignUpContract.NickNameIsEmptyException());
+            return;
+        }
+
         model.requestSignUp(view.getActivity(), this);
     }
 
