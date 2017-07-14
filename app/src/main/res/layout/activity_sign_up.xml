@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:name="com.obppamanse.honsulnamnye.user.SignUpFragment"
+        android:name="com.obppamanse.honsulnamnye.user.signup.SignUpFragment"
         android:id="@+id/container_sign_up"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

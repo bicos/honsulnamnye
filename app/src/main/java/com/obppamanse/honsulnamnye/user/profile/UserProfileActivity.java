@@ -1,4 +1,4 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.profile;
 
 import android.content.Context;
 import android.content.Intent;

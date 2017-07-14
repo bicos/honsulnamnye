@@ -1,4 +1,4 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.signin;
 
 import android.content.DialogInterface;
 import android.content.Intent;

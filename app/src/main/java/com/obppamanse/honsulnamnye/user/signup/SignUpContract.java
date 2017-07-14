@@ -1,4 +1,4 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.signup;
 
 import android.app.Activity;
 import android.content.Context;

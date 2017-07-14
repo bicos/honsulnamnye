@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
-import com.obppamanse.honsulnamnye.user.UserProfileActivity;
+import com.obppamanse.honsulnamnye.user.profile.UserProfileActivity;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;

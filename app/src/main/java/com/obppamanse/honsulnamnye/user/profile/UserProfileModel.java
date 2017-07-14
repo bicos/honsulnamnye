@@ -1,4 +1,4 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.profile;
 
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 

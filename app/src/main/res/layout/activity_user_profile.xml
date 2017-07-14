@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.user.UserProfileViewModel" />
+            type="com.obppamanse.honsulnamnye.user.profile.UserProfileViewModel" />
 
     </data>
 

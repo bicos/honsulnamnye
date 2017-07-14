@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.user.SignUpViewModel" />
+            type="com.obppamanse.honsulnamnye.user.signup.SignUpViewModel" />
     </data>
 
     <RelativeLayout

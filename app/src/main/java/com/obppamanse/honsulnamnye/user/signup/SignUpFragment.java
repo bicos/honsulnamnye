@@ -1,4 +1,4 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.signup;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignUpBinding;
 import com.obppamanse.honsulnamnye.main.MainActivity;
 

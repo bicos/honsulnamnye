@@ -5,7 +5,7 @@
 
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.user.SignInViewModel" />
+            type="com.obppamanse.honsulnamnye.user.signin.SignInViewModel" />
     </data>
 
     <RelativeLayout

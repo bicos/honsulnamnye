@@ -1,10 +1,8 @@
-package com.obppamanse.honsulnamnye.user;
+package com.obppamanse.honsulnamnye.user.signin;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by raehyeong.park on 2017. 4. 25..
