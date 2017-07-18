@@ -17,6 +17,8 @@ import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 public class UserProfileActivity extends AppCompatActivity implements UserProfileContract.View {
 
+    private static final int REQUEST_CODE_PICK_IMAGE = 1000;
+
     private ActivityUserProfileBinding binding;
 
     @Override
@@ -36,6 +38,23 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile);
         binding.setViewModel(new UserProfileViewModel(this, new UserProfileModel(info)));
+    }
+
+    @Override
+    public void chooseProfileImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "이미지 선택"), REQUEST_CODE_PICK_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_PICK_IMAGE && resultCode == RESULT_OK && data != null) {
+            binding.getViewModel().changeProfileImage(data.getData());
+        }
     }
 
     public static void startUserProfileActivity(Context context, UserInfo info){

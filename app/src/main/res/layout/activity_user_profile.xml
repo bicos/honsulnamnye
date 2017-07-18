@@ -25,7 +25,7 @@
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/default_margin"
             android:layout_marginTop="50dp"
-            android:onClick="@{(view) -> viewModel.clickChangeProfileImage(context)}"
+            android:onClick="@{(view) -> viewModel.clickChangeProfileImage()}"
             bind:setProfileImage="@{viewModel.profileUrl}" />
 
         <TextView
@@ -124,14 +124,24 @@
         </android.support.v7.widget.CardView>
 
         <Button
+            android:id="@+id/btn_modify_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            android:layout_marginTop="15dp"
+            android:onClick="@{view -> viewModel.clickModifyProfile(context)}"
+            android:text="@string/btn_modify_profile" />
+
+        <Button
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/default_margin"
             android:layout_marginRight="@dimen/default_margin"
             android:layout_marginTop="15dp"
-            android:onClick="@{view -> viewModel.clickWithdrawalButton(context)}"
-            android:text="회원탈퇴" />
+            android:onClick="@{view -> viewModel.clickWithdrawal(context)}"
+            android:text="@string/btn_withdrawal" />
 
 
     </LinearLayout>

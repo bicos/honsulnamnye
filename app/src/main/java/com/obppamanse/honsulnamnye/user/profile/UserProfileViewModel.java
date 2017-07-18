@@ -4,9 +4,11 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
@@ -48,13 +50,17 @@ public class UserProfileViewModel extends BaseObservable {
     }
 
     public void inputNickName(String nickName) {
-        if (model.getUser() != null) {
-            model.getUser().nickName = nickName;
+        if (nickName != null) {
+            model.setModifyUserName(true);
+            if (model.getUser() != null) {
+                model.getUser().nickName = nickName;
+            }
         }
     }
 
     public void changeGender(int resId) {
         if (model.getUser() != null) {
+            model.setModifyUserGender(true);
             if (resId == R.id.radio_man) {
                 model.getUser().gender = UserInfo.Gender.MALE;
             } else if (resId == R.id.radio_woman){
@@ -63,12 +69,24 @@ public class UserProfileViewModel extends BaseObservable {
         }
     }
 
-    public void clickChangeProfileImage(Context context) {
+    public void changeProfileImage(Uri uri) {
+        model.setModifyProfileImage(true);
+        if (uri != null) {
+            model.getUser().profileUri = uri.toString();
+        }
+        notifyPropertyChanged(BR.profileUrl);
+    }
+
+    public void clickChangeProfileImage() {
+        view.chooseProfileImage();
+    }
+
+    public void clickWithdrawal(Context context){
 
     }
 
-    public void clickWithdrawalButton(Context context){
-
+    public void clickModifyProfile(Context context){
+        model.updateProfile();
     }
 
     @BindingAdapter("setProfileImage")

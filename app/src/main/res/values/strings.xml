@@ -30,4 +30,6 @@
     <string name="title_modify_post">글 수정</string>
     <string name="title_profile">프로필</string>
     <string name="action_modify">수정</string>
+    <string name="btn_modify_profile">회원정보 수정</string>
+    <string name="btn_withdrawal">회원탈퇴</string>
 </resources>

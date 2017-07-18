@@ -8,11 +8,11 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.UploadTask;
+import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
