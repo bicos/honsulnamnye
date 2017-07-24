@@ -4,12 +4,12 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.firebase.storage.StorageReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.user.profile.UserProfileActivity;
 
@@ -25,9 +25,32 @@ public class SideMenuViewModel extends BaseObservable {
 
     private SideMenuContract.Request request;
 
+    private ValueEventListener listener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                request.setUserInfo(dataSnapshot.getValue(UserInfo.class));
+                notifyChange();
+            }
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
     public SideMenuViewModel(SideMenuContract.View view, SideMenuContract.Request request) {
         this.view = view;
         this.request = request;
+    }
+
+    public void startSyncUserInfo() {
+        request.startSyncUserInfo(listener);
+    }
+
+    public void stopSyncUserInfo(){
+        request.stopSyncUserInfo(listener);
     }
 
     public void clickLogoutButton() {
@@ -36,22 +59,15 @@ public class SideMenuViewModel extends BaseObservable {
     }
 
     public void clickProfileImage(final Context context) {
-        request.getUserInfo(new SideMenuContract.RequestUserInfoListener() {
-            @Override
-            public void onSuccess(UserInfo userInfo) {
-                UserProfileActivity.startUserProfileActivity(context, userInfo);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                view.failedGetUserInfo(e);
-            }
-        });
+        if (request.getCurrentUser() != null) {
+            UserProfileActivity.startUserProfileActivity(context, request.getCurrentUser());
+        } else {
+            view.failedGetUserInfo(new SideMenuContract.FailedGetUserInfo());
+        }
     }
 
     @BindingAdapter("setProfileImage")
     public static void setProfileImage(ImageView image, String profileUrl) {
-
         Glide.with(image.getContext())
                 .load(profileUrl)
                 .bitmapTransform(new CropCircleTransformation(image.getContext()))

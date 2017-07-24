@@ -81,12 +81,11 @@ public class UserProfileModel implements UserProfileContract.Model {
             public void onSuccess(Void aVoid) {
                 if (modifyUserGender) {
                     modifyUserGender = false;
-                    FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(user)
-                            .addOnSuccessListener(activity, successListener)
-                            .addOnFailureListener(activity, failureListener);
-                } else {
-                    successListener.onSuccess(aVoid);
                 }
+
+                FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(user)
+                        .addOnSuccessListener(activity, successListener)
+                        .addOnFailureListener(activity, failureListener);
             }
         }).addOnFailureListener(activity, failureListener);
     }

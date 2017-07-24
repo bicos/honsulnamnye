@@ -6,7 +6,6 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -37,22 +36,22 @@ public class UserProfileViewModel extends BaseObservable {
     }
 
     @Bindable
-    public String getProfileName(){
+    public String getProfileName() {
         return model.getUser() != null ? model.getUser().nickName : null;
     }
 
     @Bindable
-    public String getUserEmail(){
+    public String getUserEmail() {
         return model.getUser() != null ? model.getUser().email : null;
     }
 
     @Bindable
-    public String getProfileUrl(){
-        return  model.getUser() != null ? model.getUser().profileUri : null;
+    public String getProfileUrl() {
+        return model.getUser() != null ? model.getUser().profileUri : null;
     }
 
     @Bindable
-    public String getGender(){
+    public String getGender() {
         return model.getUser() != null ? model.getUser().gender : null;
     }
 
@@ -70,14 +69,13 @@ public class UserProfileViewModel extends BaseObservable {
             model.setModifyUserGender(!getGenderFromResId(resId).equals(model.getUser().gender));
             if (resId == R.id.radio_man) {
                 model.getUser().gender = UserInfo.Gender.MALE.name();
-            } else if (resId == R.id.radio_woman){
+            } else if (resId == R.id.radio_woman) {
                 model.getUser().gender = UserInfo.Gender.FEMALE.name();
             }
         }
     }
 
-    public boolean currentUserIsMale(){
-        Log.i("test", "getUser.gender : " + model.getUser().gender +", UserInfo.Gender.MALE.name() : "+UserInfo.Gender.MALE.name());
+    public boolean currentUserIsMale() {
         return model.getUser().gender != null && model.getUser().gender.equals(UserInfo.Gender.MALE.name());
     }
 
@@ -102,7 +100,7 @@ public class UserProfileViewModel extends BaseObservable {
         view.chooseProfileImage();
     }
 
-    public void clickWithdrawal(Context context){
+    public void clickWithdrawal(Context context) {
         model.withdrawalService(ActivityUtils.getActivity(context), new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -115,7 +113,7 @@ public class UserProfileViewModel extends BaseObservable {
         });
     }
 
-    public void clickModifyProfile(Context context){
+    public void clickModifyProfile(Context context) {
         model.updateProfile(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

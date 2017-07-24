@@ -20,47 +20,50 @@ public class SideMenuRequest implements SideMenuContract.Request {
 
     private FirebaseAuth auth;
 
+    private UserInfo userInfo;
+
     public SideMenuRequest() {
         auth = FirebaseAuth.getInstance();
     }
 
-    private FirebaseUser getCurrentUser() {
-        return auth.getCurrentUser();
+    @Override
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     @Override
-    public void getUserInfo(final SideMenuContract.RequestUserInfoListener listener) {
+    public UserInfo getCurrentUser() {
+        return userInfo;
+    }
+
+    @Override
+    public void startSyncUserInfo(ValueEventListener listener) {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             return;
         }
 
-        FirebaseUtils.getUserRef().child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                UserInfo userInfo = dataSnapshot.getValue(UserInfo.class);
-                if (userInfo != null) {
-                    listener.onSuccess(userInfo);
-                } else {
-                    listener.onFailed(new PostContract.NotExistAuthUserException());
-                }
-            }
+        FirebaseUtils.getUserRef().child(user.getUid()).addValueEventListener(listener);
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onFailed(databaseError.toException());
-            }
-        });
+    @Override
+    public void stopSyncUserInfo(ValueEventListener listener) {
+        FirebaseUser user = auth.getCurrentUser();
+        if (user == null) {
+            return;
+        }
+
+        FirebaseUtils.getUserRef().child(user.getUid()).removeEventListener(listener);
     }
 
     @Override
     public String getUserName() {
-        return getCurrentUser() != null ? getCurrentUser().getDisplayName() : null;
+        return getCurrentUser() != null ? getCurrentUser().nickName : null;
     }
 
     @Override
     public String getUserEmail() {
-        return getCurrentUser() != null ? getCurrentUser().getEmail() : null;
+        return getCurrentUser() != null ? getCurrentUser().email : null;
     }
 
     @Override
@@ -70,6 +73,6 @@ public class SideMenuRequest implements SideMenuContract.Request {
 
     @Override
     public String getProfileUrl() {
-        return getCurrentUser().getPhotoUrl() != null ? getCurrentUser().getPhotoUrl().toString() : null;
+        return getCurrentUser() != null ? getCurrentUser().profileUri : null;
     }
 }

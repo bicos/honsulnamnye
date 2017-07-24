@@ -1,6 +1,7 @@
 package com.obppamanse.honsulnamnye.main;
 
 
+import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -17,7 +18,9 @@ public class SideMenuContract {
 
     public interface Request {
 
-        void getUserInfo(RequestUserInfoListener listener);
+        void startSyncUserInfo(ValueEventListener listener);
+
+        void stopSyncUserInfo(ValueEventListener listener);
 
         String getUserName();
 
@@ -26,11 +29,16 @@ public class SideMenuContract {
         void requestLogout();
 
         String getProfileUrl();
+
+        void setUserInfo(UserInfo userInfo);
+
+        UserInfo getCurrentUser();
     }
 
-    public interface RequestUserInfoListener {
-        void onSuccess(UserInfo userInfo);
-
-        void onFailed(Exception e);
+    public static class FailedGetUserInfo extends Exception{
+        @Override
+        public String getMessage() {
+            return "유저 정보를 가져오지 못하였습니다.";
+        }
     }
 }

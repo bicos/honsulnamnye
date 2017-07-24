@@ -29,17 +29,26 @@ public class SideMenuFragment extends Fragment implements SideMenuContract.View 
         return fragment;
     }
 
+    private SideMenuViewModel viewModel;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentSideMenuBinding binding = FragmentSideMenuBinding.inflate(inflater, container, false);
-        binding.setViewModel(new SideMenuViewModel(this, new SideMenuRequest()));
+
+        viewModel = new SideMenuViewModel(this, new SideMenuRequest());
+        binding.setViewModel(viewModel);
+        viewModel.startSyncUserInfo();
+
         return binding.getRoot();
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onDestroyView() {
+        if (viewModel != null) {
+            viewModel.stopSyncUserInfo();
+        }
+        super.onDestroyView();
     }
 
     @Override
