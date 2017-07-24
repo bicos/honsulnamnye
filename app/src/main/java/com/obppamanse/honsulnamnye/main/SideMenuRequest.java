@@ -64,20 +64,12 @@ public class SideMenuRequest implements SideMenuContract.Request {
     }
 
     @Override
-    public StorageReference getProfileStorageReference() {
-        String child = null;
-
-        FirebaseUser user = getCurrentUser();
-
-        if (user != null) {
-            child = user.getEmail();
-        }
-
-        return !TextUtils.isEmpty(child) ? FirebaseUtils.getProfileStorageRef().child(user.getEmail()) : null;
+    public void requestLogout() {
+        auth.signOut();
     }
 
     @Override
-    public void requestLogout() {
-        auth.signOut();
+    public String getProfileUrl() {
+        return getCurrentUser().getPhotoUrl() != null ? getCurrentUser().getPhotoUrl().toString() : null;
     }
 }

@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSideMenuBinding;
 
 /**
@@ -46,8 +44,7 @@ public class SideMenuFragment extends Fragment implements SideMenuContract.View 
 
     @Override
     public void successLogout() {
-        startActivity(new Intent(getContext(), SplashActivity.class));
-        getActivity().finish();
+
     }
 
     @Override

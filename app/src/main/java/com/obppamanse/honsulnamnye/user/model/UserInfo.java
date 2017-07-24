@@ -4,11 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.IgnoreExtraProperties;
 
 /**
  * Created by raehyeong.park on 2017. 4. 28..
  */
 
+@IgnoreExtraProperties
 public class UserInfo implements Parcelable {
 
     public String email;
@@ -17,7 +19,7 @@ public class UserInfo implements Parcelable {
 
     public String nickName;
 
-    public Gender gender;
+    public String gender;
 
     public String profileUri;
 
@@ -40,6 +42,7 @@ public class UserInfo implements Parcelable {
         email = in.readString();
         password = in.readString();
         nickName = in.readString();
+        gender = in.readString();
         profileUri = in.readString();
         interestingCategory = in.readString();
     }
@@ -49,6 +52,7 @@ public class UserInfo implements Parcelable {
         dest.writeString(email);
         dest.writeString(password);
         dest.writeString(nickName);
+        dest.writeString(gender);
         dest.writeString(profileUri);
         dest.writeString(interestingCategory);
     }

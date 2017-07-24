@@ -1,9 +1,15 @@
 package com.obppamanse.honsulnamnye.user.profile;
 
+import android.app.Activity;
 import android.net.Uri;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.UploadTask;
+import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -33,22 +39,61 @@ public class UserProfileModel implements UserProfileContract.Model {
     }
 
     @Override
-    public void updateProfile() {
-        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+    public void updateProfile(final Activity activity,
+                              final OnSuccessListener<Void> successListener,
+                              final OnFailureListener failureListener) {
+        final UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
 
         if (modifyProfileImage) {
-            builder.setPhotoUri(Uri.parse(user.profileUri));
+            modifyProfileImage = false;
+
+            FirebaseUtils.getProfileStorageRef().child(user.email)
+                    .putFile(Uri.parse(user.profileUri))
+                    .addOnSuccessListener(activity, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            if (taskSnapshot.getDownloadUrl() != null) {
+                                builder.setPhotoUri(taskSnapshot.getDownloadUrl());
+                                user.profileUri = taskSnapshot.getDownloadUrl().toString();
+                                updateProfile(builder, activity, successListener, failureListener);
+                            } else {
+                                failureListener.onFailure(new UserProfileContract.FailureModifyProfileException());
+                            }
+                        }
+                    })
+                    .addOnFailureListener(activity, failureListener);
+        } else {
+            updateProfile(builder, activity, successListener, failureListener);
         }
     }
 
-    @Override
-    public void modifyUserGender() {
+    private void updateProfile(UserProfileChangeRequest.Builder builder, final Activity activity,
+                               final OnSuccessListener<Void> successListener,
+                               final OnFailureListener failureListener) {
 
+        if (modifyUserName) {
+            modifyUserName = false;
+            builder.setDisplayName(user.nickName);
+        }
+
+        firebaseUser.updateProfile(builder.build()).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                if (modifyUserGender) {
+                    modifyUserGender = false;
+                    FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(user)
+                            .addOnSuccessListener(activity, successListener)
+                            .addOnFailureListener(activity, failureListener);
+                } else {
+                    successListener.onSuccess(aVoid);
+                }
+            }
+        }).addOnFailureListener(activity, failureListener);
     }
 
     @Override
-    public void withdrawalService() {
-
+    public void withdrawalService(Activity activity, OnCompleteListener<Void> listener) {
+        firebaseUser.delete().addOnCompleteListener(activity, listener);
     }
 
     @Override

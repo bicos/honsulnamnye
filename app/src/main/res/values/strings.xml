@@ -32,4 +32,21 @@
     <string name="action_modify">수정</string>
     <string name="btn_modify_profile">회원정보 수정</string>
     <string name="btn_withdrawal">회원탈퇴</string>
+    <string name="error_not_exist_user_info">유저 정보가 존재하지 않습니다.</string>
+    <string name="msg_withdrawal_service">서비스를 탈퇴하였습니다.</string>
+    <string name="error_withdrawal_service">서비스 탈퇴를 실패하였습니다.</string>
+    <string name="msg_success_modify_user_info">유저 정보를 업데이트하였습니다.</string>
+    <string name="error_failed_modify_user_info">유저 정보를 업데이트를 실패하였습니다.</string>
+    <string name="msg_logout">로그아웃 되었습니다. 다시 로그인해주세요.</string>
+    <string name="title_alert">알림</string>
+    <string name="button_ok">확인</string>
+    <string name="msg_exist_modify_user_info">현재 유저 정보 수정사항이 존재합니다. 수정하시겠습니까?</string>
+    <string name="button_cancel">취소</string>
+    <string name="title_select_image">이미지 선택</string>
+    <string name="title_optional">부가항목</string>
+    <string name="sub_title_gender">성별</string>
+    <string name="txt_mail">남자</string>
+    <string name="txt_femail">여자</string>
+    <string name="hint_input_nickname">닉네임을 입력하세요</string>
+    <string name="title_critical">필수항목</string>
 </resources>

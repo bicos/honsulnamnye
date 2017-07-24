@@ -1,7 +1,6 @@
 package com.obppamanse.honsulnamnye.main;
 
 
-import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -24,9 +23,9 @@ public class SideMenuContract {
 
         String getUserEmail();
 
-        StorageReference getProfileStorageReference();
-
         void requestLogout();
+
+        String getProfileUrl();
     }
 
     public interface RequestUserInfoListener {

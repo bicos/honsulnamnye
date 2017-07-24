@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
-import com.obppamanse.honsulnamnye.user.profile.UserProfileActivity;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
+import com.obppamanse.honsulnamnye.user.profile.UserProfileActivity;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -50,11 +50,10 @@ public class SideMenuViewModel extends BaseObservable {
     }
 
     @BindingAdapter("setProfileImage")
-    public static void setProfileImage(ImageView image,@Nullable StorageReference ref) {
+    public static void setProfileImage(ImageView image, String profileUrl) {
 
         Glide.with(image.getContext())
-                .using(new FirebaseImageLoader())
-                .load(ref)
+                .load(profileUrl)
                 .bitmapTransform(new CropCircleTransformation(image.getContext()))
                 .into(image);
     }
@@ -70,7 +69,7 @@ public class SideMenuViewModel extends BaseObservable {
     }
 
     @Bindable
-    public StorageReference getProfileStorageReference() {
-        return request.getProfileStorageReference();
+    public String getProfileUrl() {
+        return request.getProfileUrl();
     }
 }

@@ -51,13 +51,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="필수항목" />
+                    android:text="@string/title_critical" />
 
                 <EditText
                     android:id="@+id/et_input_nickname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="닉네임을 입력하세요"
+                    android:hint="@string/hint_input_nickname"
                     android:inputType="text"
                     android:onTextChanged="@{(nickName, a,b,c) -> viewModel.inputNickName(nickName.toString())}"
                     android:text="@{viewModel.profileName}" />
@@ -82,7 +82,7 @@
                     android:id="@+id/optional"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="부가항목" />
+                    android:text="@string/title_optional" />
 
                 <TextView
                     android:id="@+id/gender"
@@ -93,7 +93,7 @@
                     android:layout_alignTop="@+id/radio_group_gender"
                     android:layout_toLeftOf="@+id/radio_group_gender"
                     android:gravity="center_vertical"
-                    android:text="성별" />
+                    android:text="@string/sub_title_gender" />
 
                 <RadioGroup
                     android:id="@+id/radio_group_gender"
@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/optional"
-                    android:checkedButton="@{viewModel.gender == Gender.MALE ? @id/radio_man : @id/radio_woman}"
+                    android:checkedButton="@{viewModel.currentUserIsMale() ? @id/radio_man : @id/radio_woman}"
                     android:onCheckedChanged="@{(group, checkedId) -> viewModel.changeGender(checkedId)}"
                     android:orientation="horizontal">
 
@@ -109,13 +109,13 @@
                         android:id="@+id/radio_man"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="남자" />
+                        android:text="@string/txt_mail" />
 
                     <RadioButton
                         android:id="@+id/radio_woman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="여자" />
+                        android:text="@string/txt_femail" />
 
                 </RadioGroup>
 

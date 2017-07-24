@@ -102,6 +102,11 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
+    public static void startSplashActivity(Activity activity) {
+        Intent intent = new Intent(activity, SplashActivity.class);
+        activity.startActivity(intent);
+    }
+
     public static void startMainActivity(Activity activity) {
         Intent intent = new Intent(activity, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);

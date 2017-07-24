@@ -90,7 +90,7 @@ public class SignUpModel implements SignUpContract.Model {
 
     @Override
     public void setGender(UserInfo.Gender gender) {
-        userInfo.gender = gender;
+        userInfo.gender = gender.name();
     }
 
     @Override
