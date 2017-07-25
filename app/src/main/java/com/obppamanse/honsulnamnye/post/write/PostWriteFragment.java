@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.databinding.FragmentPostWriteBinding;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
@@ -23,6 +24,8 @@ import static com.obppamanse.honsulnamnye.post.write.MapsActivity.PARAM_SELECT_P
 public class PostWriteFragment extends Fragment implements PostContract.WriteView {
 
     private static final int REQUEST_SELECT_LOCATION = 1000;
+
+    private static final int REQUEST_UPLOAD_IMAGE = 1001;
 
     public PostWriteFragment() {
     }
@@ -43,6 +46,7 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPostWriteBinding.inflate(inflater, container, false);
         binding.setViewModel(new PostWriteViewModel(this, new PostWriteModel()));
+        binding.loadingProgress.hide();
         return binding.getRoot();
     }
 
@@ -68,22 +72,32 @@ public class PostWriteFragment extends Fragment implements PostContract.WriteVie
     }
 
     @Override
+    public void chooseProfileImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.title_select_image)), REQUEST_UPLOAD_IMAGE);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK && data != null) {
             if (data.hasExtra(PARAM_SELECT_PLACE)) {
                 binding.getViewModel().updatePlace((Place) data.getParcelableExtra(PARAM_SELECT_PLACE));
             }
+        } else if (requestCode == REQUEST_UPLOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            binding.getViewModel().addUploadImageUri(data.getData());
         }
     }
 
     @Override
     public void showProgress() {
-
+        binding.loadingProgress.show();
     }
 
     @Override
     public void dismissProgress() {
-
+        binding.loadingProgress.hide();
     }
 }

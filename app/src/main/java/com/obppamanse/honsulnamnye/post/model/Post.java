@@ -3,6 +3,8 @@ package com.obppamanse.honsulnamnye.post.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +34,9 @@ public class Post implements Parcelable {
     // 만나는 장소
     private Place place;
 
+    // 업로드된 파일 이름들
+    private List<String> fileNames = new ArrayList<>();
+
     // 가입자
     private Map<String, Participant> participantList;
 
@@ -46,6 +51,7 @@ public class Post implements Parcelable {
         writeTime = in.readLong();
         dueDateTime = in.readLong();
         place = in.readParcelable(Place.class.getClassLoader());
+        fileNames = in.createStringArrayList();
     }
 
     @Override
@@ -57,6 +63,7 @@ public class Post implements Parcelable {
         dest.writeLong(writeTime);
         dest.writeLong(dueDateTime);
         dest.writeParcelable(place, flags);
+        dest.writeStringList(fileNames);
     }
 
     @Override
@@ -138,5 +145,13 @@ public class Post implements Parcelable {
 
     public void setParticipantList(Map<String, Participant> participantList) {
         this.participantList = participantList;
+    }
+
+    public void addUploadFileName(String fileName) {
+        fileNames.add(fileName);
+    }
+
+    public List<String> getFileNames() {
+        return fileNames;
     }
 }

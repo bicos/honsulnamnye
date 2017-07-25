@@ -94,6 +94,10 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     }
 
     private void populatePostDetail(Post post) {
+        if (post == null) {
+            return;
+        }
+
         setTitle(post.getTitle());
 
         viewModel = new PostDetailViewModel(this, new PostDetailModel(post));

@@ -17,25 +17,29 @@ public class FirebaseUtils {
 
     public static final String PARTICIPANT_LIST_REF = "participantList";
 
-    public static DatabaseReference getUserRef(){
+    public static DatabaseReference getUserRef() {
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);
     }
 
-    public static DatabaseReference getPostRef(){
+    public static DatabaseReference getPostRef() {
         return FirebaseDatabase.getInstance().getReference().child(POST_REF);
     }
 
-    public static DatabaseReference getParticipantListRef(String postKey){
+    public static DatabaseReference getParticipantListRef(String postKey) {
         return getPostRef().child(postKey).child(PARTICIPANT_LIST_REF);
     }
 
     private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";
 
-    public static StorageReference getStorageRef(){
+    public static StorageReference getStorageRef() {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF);
     }
 
-    public static StorageReference getProfileStorageRef(){
+    public static StorageReference getProfileStorageRef() {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("profile");
+    }
+
+    public static StorageReference getPostStorageRef(String postUid) {
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("post").child(postUid);
     }
 }

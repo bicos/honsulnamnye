@@ -1,16 +1,15 @@
 package com.obppamanse.honsulnamnye.post.write;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.view.View;
 import android.widget.DatePicker;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
@@ -66,18 +65,23 @@ public class PostWriteViewModel extends BaseObservable {
     }
 
     public void clickWritePost(Context context) {
+        mView.showProgress();
         try {
-            mModel.writePost(ActivityUtils.getActivity(context), new OnCompleteListener<Void>() {
+            mModel.writePost(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        mView.successWritePost();
-                    } else {
-                        mView.failureWritePost(task.getException());
-                    }
+                public void onSuccess(Void aVoid) {
+                    mView.dismissProgress();
+                    mView.successWritePost();
+                }
+            }, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    mView.dismissProgress();
+                    mView.failureWritePost(e);
                 }
             });
         } catch (Exception e) {
+            mView.dismissProgress();
             mView.failureWritePost(e);
         }
     }
@@ -110,5 +114,13 @@ public class PostWriteViewModel extends BaseObservable {
 
     public void clickSelectLocation() {
         mView.startSelectLocation();
+    }
+
+    public void clickUploadFile() {
+        mView.chooseProfileImage();
+    }
+
+    public void addUploadImageUri(Uri data) {
+        mModel.addUploadImageUri(data);
     }
 }

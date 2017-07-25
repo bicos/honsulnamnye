@@ -2,8 +2,11 @@ package com.obppamanse.honsulnamnye.post;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
 
@@ -44,11 +47,14 @@ public class PostContract {
     }
 
     public interface WriteModel extends SetModel {
-        void writePost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+
+        void writePost(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener) throws Exception;
 
         String getPlaceName();
 
         long getDueDate();
+
+        void addUploadImageUri(Uri data);
     }
 
     public interface ModifyModel extends GetModel, SetModel {
@@ -81,6 +87,8 @@ public class PostContract {
         void showErrorWrongDueDate();
 
         void startSelectLocation();
+
+        void chooseProfileImage();
     }
 
     public interface ModifyView extends View {
