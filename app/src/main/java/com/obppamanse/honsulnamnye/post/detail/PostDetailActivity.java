@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -79,6 +80,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
+        setSupportActionBar(binding.toolbar);
         showProgress();
         FirebaseUtils.getPostRef().child(post.getKey()).addValueEventListener(listener);
     }
@@ -89,7 +91,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         super.onDestroy();
     }
 
-    private void showToastError(){
+    private void showToastError() {
         Toast.makeText(getContext(), "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
     }
 
@@ -97,6 +99,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         if (post == null) {
             return;
         }
+
+        Log.i("test", "post : " + post);
 
         setTitle(post.getTitle());
 

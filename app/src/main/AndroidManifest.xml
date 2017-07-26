@@ -12,14 +12,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name=".DariApp"
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".DariApp">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -43,7 +43,8 @@
             android:label="글쓰기" />
         <activity
             android:name=".post.detail.PostDetailActivity"
-            android:label="" />
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">

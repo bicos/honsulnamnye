@@ -7,10 +7,12 @@ import android.net.Uri;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by raehyeong.park on 2017. 5. 25..
@@ -69,6 +71,8 @@ public class PostContract {
         void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
         void requestIsMember(Activity activity, final PostDetailModel.MemberExistListener listener);
+
+        List<StorageReference> getImageUrlList();
     }
 
     public interface View {

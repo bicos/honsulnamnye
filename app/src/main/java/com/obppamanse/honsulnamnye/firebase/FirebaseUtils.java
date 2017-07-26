@@ -39,7 +39,12 @@ public class FirebaseUtils {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("profile");
     }
 
-    public static StorageReference getPostStorageRef(String postUid) {
-        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("post").child(postUid);
+    /**
+     *
+     * @param postKey {@link com.obppamanse.honsulnamnye.post.model.Post#key}
+     * @return
+     */
+    public static StorageReference getPostStorageRef(String postKey) {
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("post").child(postKey);
     }
 }

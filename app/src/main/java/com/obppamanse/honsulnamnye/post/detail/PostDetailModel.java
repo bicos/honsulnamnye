@@ -9,11 +9,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
-import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Participant;
+import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ravy on 2017. 6. 11..
@@ -128,6 +132,19 @@ public class PostDetailModel implements PostContract.DetailModel {
                 listener.isMember(false);
             }
         });
+    }
+
+    @Override
+    public List<StorageReference> getImageUrlList() {
+        List<StorageReference> list = new ArrayList<>();
+
+        if (post != null) {
+            for (String url : post.getFileNames()) {
+                list.add(FirebaseUtils.getPostStorageRef(post.getKey()).child(url));
+            }
+        }
+
+        return list;
     }
 
     public interface MemberExistListener {

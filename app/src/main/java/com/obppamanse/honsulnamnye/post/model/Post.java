@@ -154,4 +154,19 @@ public class Post implements Parcelable {
     public List<String> getFileNames() {
         return fileNames;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "key='" + key + '\'' +
+                ", uid='" + uid + '\'' +
+                ", title='" + title + '\'' +
+                ", desc='" + desc + '\'' +
+                ", writeTime=" + writeTime +
+                ", dueDateTime=" + dueDateTime +
+                ", place=" + place +
+                ", fileNames=" + fileNames +
+                ", participantList=" + participantList +
+                '}';
+    }
 }
