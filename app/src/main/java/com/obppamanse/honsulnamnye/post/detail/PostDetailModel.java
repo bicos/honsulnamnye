@@ -27,11 +27,14 @@ public class PostDetailModel implements PostContract.DetailModel {
 
     private Post post;
 
+    private FirebaseUser user;
+
     private DatabaseReference reference;
 
     public PostDetailModel(Post post) {
         this.reference = FirebaseUtils.getPostRef().child(post.getKey());
         this.post = post;
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
@@ -61,7 +64,6 @@ public class PostDetailModel implements PostContract.DetailModel {
 
     @Override
     public boolean isWriter() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         return user != null && user.getUid().equals(post.getUid());
     }
 
@@ -77,8 +79,6 @@ public class PostDetailModel implements PostContract.DetailModel {
 
     @Override
     public void joinGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user == null) {
             throw new PostContract.NotExistAuthUserException();
         }
@@ -95,8 +95,6 @@ public class PostDetailModel implements PostContract.DetailModel {
 
     @Override
     public void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user == null) {
             throw new PostContract.NotExistAuthUserException();
         }
@@ -112,8 +110,6 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     public void requestIsMember(Activity activity, final MemberExistListener listener) {
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if (user == null) {
             listener.isMember(false);
             return;

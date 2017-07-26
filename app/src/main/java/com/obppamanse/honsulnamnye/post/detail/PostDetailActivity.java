@@ -81,6 +81,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         setSupportActionBar(binding.toolbar);
+
         showProgress();
         FirebaseUtils.getPostRef().child(post.getKey()).addValueEventListener(listener);
     }
@@ -99,8 +100,6 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         if (post == null) {
             return;
         }
-
-        Log.i("test", "post : " + post);
 
         setTitle(post.getTitle());
 

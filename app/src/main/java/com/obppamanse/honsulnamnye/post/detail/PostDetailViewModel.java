@@ -36,6 +36,8 @@ import com.obppamanse.honsulnamnye.util.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 /**
  * Created by Ravy on 2017. 6. 11..
  */
@@ -221,6 +223,8 @@ public class PostDetailViewModel extends BaseObservable {
             Glide.with(container.getContext())
                     .using(new FirebaseImageLoader())
                     .load(imageUrlList.get(position))
+                    .bitmapTransform(new BlurTransformation(container.getContext()))
+                    .centerCrop()
                     .into(imageView);
             container.addView(imageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             return imageView;
