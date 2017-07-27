@@ -1,7 +1,6 @@
 package com.obppamanse.honsulnamnye.user.profile;
 
 import android.app.Activity;
-import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

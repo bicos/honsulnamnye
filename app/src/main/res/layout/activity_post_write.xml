@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.obppamanse.honsulnamnye.post.write.PostWriteViewModel" />
@@ -143,6 +145,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
                             android:text="사진" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/pager_upload_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/default_margin"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="5dp"
+                            android:paddingRight="5dp"
+                            android:paddingTop="10dp"
+                            android:visibility="@{viewModel.uploadImageUri.isEmpty() ? View.GONE : View.VISIBLE}"
+                            app:setUploadImageList="@{viewModel.uploadImageUri}" />
 
                         <Button
                             android:id="@+id/btn_upload_image"

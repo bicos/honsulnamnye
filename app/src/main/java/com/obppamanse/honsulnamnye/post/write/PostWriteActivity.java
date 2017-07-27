@@ -60,7 +60,7 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
     }
 
     @Override
-    public void chooseProfileImage() {
+    public void chooseUploadImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);

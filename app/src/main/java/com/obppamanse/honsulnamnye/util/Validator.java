@@ -1,7 +1,5 @@
 package com.obppamanse.honsulnamnye.util;
 
-import android.text.TextUtils;
-
 /**
  * Created by raehyeong.park on 2017. 7. 11..
  */

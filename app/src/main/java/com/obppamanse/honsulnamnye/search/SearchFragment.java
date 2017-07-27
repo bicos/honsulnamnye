@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.Query;
-import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.databinding.FragmentSearchBinding;
 
 /**

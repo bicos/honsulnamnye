@@ -11,7 +11,6 @@ import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -57,6 +56,8 @@ public class PostContract {
         long getDueDate();
 
         void addUploadImageUri(Uri data);
+
+        List<Uri> getUploadImageUri();
     }
 
     public interface ModifyModel extends GetModel, SetModel {
@@ -92,7 +93,7 @@ public class PostContract {
 
         void startSelectLocation();
 
-        void chooseProfileImage();
+        void chooseUploadImage();
     }
 
     public interface ModifyView extends View {

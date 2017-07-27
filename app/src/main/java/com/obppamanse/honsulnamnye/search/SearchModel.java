@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.search;
 
-import android.app.Activity;
 import android.text.TextUtils;
 
 import com.google.firebase.database.Query;
