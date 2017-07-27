@@ -131,6 +131,24 @@ public class PostContract {
         }
     }
 
+    public static class EmptyDescPostException extends Exception {
+        private static final String MSG = "모임 설명이 비어있습니다. 모임 설명을 입력하여 주세요.";
+
+        @Override
+        public String getMessage() {
+            return MSG;
+        }
+    }
+
+    public static class EmptyTitlePostException extends Exception {
+        private static final String MSG = "모임 제목이 비어있습니다. 모임 제목을 입력하여 주세요.";
+
+        @Override
+        public String getMessage() {
+            return MSG;
+        }
+    }
+
     public static class FailureWritePostException extends Exception {
         private static final String MSG = "글쓰기를 실패하였습니다. 다시 시도해주세요.";
 
@@ -150,7 +168,7 @@ public class PostContract {
     }
 
     public static class FailureModifyPostException extends Exception {
-        private static final String MSG = "글쓰기를 실패하였습니다. 다시 시도해주세요.";
+        private static final String MSG = "글 수정을 실패하였습니다. 다시 시도해주세요.";
 
         @Override
         public String getMessage() {

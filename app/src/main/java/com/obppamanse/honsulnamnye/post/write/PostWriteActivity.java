@@ -46,7 +46,7 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
 
     @Override
     public void failureWritePost(Exception e) {
-        Toast.makeText(getContext(), "글쓰기를 실패하였습니다. 원인 : ["+e.toString()+"]", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "글쓰기를 실패하였습니다.\n["+e.getMessage()+"]", Toast.LENGTH_SHORT).show();
     }
 
     @Override

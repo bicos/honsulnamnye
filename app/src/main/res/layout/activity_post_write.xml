@@ -18,14 +18,13 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/btn_write_post"
-            android:clipToPadding="false"
-            android:paddingBottom="30dp">
+            android:layout_above="@+id/btn_write_post">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="40dp">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
@@ -43,7 +42,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:hint="제목을 입력해주세요."
+                            android:hint="@string/hint_input_title"
                             android:onTextChanged="@{(title,a,b,c) -> viewModel.updateTitle(title)}" />
 
                         <EditText
@@ -51,7 +50,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:hint="내용을 입력해주세요."
+                            android:hint="@string/hint_input_desc"
                             android:maxLines="10"
                             android:onTextChanged="@{(desc,a,b,c) -> viewModel.updateDesc(desc)}" />
 
@@ -64,7 +63,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/default_margin"
                     android:layout_marginLeft="@dimen/default_margin"
-                    android:layout_marginRight="@dimen/default_margin">
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:onClick="@{(view) -> viewModel.clickDueDate(context)}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -78,14 +78,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="약속 날짜" />
+                            android:text="@string/subtitle_due_date" />
 
                         <TextView
                             android:id="@+id/tv_due_date"
                             style="@style/TextAppearance.AppCompat.Body1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{(view) -> viewModel.clickDueDate(context)}"
                             android:text="@{viewModel.dueDateTxt}" />
 
                     </LinearLayout>
@@ -97,7 +96,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/default_margin"
                     android:layout_marginLeft="@dimen/default_margin"
-                    android:layout_marginRight="@dimen/default_margin">
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:onClick="@{(view) -> viewModel.clickSelectLocation()}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -111,14 +111,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="만날 장소" />
+                            android:text="@string/subtitle_location" />
 
                         <TextView
                             android:id="@+id/tv_location"
                             style="@style/TextAppearance.AppCompat.Body1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{(view) -> viewModel.clickSelectLocation()}"
                             android:text="@{viewModel.placeName}" />
 
                     </LinearLayout>
@@ -144,7 +143,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="사진" />
+                            android:text="@string/subtitle_picture" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/pager_upload_image"
@@ -163,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onClick="@{(view) -> viewModel.clickUploadFile()}"
-                            android:text="사진 업로드" />
+                            android:text="@string/button_picture_upload" />
 
                     </LinearLayout>
 
@@ -179,7 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:onClick="@{view -> viewModel.clickWritePost(context)}"
-            android:text="write post" />
+            android:text="@string/button_create_post" />
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/loading_progress"

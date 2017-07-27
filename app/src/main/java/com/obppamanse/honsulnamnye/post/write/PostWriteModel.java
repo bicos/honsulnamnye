@@ -57,6 +57,14 @@ public class PostWriteModel implements PostContract.WriteModel {
             throw new PostContract.FailureWritePostException();
         }
 
+        if (TextUtils.isEmpty(post.getTitle())){
+            throw new PostContract.EmptyTitlePostException();
+        }
+
+        if (TextUtils.isEmpty(post.getDesc())) {
+            throw new PostContract.EmptyDescPostException();
+        }
+
         post.setUid(user.getUid());
 
         final String key = postRef.push().getKey();

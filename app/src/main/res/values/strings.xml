@@ -49,4 +49,9 @@
     <string name="txt_femail">여자</string>
     <string name="hint_input_nickname">닉네임을 입력하세요</string>
     <string name="title_critical">필수항목</string>
+    <string name="subtitle_due_date">약속 날짜</string>
+    <string name="subtitle_location">만날 장소</string>
+    <string name="subtitle_picture">사진</string>
+    <string name="button_picture_upload">사진 업로드</string>
+    <string name="button_create_post">모임 만들기</string>
 </resources>

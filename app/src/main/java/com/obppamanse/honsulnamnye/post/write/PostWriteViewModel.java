@@ -194,10 +194,6 @@ public class PostWriteViewModel extends BaseObservable {
             uriList.remove(position);
             notifyItemRemoved(position);
         }
-
-        public void modifyItem(int position) {
-
-        }
     }
 
     private static class SimpleImageViewHolder extends RecyclerView.ViewHolder{
