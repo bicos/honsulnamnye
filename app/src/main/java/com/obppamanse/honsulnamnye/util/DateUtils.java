@@ -10,8 +10,16 @@ import java.util.Locale;
 
 public class DateUtils {
 
+    private static final String COMMON_DATE_FORMAT = "yyyy년 MM월 dd일 (EEEE)";
+
+    public static final String SIMPLE_DATE_FORMAT = "MM.dd kk:mm:ss";
+
     public static String getDateStr(long timeMillis) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 (EEEE)", Locale.KOREA);
-        return format.format(new Date(timeMillis));
+        return getDateStr(timeMillis, COMMON_DATE_FORMAT);
+    }
+
+    public static String getDateStr(long timeMillis, String format) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.KOREA);
+        return simpleDateFormat.format(new Date(timeMillis));
     }
 }

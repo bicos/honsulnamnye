@@ -11,6 +11,8 @@ import com.google.firebase.storage.StorageReference;
 
 public class FirebaseUtils {
 
+    private static final String CHAT_REF = "chat";
+
     private static final String USER_REF = "user";
 
     private static final String POST_REF = "post";
@@ -46,5 +48,9 @@ public class FirebaseUtils {
      */
     public static StorageReference getPostStorageRef(String postKey) {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("post").child(postKey);
+    }
+
+    public static DatabaseReference getChatRef() {
+        return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
     }
 }
