@@ -96,7 +96,6 @@ public class UserProfileViewModel extends BaseObservable {
     }
 
     public void clickChangeProfileImage() {
-
         view.chooseProfileImage();
     }
 

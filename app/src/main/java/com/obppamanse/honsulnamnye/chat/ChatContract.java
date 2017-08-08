@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
 
 /**
@@ -24,6 +25,8 @@ public class ChatContract {
         void requestInputChat(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
         Chat getChat();
+
+        DatabaseReference getChatRef();
     }
 
     public class MessageEmptyException extends Exception {

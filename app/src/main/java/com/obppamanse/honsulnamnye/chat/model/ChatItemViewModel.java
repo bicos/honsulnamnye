@@ -2,7 +2,10 @@ package com.obppamanse.honsulnamnye.chat.model;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -12,6 +15,8 @@ import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.util.DateUtils;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.obppamanse.honsulnamnye.util.DateUtils.SIMPLE_DATE_FORMAT;
 
@@ -62,5 +67,13 @@ public class ChatItemViewModel extends BaseObservable {
     @Bindable
     public String getDateStr() {
         return DateUtils.getDateStr(Long.valueOf(chat.getTimeStamp()), SIMPLE_DATE_FORMAT);
+    }
+
+    @BindingAdapter("setProfileImage")
+    public static void setProfileImage(ImageView imageView, UserInfo userInfo) {
+        Glide.with(imageView.getContext())
+                .load(userInfo.profileUri)
+                .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                .into(imageView);
     }
 }

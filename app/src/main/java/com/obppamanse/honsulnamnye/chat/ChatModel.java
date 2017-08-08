@@ -68,6 +68,7 @@ public class ChatModel implements ChatContract.Model {
         return chat;
     }
 
+    @Override
     public DatabaseReference getChatRef() {
         return chatRef;
     }

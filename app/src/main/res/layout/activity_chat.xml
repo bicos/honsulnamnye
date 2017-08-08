@@ -15,6 +15,7 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/chat_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/input_chat"
@@ -27,7 +28,7 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/btn_enter"
-            android:onEditorAction="@{(tv, id, event) -> viewModel.inputChatEditorAction(tv, id, event)"
+            android:onEditorAction="@{(tv, id, event) -> viewModel.inputChatEditorAction(tv, id, event)}"
             android:text="@={viewModel.message}"
             android:imeOptions="actionSend"/>
 

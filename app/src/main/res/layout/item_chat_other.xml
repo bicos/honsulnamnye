@@ -12,6 +12,7 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/layout_other"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/default_margin">
@@ -28,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/user_profile"
-            android:text="@{viewModel.userInfo}"
+            android:text="@{viewModel.userInfo.nickName}"
             tool:text="userName" />
 
         <TextView

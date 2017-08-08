@@ -5,6 +5,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -38,6 +39,11 @@ public class ChatViewModel extends BaseObservable {
         return model.getChat().getMsg();
     }
 
+    @Bindable
+    public ChatContract.Model getModel() {
+        return model;
+    }
+
     public void clickInputChat(Context context) {
         model.requestInputChat(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
 
@@ -55,14 +61,20 @@ public class ChatViewModel extends BaseObservable {
         });
     }
 
-    public void inputChatEditorAction(TextView tv, int actionId, KeyEvent event) {
+    public boolean inputChatEditorAction(TextView tv, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND && event.getAction() == KeyEvent.ACTION_UP) {
             clickInputChat(tv.getContext());
+            return true;
         }
+        return false;
     }
 
     @BindingAdapter("setRecyclerView")
     public static void setRecyclerView(RecyclerView recyclerView, ChatViewModel viewModel) {
-
+        if (recyclerView.getAdapter() == null) {
+            ChatRecyclerAdapter adapter = new ChatRecyclerAdapter(viewModel.getModel().getChatRef());
+            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+            recyclerView.setAdapter(adapter);
+        }
     }
 }
