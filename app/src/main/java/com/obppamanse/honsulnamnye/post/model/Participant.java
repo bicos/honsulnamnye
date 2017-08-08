@@ -8,6 +8,11 @@ import android.os.Parcelable;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -15,7 +20,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  * Created by Ravy on 2017. 6. 18..
  */
 
-public class Participant extends BaseObservable implements Parcelable{
+@IgnoreExtraProperties
+public class Participant extends BaseObservable implements Parcelable {
 
     private String uid;
 
@@ -88,11 +94,21 @@ public class Participant extends BaseObservable implements Parcelable{
         this.userName = userName;
     }
 
+    @Exclude
     @BindingAdapter("setProfileImage")
     public static void setProfileImage(ImageView image, String profileUrl) {
         Glide.with(image.getContext())
                 .load(profileUrl)
                 .bitmapTransform(new CropCircleTransformation(image.getContext()))
                 .into(image);
+    }
+
+    @Exclude
+    public Map<String, Object> toMap(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("uid", uid);
+        map.put("profileUrl", profileUrl);
+        map.put("userName", userName);
+        return map;
     }
 }

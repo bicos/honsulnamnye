@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="participant"
-            type="com.obppamanse.honsulnamnye.post.model.Participant" />
+            name="userInfo"
+            type="com.obppamanse.honsulnamnye.user.model.UserInfo" />
     </data>
 
     <LinearLayout
@@ -22,14 +22,14 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/default_margin"
-            bind:setProfileImage="@{participant.profileUrl}" />
+            bind:setProfileImage="@{userInfo.profileUri}" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@{participant.userName}" />
+            android:text="@{userInfo.nickName}" />
 
     </LinearLayout>
 </layout>

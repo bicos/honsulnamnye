@@ -4,7 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by raehyeong.park on 2017. 4. 28..
@@ -15,6 +19,7 @@ public class UserInfo implements Parcelable {
 
     public String email;
 
+    @Exclude
     public String password;
 
     public String nickName;
@@ -73,4 +78,15 @@ public class UserInfo implements Parcelable {
             return new UserInfo[size];
         }
     };
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("email", email);
+        result.put("nickName", nickName);
+        result.put("gender", gender);
+        result.put("profileUri", profileUri);
+        result.put("interestingCategory", interestingCategory);
+        return result;
+    }
 }

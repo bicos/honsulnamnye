@@ -44,8 +44,6 @@ public class PersonalFragment extends Fragment {
         return view;
     }
 
-
-
     private static class PersonalCalendarFragmentAdapter extends FragmentPagerAdapter {
 
         public PersonalCalendarFragmentAdapter(FragmentManager fm) {
