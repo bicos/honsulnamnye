@@ -1,17 +1,26 @@
 package com.obppamanse.honsulnamnye.chat.model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /**
  * Created by raehyeong.park on 2017. 8. 3..
  */
 
+@IgnoreExtraProperties
 public class Chat {
 
     private String uid;
     private String name;
-    private String timestamp;
+    private long timestamp;
     private String msg;
+    private String key;
 
     public Chat() {
+    }
+
+    public Chat(String uid, String name) {
+        this.uid = uid;
+        this.name = name;
     }
 
     public String getUid() {
@@ -30,11 +39,11 @@ public class Chat {
         this.name = name;
     }
 
-    public String getTimeStamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -44,5 +53,9 @@ public class Chat {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

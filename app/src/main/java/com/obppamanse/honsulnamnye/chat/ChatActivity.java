@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
         Toast.makeText(this, "메세지 전송을 실패하였습니다. 원인[" + e.getMessage() + "]", Toast.LENGTH_SHORT).show();
     }
 
-    public void start(Context context, String key) {
+    public static void start(Context context, String key) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(PARAM_KEY, key);
         context.startActivity(intent);

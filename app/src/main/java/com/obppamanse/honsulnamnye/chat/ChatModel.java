@@ -38,7 +38,7 @@ public class ChatModel implements ChatContract.Model {
 
         chatRef = FirebaseUtils.getChatRef().child(chatKey);
         user = FirebaseAuth.getInstance().getCurrentUser();
-        chat = new Chat();
+        chat = new Chat(user.getUid(), user.getDisplayName());
     }
 
     @Override
@@ -49,18 +49,22 @@ public class ChatModel implements ChatContract.Model {
             failureListener.onFailure(new PostContract.EmptyDescPostException());
             return;
         }
-
-        chatRef.setValue(chat)
+        final String chatKey = chatRef.push().getKey();
+        chat.setKey(chatKey);
+        chatRef.child(chatKey).setValue(chat)
                 .continueWithTask(new Continuation<Void, Task<Void>>() {
                     @Override
                     public Task<Void> then(@NonNull Task<Void> task) throws Exception {
-                        return chatRef.setValue(ServerValue.TIMESTAMP)
-                                .addOnSuccessListener(activity, successListener)
-                                .addOnFailureListener(activity, failureListener);
+                        if (task.isSuccessful()) {
+                            return chatRef.child(chatKey).child("timestamp").setValue(ServerValue.TIMESTAMP)
+                                    .addOnSuccessListener(activity, successListener)
+                                    .addOnFailureListener(activity, failureListener);
+                        } else {
+                            failureListener.onFailure(task.getException());
+                            return task;
+                        }
                     }
-                })
-                .addOnSuccessListener(activity, successListener)
-                .addOnFailureListener(activity, failureListener);
+                });
     }
 
     @Override

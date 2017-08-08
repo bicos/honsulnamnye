@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.R;
+import com.obppamanse.honsulnamnye.chat.ChatActivity;
 import com.obppamanse.honsulnamnye.databinding.ActivityPostDetailBinding;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
@@ -191,6 +192,17 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     @Override
     public void failureWithdrawalGroup(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successCreateChatRoom(String newChatKey) {
+        Toast.makeText(this, "채팅방 만들기를 성공하였습니다.", Toast.LENGTH_SHORT).show();
+        ChatActivity.start(this, newChatKey);
+    }
+
+    @Override
+    public void failureCreateChatRoom(Exception e) {
+        Toast.makeText(this, "채팅방 만들기를 실패하였습니다.", Toast.LENGTH_SHORT).show();
     }
 
     public static void startPostDetailActivity(Context context, Post post) {

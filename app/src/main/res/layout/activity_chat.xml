@@ -40,6 +40,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
+            android:onClick="@{view -> viewModel.clickInputChat(view.getContext())}"
             android:text="확인" />
 
     </RelativeLayout>

@@ -119,6 +119,10 @@ public class PostContract {
         void successWithdrawalGroup();
 
         void failureWithdrawalGroup(Exception e);
+
+        void successCreateChatRoom(String newChatKey);
+
+        void failureCreateChatRoom(Exception e);
     }
 
     public static class NotExistAuthUserException extends Exception {

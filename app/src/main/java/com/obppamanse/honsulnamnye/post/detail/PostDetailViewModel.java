@@ -174,8 +174,8 @@ public class PostDetailViewModel extends BaseObservable {
     }
 
     @BindingAdapter("setParticipantList")
-    public static void setParticipantList(RecyclerView recyclerView, DatabaseReference reference) {
-        if (reference == null) {
+    public static void setParticipantList(RecyclerView recyclerView, PostDetailViewModel viewModel) {
+        if (viewModel == null || viewModel.getParticipantListRef() == null) {
             return;
         }
 
@@ -186,8 +186,12 @@ public class PostDetailViewModel extends BaseObservable {
         RecyclerView.Adapter adapter = recyclerView.getAdapter();
 
         if (adapter == null) {
-            recyclerView.setAdapter(new ParticipantListAdapter(reference));
+            recyclerView.setAdapter(new ParticipantListAdapter(viewModel.getView(), viewModel.getParticipantListRef()));
         }
+    }
+
+    private PostContract.DetailView getView() {
+        return view;
     }
 
     @BindingAdapter("setImageList")

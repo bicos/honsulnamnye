@@ -83,7 +83,7 @@ public class SplashActivity extends AppCompatActivity {
     private void requestExistCurrentUser(FirebaseUser currentUser) {
         progressBar.show();
         reference = FirebaseUtils.getUserRef().child(currentUser.getUid());
-        reference.addListenerForSingleValueEvent(listener);
+        reference.addValueEventListener(listener);
     }
 
     @Override

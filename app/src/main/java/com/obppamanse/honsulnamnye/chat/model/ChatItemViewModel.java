@@ -66,14 +66,16 @@ public class ChatItemViewModel extends BaseObservable {
 
     @Bindable
     public String getDateStr() {
-        return DateUtils.getDateStr(Long.valueOf(chat.getTimeStamp()), SIMPLE_DATE_FORMAT);
+        return DateUtils.getDateStr(chat.getTimestamp(), SIMPLE_DATE_FORMAT);
     }
 
     @BindingAdapter("setProfileImage")
     public static void setProfileImage(ImageView imageView, UserInfo userInfo) {
-        Glide.with(imageView.getContext())
-                .load(userInfo.profileUri)
-                .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
-                .into(imageView);
+        if (userInfo != null) {
+            Glide.with(imageView.getContext())
+                    .load(userInfo.profileUri)
+                    .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                    .into(imageView);
+        }
     }
 }

@@ -83,9 +83,7 @@ public class PostDetailModel implements PostContract.DetailModel {
             throw new PostContract.NotExistAuthUserException();
         }
 
-        Participant participant = new Participant(user.getUid(),
-                user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null,
-                user.getDisplayName());
+        Participant participant = new Participant(user.getUid());
 
         reference.child(FirebaseUtils.PARTICIPANT_LIST_REF)
                 .child(participant.getUid())
@@ -99,9 +97,7 @@ public class PostDetailModel implements PostContract.DetailModel {
             throw new PostContract.NotExistAuthUserException();
         }
 
-        Participant participant = new Participant(user.getUid(),
-                user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : null,
-                user.getDisplayName());
+        Participant participant = new Participant(user.getUid());
 
         reference.child(FirebaseUtils.PARTICIPANT_LIST_REF)
                 .child(participant.getUid())

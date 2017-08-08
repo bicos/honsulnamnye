@@ -17,6 +17,8 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class UserInfo implements Parcelable {
 
+    public String uid;
+
     public String email;
 
     @Exclude
@@ -34,6 +36,7 @@ public class UserInfo implements Parcelable {
     }
 
     public UserInfo(FirebaseUser firebaseUser) {
+        uid = firebaseUser.getUid();
         email = firebaseUser.getEmail();
         nickName = firebaseUser.getDisplayName();
         profileUri = firebaseUser.getPhotoUrl() == null ? null : firebaseUser.getPhotoUrl().toString();
@@ -44,6 +47,7 @@ public class UserInfo implements Parcelable {
     }
 
     protected UserInfo(Parcel in) {
+        uid = in.readString();
         email = in.readString();
         password = in.readString();
         nickName = in.readString();
@@ -54,6 +58,7 @@ public class UserInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
         dest.writeString(email);
         dest.writeString(password);
         dest.writeString(nickName);
@@ -82,6 +87,7 @@ public class UserInfo implements Parcelable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
         result.put("email", email);
         result.put("nickName", nickName);
         result.put("gender", gender);

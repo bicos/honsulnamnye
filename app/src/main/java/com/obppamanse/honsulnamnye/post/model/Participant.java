@@ -25,30 +25,20 @@ public class Participant extends BaseObservable implements Parcelable {
 
     private String uid;
 
-    private String profileUrl;
-
-    private String userName;
-
     public Participant() {
     }
 
-    public Participant(String uid, String profileUrl, String userName) {
+    public Participant(String uid) {
         this.uid = uid;
-        this.profileUrl = profileUrl;
-        this.userName = userName;
     }
 
     protected Participant(Parcel in) {
         uid = in.readString();
-        profileUrl = in.readString();
-        userName = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
-        dest.writeString(profileUrl);
-        dest.writeString(userName);
     }
 
     @Override
@@ -76,24 +66,6 @@ public class Participant extends BaseObservable implements Parcelable {
         this.uid = uid;
     }
 
-    @Bindable
-    public String getProfileUrl() {
-        return profileUrl;
-    }
-
-    public void setProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-    }
-
-    @Bindable
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     @Exclude
     @BindingAdapter("setProfileImage")
     public static void setProfileImage(ImageView image, String profileUrl) {
@@ -107,8 +79,6 @@ public class Participant extends BaseObservable implements Parcelable {
     public Map<String, Object> toMap(){
         Map<String, Object> map = new HashMap<>();
         map.put("uid", uid);
-        map.put("profileUrl", profileUrl);
-        map.put("userName", userName);
         return map;
     }
 }
