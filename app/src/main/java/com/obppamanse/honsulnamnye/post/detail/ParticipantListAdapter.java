@@ -8,6 +8,7 @@ import android.databinding.Bindable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,6 +31,7 @@ import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Participant;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,13 +130,12 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
         }
 
         private void startChat() {
-            DatabaseReference reference = FirebaseUtils.getChatRef();
+            UserInfo updateMyInfo = new UserInfo(me);
 
-            final String newChatKey = reference.push().getKey();
+            final String newChatKey = createChatRoomKey(updateMyInfo.uid, other.uid);
 
             ChatRoom chatRoom = new ChatRoom(newChatKey);
 
-            UserInfo updateMyInfo = new UserInfo(me);
             chatRoom.userList.put(updateMyInfo.uid, updateMyInfo.uid);
             chatRoom.userList.put(other.uid, other.uid);
 
@@ -158,6 +159,12 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
                             view.failureCreateChatRoom(e);
                         }
                     });
+        }
+
+        private String createChatRoomKey(String myUid, String otherUid) {
+            String[] args = new String[]{myUid, otherUid};
+            Arrays.sort(args);
+            return TextUtils.join("_", args);
         }
     }
 }

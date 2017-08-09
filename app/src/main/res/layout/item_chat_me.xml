@@ -18,17 +18,18 @@
         android:padding="@dimen/default_margin">
 
         <ImageView
+            android:layout_alignParentRight="true"
             android:id="@+id/user_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginRight="5dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
             bind:setProfileImage="@{viewModel.userInfo}" />
 
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/user_profile"
+            android:layout_toLeftOf="@+id/user_profile"
             android:text="@{viewModel.userInfo.nickName}"
             tool:text="userName" />
 
@@ -37,12 +38,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/user_name"
-            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/user_profile"
-            android:background="@drawable/bg_chat_others"
+            android:layout_toLeftOf="@+id/user_profile"
+            android:background="@drawable/bg_chat_me"
             android:padding="10dp"
             android:text="@{viewModel.chat.msg}"
+            android:textColor="#ffffff"
             tool:text="message" />
 
         <TextView
@@ -50,8 +52,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/msg"
-            android:layout_toRightOf="@+id/msg"
+            android:layout_toLeftOf="@+id/msg"
             android:text="@{viewModel.dateStr}"
+            android:textSize="10sp"
             tool:text="1.1 12:00" />
 
     </RelativeLayout>

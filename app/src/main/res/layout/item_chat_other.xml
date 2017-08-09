@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/user_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginRight="5dp"
             bind:setProfileImage="@{viewModel.userInfo}" />
 
@@ -43,7 +43,8 @@
             android:background="@drawable/bg_chat_others"
             android:padding="10dp"
             android:text="@{viewModel.chat.msg}"
-            tool:text="message" />
+            tool:text="message"
+            android:textColor="#ffffff"/>
 
         <TextView
             android:id="@+id/date"
@@ -52,6 +53,7 @@
             android:layout_alignBottom="@+id/msg"
             android:layout_toRightOf="@+id/msg"
             android:text="@{viewModel.dateStr}"
+            android:textSize="10sp"
             tool:text="1.1 12:00" />
 
     </RelativeLayout>
