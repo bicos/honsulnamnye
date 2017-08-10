@@ -53,10 +53,10 @@ public class PersonalCalendarFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_personal_calendar, container, false);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            final ContentLoadingProgressBar progressBar = (ContentLoadingProgressBar) view.findViewById(R.id.loading_progress);
+            final ContentLoadingProgressBar progressBar = view.findViewById(R.id.loading_progress);
             progressBar.show();
 
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.personal_list);
+            RecyclerView recyclerView = view.findViewById(R.id.personal_list);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             recyclerView.setHasFixedSize(true);
 
@@ -70,14 +70,14 @@ public class PersonalCalendarFragment extends Fragment {
 
             adapter = new TimeLineRecyclerAdapter(q) {
                 @Override
-                protected void onDataChanged() {
+                public void onDataChanged() {
                     if (progressBar.isShown()) {
                         progressBar.hide();
                     }
                 }
 
                 @Override
-                protected void onCancelled(DatabaseError error) {
+                public void onCancelled(DatabaseError error) {
                     if (progressBar.isShown()) {
                         progressBar.hide();
                     }

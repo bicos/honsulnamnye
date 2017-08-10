@@ -35,22 +35,22 @@ public class TimeLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_timeline, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_post);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_post);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        final ContentLoadingProgressBar progressBar = (ContentLoadingProgressBar) view.findViewById(R.id.loading_progress);
+        final ContentLoadingProgressBar progressBar = view.findViewById(R.id.loading_progress);
         progressBar.show();
 
         adapter = new TimeLineRecyclerAdapter() {
             @Override
-            protected void onDataChanged() {
+            public void onDataChanged() {
                 if (progressBar.isShown()) {
                     progressBar.hide();
                 }
             }
 
             @Override
-            protected void onCancelled(DatabaseError error) {
+            public void onCancelled(DatabaseError error) {
                 if (progressBar.isShown()) {
                     progressBar.hide();
                 }

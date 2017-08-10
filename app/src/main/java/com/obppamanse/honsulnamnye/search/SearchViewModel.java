@@ -80,7 +80,7 @@ public class SearchViewModel extends BaseObservable {
 
         TimeLineRecyclerAdapter adapter = new TimeLineRecyclerAdapter(viewModel.getSearchQuery()) {
             @Override
-            protected void onDataChanged() {
+            public void onDataChanged() {
                 if (viewModel.getIsShowProgress()) {
                     viewModel.setIsShowProgress(false);
                 }
