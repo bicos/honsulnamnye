@@ -1,6 +1,7 @@
 package com.obppamanse.honsulnamnye.chat.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
  * Created by raehyeong.park on 2017. 8. 3..
@@ -9,34 +10,27 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class Chat {
 
-    private String uid;
-    private String name;
+    private UserInfo userInfo;
+
     private long timestamp;
+
     private String msg;
+
     private String key;
 
     public Chat() {
     }
 
-    public Chat(String uid, String name) {
-        this.uid = uid;
-        this.name = name;
+    public Chat(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
-    public String getUid() {
-        return uid;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 
     public long getTimestamp() {
@@ -57,5 +51,9 @@ public class Chat {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getKey() {
+        return key;
     }
 }

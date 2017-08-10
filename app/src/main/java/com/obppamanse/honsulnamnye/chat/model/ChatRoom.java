@@ -1,7 +1,5 @@
 package com.obppamanse.honsulnamnye.chat.model;
 
-import com.obppamanse.honsulnamnye.user.model.UserInfo;
-
 import java.util.HashMap;
 import java.util.Map;
 

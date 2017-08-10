@@ -54,6 +54,11 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
         binding.chatList.scrollToPosition(binding.chatList.getAdapter().getItemCount() - 1);
     }
 
+    @Override
+    public void showErrorToast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
     public static void start(Context context, String key) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(PARAM_KEY, key);

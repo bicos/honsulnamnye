@@ -1,5 +1,10 @@
 package com.obppamanse.honsulnamnye.chat;
 
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,13 +27,26 @@ public class ChatRecyclerAdapter extends FirebaseRecyclerAdapter<Chat, ChatItemV
     }
 
     @Override
+    public ChatItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ViewDataBinding binding;
+
+        if (viewType == R.layout.item_chat_me || viewType == R.layout.item_chat_other) {
+            binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), viewType, parent, false);
+        } else {
+            throw new IllegalArgumentException("viewType argument not valid");
+        }
+
+        return new ChatItemViewHolder(binding, new ChatItemViewModel());
+    }
+
+    @Override
     protected void populateViewHolder(ChatItemViewHolder viewHolder, Chat model, int position) {
-        viewHolder.populateChat(new ChatItemViewModel(model));
+        viewHolder.populateChat(model);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).getUid().equals(user.getUid())){
+        if (getItem(position).getUserInfo().uid.equals(user.getUid())) {
             // 자신이 쓴 채팅이라면
             return R.layout.item_chat_me;
         } else {

@@ -6,13 +6,6 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.obppamanse.honsulnamnye.BR;
-import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
@@ -26,47 +19,29 @@ import static com.obppamanse.honsulnamnye.util.DateUtils.SIMPLE_DATE_FORMAT;
 
 public class ChatItemViewModel extends BaseObservable {
 
-    private Chat chat;
+    private Chat mChat;
 
-    private UserInfo userInfo;
+    public ChatItemViewModel() {
+    }
 
-    private FirebaseUser me;
-
-    public ChatItemViewModel(Chat chat) {
-        this.chat = chat;
-        this.me = FirebaseAuth.getInstance().getCurrentUser();
-        FirebaseUtils.getUserRef().child(chat.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userInfo = dataSnapshot.getValue(UserInfo.class);
-                notifyPropertyChanged(BR.userInfo);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // do nothing
-            }
-        });
+    public void setChat(Chat chat) {
+        mChat = chat;
+        notifyChange();
     }
 
     @Bindable
     public Chat getChat() {
-        return chat;
+        return mChat;
     }
 
     @Bindable
     public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    @Bindable
-    public boolean getIsMyChat() {
-        return me != null && me.getUid().equals(chat.getUid());
+        return mChat.getUserInfo();
     }
 
     @Bindable
     public String getDateStr() {
-        return DateUtils.getDateStr(chat.getTimestamp(), SIMPLE_DATE_FORMAT);
+        return mChat != null ? DateUtils.getDateStr(mChat.getTimestamp(), SIMPLE_DATE_FORMAT) : null;
     }
 
     @BindingAdapter("setProfileImage")

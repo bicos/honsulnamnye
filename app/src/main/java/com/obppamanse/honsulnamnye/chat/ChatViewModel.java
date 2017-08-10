@@ -7,12 +7,14 @@ import android.databinding.BindingAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
 /**
@@ -45,6 +47,11 @@ public class ChatViewModel extends BaseObservable {
     }
 
     public void clickInputChat(Context context) {
+        if (TextUtils.isEmpty(model.getChat().getMsg())) {
+            view.showErrorToast(context.getString(R.string.error_input_text));
+            return;
+        }
+
         model.requestInputChat(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
 
             @Override
@@ -56,8 +63,8 @@ public class ChatViewModel extends BaseObservable {
 
             @Override
             public void onFailure(@NonNull Exception e) {
-                view.clearInputChat();
                 view.showErrorToast(e);
+                view.clearInputChat();
             }
         });
     }

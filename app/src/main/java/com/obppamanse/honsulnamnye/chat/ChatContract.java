@@ -20,6 +20,8 @@ public class ChatContract {
         void showErrorToast(Exception e);
 
         void moveScrollToPositionBottom();
+
+        void showErrorToast(String msg);
     }
 
     public interface Model {
@@ -31,7 +33,7 @@ public class ChatContract {
         DatabaseReference getChatRef();
     }
 
-    public class MessageEmptyException extends Exception {
+    public static class MessageEmptyException extends Exception {
 
         private static final String MSG = "메세지를 입력하여 주세요.";
 
