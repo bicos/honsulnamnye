@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.SignUpActivity;
-import com.obppamanse.honsulnamnye.SplashActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
+import com.obppamanse.honsulnamnye.main.MainActivity;
 
 /**
  * Created by raehyeong.park on 2017. 4. 25..
@@ -34,10 +34,9 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     public SignInFragment() {
-
     }
 
-    FragmentSignInBinding binding;
+    private FragmentSignInBinding binding;
 
     @Nullable
     @Override
@@ -52,11 +51,6 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (model != null) {
             model.onActivityResult(requestCode, resultCode, data);
@@ -65,7 +59,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @Override
     public void startMainActivity() {
-        SplashActivity.startMainActivity(getActivity());
+        MainActivity.start(getActivity());
     }
 
     @Override
@@ -79,8 +73,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @Override
     public void startSignUpActivity() {
-        Intent intent = new Intent(getActivity(), SignUpActivity.class);
-        startActivity(intent);
+        SignUpActivity.start(getContext());
     }
 
     @Override
@@ -90,7 +83,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
 
     @Override
     public void showException(Exception e) {
-        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "회원 가입 중 에러가 발생하였습니다. 원인[" + e.getMessage() + "]", Toast.LENGTH_SHORT).show();
     }
 
     @Override

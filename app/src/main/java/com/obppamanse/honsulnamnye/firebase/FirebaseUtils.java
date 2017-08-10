@@ -19,6 +19,8 @@ public class FirebaseUtils {
 
     public static final String PARTICIPANT_LIST_REF = "participantList";
 
+    public static final String PUSH_TOKEN_REF = "pushToken";
+
     public static DatabaseReference getUserRef() {
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);
     }
@@ -42,7 +44,6 @@ public class FirebaseUtils {
     }
 
     /**
-     *
      * @param postKey {@link com.obppamanse.honsulnamnye.post.model.Post#key}
      * @return
      */
@@ -53,4 +54,5 @@ public class FirebaseUtils {
     public static DatabaseReference getChatRef() {
         return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
     }
+
 }

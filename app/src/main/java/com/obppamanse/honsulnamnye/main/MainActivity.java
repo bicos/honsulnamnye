@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
             if (firebaseAuth.getCurrentUser() == null) {
                 Toast.makeText(getApplicationContext(), R.string.msg_logout, Toast.LENGTH_SHORT).show();
-                SplashActivity.startSplashActivity(MainActivity.this);
+                SplashActivity.start(MainActivity.this);
                 finish();
             }
         }
@@ -44,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DrawerLayout layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout layout = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 layout, toolbar, R.string.open_drawer, R.string.close_drawer);
@@ -109,5 +110,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void clickSearch(View view) {
         selectTab(INDEX_SEARCH);
+    }
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
     }
 }

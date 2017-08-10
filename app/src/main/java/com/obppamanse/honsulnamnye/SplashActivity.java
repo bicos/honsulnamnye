@@ -7,15 +7,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.main.MainActivity;
+import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.user.signin.SignInFragment;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
@@ -25,92 +27,72 @@ import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
 public class SplashActivity extends AppCompatActivity {
 
-    public static final String PARAM_ACTION = "action";
-
-    public static final String ACTION_START_MAIN_ACTIVITY = "start_main_activity";
-
     private ContentLoadingProgressBar progressBar;
-
-    private DatabaseReference reference;
-
-    private ValueEventListener listener = new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            progressBar.hide();
-            if (dataSnapshot.exists()) {
-                startMainActivity(SplashActivity.this);
-            } else {
-                Intent intent = new Intent(SplashActivity.this, SignUpActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-            // do nothing
-            progressBar.hide();
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        progressBar = (ContentLoadingProgressBar) findViewById(R.id.loading_progress);
+        progressBar = findViewById(R.id.loading_progress);
 
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             progressBar.hide();
-            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_splash);
-            if (currentFragment == null || !(currentFragment instanceof SignInFragment))
-                ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
-                        SignInFragment.newInstance(),
-                        R.id.container_splash);
+            startSignInFragment();
         } else {
+            progressBar.show();
             requestExistCurrentUser(FirebaseAuth.getInstance().getCurrentUser());
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        if (reference != null) {
-            reference.removeEventListener(listener);
+    private void startSignInFragment() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_splash);
+        if (currentFragment == null || !(currentFragment instanceof SignInFragment)) {
+            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                    SignInFragment.newInstance(),
+                    R.id.container_splash);
         }
-        super.onDestroy();
     }
 
     private void requestExistCurrentUser(FirebaseUser currentUser) {
-        progressBar.show();
-        reference = FirebaseUtils.getUserRef().child(currentUser.getUid());
-        reference.addValueEventListener(listener);
+        FirebaseUtils.getUserRef()
+                .child(currentUser.getUid())
+                .addListenerForSingleValueEvent(
+                        new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                progressBar.hide();
+                                if (dataSnapshot.exists()) {
+                                    sendRegistrationToServer(dataSnapshot.getValue(UserInfo.class));
+                                    MainActivity.start(SplashActivity.this);
+                                    finish();
+                                } else {
+                                    SignUpActivity.start(SplashActivity.this);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                progressBar.hide();
+                                Toast.makeText(getApplicationContext(), "유저 정보를 가져오는 중 에러가 발생하였습니다.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+                );
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-
-        switch (intent.getStringExtra(PARAM_ACTION)) {
-            case ACTION_START_MAIN_ACTIVITY:
-                Intent newIntent = new Intent(this, MainActivity.class);
-                startActivity(newIntent);
-                finish();
-                break;
-
-            default:
-                break;
+    private void sendRegistrationToServer(UserInfo userInfo) {
+        if (userInfo != null && userInfo.uid != null) {
+            FirebaseUtils.getUserRef()
+                    .child(userInfo.uid)
+                    .child(FirebaseUtils.PUSH_TOKEN_REF)
+                    .setValue(FirebaseInstanceId.getInstance().getToken());
         }
     }
 
-    public static void startSplashActivity(Activity activity) {
+    public static void start(Activity activity) {
         Intent intent = new Intent(activity, SplashActivity.class);
-        activity.startActivity(intent);
-    }
-
-    public static void startMainActivity(Activity activity) {
-        Intent intent = new Intent(activity, SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(SplashActivity.PARAM_ACTION, SplashActivity.ACTION_START_MAIN_ACTIVITY);
         activity.startActivity(intent);
     }
 }
