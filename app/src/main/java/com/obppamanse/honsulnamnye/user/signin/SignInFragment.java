@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.R;
-import com.obppamanse.honsulnamnye.SignUpActivity;
+import com.obppamanse.honsulnamnye.user.signup.SignUpActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 import com.obppamanse.honsulnamnye.main.MainActivity;
 

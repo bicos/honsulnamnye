@@ -16,15 +16,13 @@ public class SignUpContract {
 
     public interface View {
 
-        Activity getActivity();
-
-        Context getContext();
-
         void showException(Exception e);
 
         void startMainActivity();
 
         void chooseProfileImage();
+
+        Activity getActivity();
     }
 
     public interface Model {

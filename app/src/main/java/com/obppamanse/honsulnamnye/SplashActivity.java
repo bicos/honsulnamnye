@@ -19,6 +19,7 @@ import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.main.MainActivity;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.user.signin.SignInFragment;
+import com.obppamanse.honsulnamnye.user.signup.SignUpActivity;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
 /**

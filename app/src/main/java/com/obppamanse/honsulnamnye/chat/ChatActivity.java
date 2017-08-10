@@ -51,7 +51,12 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void moveScrollToPositionBottom() {
-        binding.chatList.scrollToPosition(binding.chatList.getAdapter().getItemCount() - 1);
+        binding.chatList.post(new Runnable() {
+            @Override
+            public void run() {
+                binding.chatList.scrollToPosition(binding.chatList.getAdapter().getItemCount() - 1);
+            }
+        });
     }
 
     @Override
