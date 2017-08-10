@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/input_chat"
-            app:setRecyclerView="@{viewModel}"/>
+            app:setRecyclerView="@{viewModel}" />
 
         <EditText
             android:id="@+id/input_chat"
@@ -28,9 +28,10 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/btn_enter"
+            android:imeOptions="actionSend"
+            android:inputType="textMultiLine"
             android:onEditorAction="@{(tv, id, event) -> viewModel.inputChatEditorAction(tv, id, event)}"
-            android:text="@={viewModel.message}"
-            android:imeOptions="actionSend"/>
+            android:text="@={viewModel.message}" />
 
         <Button
             android:id="@+id/btn_enter"

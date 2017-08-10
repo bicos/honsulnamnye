@@ -22,7 +22,7 @@
             android:id="@+id/user_profile"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="@dimen/default_margin"
             bind:setProfileImage="@{viewModel.userInfo}" />
 
         <TextView

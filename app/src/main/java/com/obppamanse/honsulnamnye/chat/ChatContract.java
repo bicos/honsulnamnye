@@ -18,6 +18,8 @@ public class ChatContract {
         void clearInputChat();
 
         void showErrorToast(Exception e);
+
+        void moveScrollToPositionBottom();
     }
 
     public interface Model {

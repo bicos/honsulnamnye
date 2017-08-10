@@ -50,6 +50,7 @@ public class ChatViewModel extends BaseObservable {
             @Override
             public void onSuccess(Void aVoid) {
                 view.clearInputChat();
+                view.moveScrollToPositionBottom();
             }
         }, new OnFailureListener() {
 
@@ -62,7 +63,7 @@ public class ChatViewModel extends BaseObservable {
     }
 
     public boolean inputChatEditorAction(TextView tv, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEND && event.getAction() == KeyEvent.ACTION_UP) {
+        if (actionId == EditorInfo.IME_ACTION_SEND) {
             clickInputChat(tv.getContext());
             return true;
         }
@@ -72,8 +73,11 @@ public class ChatViewModel extends BaseObservable {
     @BindingAdapter("setRecyclerView")
     public static void setRecyclerView(RecyclerView recyclerView, ChatViewModel viewModel) {
         if (recyclerView.getAdapter() == null) {
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
+            manager.setStackFromEnd(true);
+            recyclerView.setLayoutManager(manager);
+
             ChatRecyclerAdapter adapter = new ChatRecyclerAdapter(viewModel.getModel().getChatRef());
-            recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
             recyclerView.setAdapter(adapter);
         }
     }
