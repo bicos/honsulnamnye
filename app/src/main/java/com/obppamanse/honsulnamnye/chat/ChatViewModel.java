@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -69,12 +70,20 @@ public class ChatViewModel extends BaseObservable {
         });
     }
 
+    public void clickUploadImage() {
+        view.chooseUploadImage();
+    }
+
     public boolean inputChatEditorAction(TextView tv, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEND) {
             clickInputChat(tv.getContext());
             return true;
         }
         return false;
+    }
+
+    public void addUploadImageUri(Uri data) {
+
     }
 
     @BindingAdapter("setRecyclerView")

@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -18,6 +19,8 @@ import com.obppamanse.honsulnamnye.databinding.ActivityChatBinding;
 public class ChatActivity extends AppCompatActivity implements ChatContract.View {
 
     private static final String PARAM_KEY = "key";
+
+    private static final int REQUEST_UPLOAD_IMAGE = 1000;
 
     private ActivityChatBinding binding;
 
@@ -62,6 +65,23 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
     @Override
     public void showErrorToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void chooseUploadImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.title_select_image)), REQUEST_UPLOAD_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_UPLOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            binding.getViewModel().addUploadImageUri(data.getData());
+        }
     }
 
     public static void start(Context context, String key) {
