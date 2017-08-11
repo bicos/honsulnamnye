@@ -29,7 +29,7 @@
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/btn_enter"
             android:imeOptions="actionSend"
-            android:inputType="textMultiLine"
+            android:inputType="text|textMultiLine"
             android:onEditorAction="@{(tv, id, event) -> viewModel.inputChatEditorAction(tv, id, event)}"
             android:text="@={viewModel.message}" />
 
@@ -43,6 +43,11 @@
             android:layout_marginRight="5dp"
             android:onClick="@{view -> viewModel.clickInputChat(view.getContext())}"
             android:text="확인" />
+
+        <ImageButton
+            android:id="@+id/btn_add_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </RelativeLayout>
 
