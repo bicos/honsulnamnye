@@ -130,15 +130,15 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         switch (item.getItemId()) {
             case R.id.action_delete:
                 new AlertDialog.Builder(this)
-                        .setTitle("알림")
-                        .setMessage("해당 글을 삭제하겠습니까?")
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.title_alert)
+                        .setMessage(R.string.msg_delete_post)
+                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 viewModel.clickDeletePost(PostDetailActivity.this);
                             }
                         })
-                        .setNegativeButton("취소", null)
+                        .setNegativeButton(R.string.button_cancel, null)
                         .show();
                 return true;
             case R.id.action_modify:

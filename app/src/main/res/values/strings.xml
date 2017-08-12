@@ -64,4 +64,5 @@
     <string name="msg_success_create_chat_room">채팅방 만들기를 성공하였습니다.</string>
     <string name="msg_failed_create_chat_room">채팅방 만들기를 실패하였습니다.</string>
     <string name="msg_exit_group">그룹을 탈퇴하시겠습니까?</string>
+    <string name="msg_delete_post">해당 글을 삭제하겠습니까?</string>
 </resources>
