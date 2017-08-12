@@ -165,18 +165,18 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void successDeletePost() {
-        Toast.makeText(this, "글을 삭제하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_success_delete_post, Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void failureDeletePost(Exception e) {
-        Toast.makeText(this, "글 삭제를 실패하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_delete_post_failed, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successJoinGroup() {
-        Toast.makeText(this, "그룹 가입에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_success_join_group, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -186,7 +186,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void successWithdrawalGroup() {
-        Toast.makeText(this, "그룹 탈퇴에 성공하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_success_exit_group, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -196,13 +196,22 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void successCreateChatRoom(String newChatKey) {
-        Toast.makeText(this, "채팅방 만들기를 성공하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_success_create_chat_room, Toast.LENGTH_SHORT).show();
         ChatActivity.start(this, newChatKey);
     }
 
     @Override
     public void failureCreateChatRoom(Exception e) {
-        Toast.makeText(this, "채팅방 만들기를 실패하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.msg_failed_create_chat_room, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showAlertWithdrawalGroup(DialogInterface.OnClickListener onClickListener) {
+        new AlertDialog.Builder(this).setTitle(R.string.title_alert)
+                .setMessage(R.string.msg_exit_group)
+                .setPositiveButton(R.string.button_ok, onClickListener)
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
     public static void startPostDetailActivity(Context context, Post post) {

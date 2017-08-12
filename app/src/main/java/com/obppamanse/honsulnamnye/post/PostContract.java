@@ -2,6 +2,7 @@ package com.obppamanse.honsulnamnye.post;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -123,6 +124,8 @@ public class PostContract {
         void successCreateChatRoom(String newChatKey);
 
         void failureCreateChatRoom(Exception e);
+
+        void showAlertWithdrawalGroup(DialogInterface.OnClickListener onClickListener);
     }
 
     public static class NotExistAuthUserException extends Exception {

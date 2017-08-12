@@ -2,6 +2,7 @@ package com.obppamanse.honsulnamnye.post.detail;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -142,24 +143,34 @@ public class PostDetailViewModel extends BaseObservable {
         }
     }
 
-    public void clickWithdrawalGroup(Context context) {
-        try {
-            model.withdrawalGroup((Activity) context, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        isMember = false;
-                        view.successWithdrawalGroup();
-                    } else {
-                        isMember = true;
-                        view.failureWithdrawalGroup(task.getException());
+    public void clickWithdrawalGroup(final Context context) {
+        view.showAlertWithdrawalGroup(new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (i == DialogInterface.BUTTON_POSITIVE) {
+                    try {
+                        model.withdrawalGroup((Activity) context, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful()) {
+                                    isMember = false;
+                                    view.successWithdrawalGroup();
+                                } else {
+                                    isMember = true;
+                                    view.failureWithdrawalGroup(task.getException());
+                                }
+                                notifyChange();
+
+                            }
+                        });
+                    } catch (Exception e) {
+                        view.failureJoinGroup(e);
                     }
-                    notifyChange();
                 }
-            });
-        } catch (Exception e) {
-            view.failureJoinGroup(e);
-        }
+            }
+        });
     }
 
     public void updateGoogleMap(GoogleMap googleMap) {
