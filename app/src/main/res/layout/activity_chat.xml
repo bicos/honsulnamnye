@@ -42,11 +42,11 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
-            android:onClick="@{view -> viewModel.clickInputChat()}"
+            android:onClick="@{view -> viewModel.clickInputChat(view.getContext())}"
             android:text="확인" />
 
         <ImageButton
-            android:onClick="@{view -> viewModel.clickUploadImage(view.getContext())}"
+            android:onClick="@{view -> viewModel.clickUploadImage()}"
             android:id="@+id/btn_add_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
