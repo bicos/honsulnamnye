@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.R;
-import com.obppamanse.honsulnamnye.user.signup.SignUpActivity;
 import com.obppamanse.honsulnamnye.databinding.FragmentSignInBinding;
 import com.obppamanse.honsulnamnye.main.MainActivity;
+import com.obppamanse.honsulnamnye.user.signup.SignUpActivity;
 
 /**
  * Created by raehyeong.park on 2017. 4. 25..
@@ -60,6 +60,7 @@ public class SignInFragment extends Fragment implements SignInContract.View {
     @Override
     public void startMainActivity() {
         MainActivity.start(getActivity());
+        getActivity().finish();
     }
 
     @Override

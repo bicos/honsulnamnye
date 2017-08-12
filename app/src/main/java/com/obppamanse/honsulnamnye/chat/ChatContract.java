@@ -22,6 +22,8 @@ public class ChatContract {
         void moveScrollToPositionBottom();
 
         void showErrorToast(String msg);
+
+        void chooseUploadImage();
     }
 
     public interface Model {

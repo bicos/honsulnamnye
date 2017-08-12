@@ -56,6 +56,7 @@
     <string name="button_create_post">모임 만들기</string>
     <string name="title_chat">채팅</string>
     <string name="error_input_text">메세지를 입력하여 주세요.</string>
+    <string name="button_logout">logout</string>
     <string name="msg_success_delete_post">글을 삭제하였습니다.</string>
     <string name="msg_delete_post_failed">글 삭제를 실패하였습니다.</string>
     <string name="msg_success_join_group">그룹 가입에 성공하였습니다.</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <data>
 
@@ -23,16 +24,22 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginBottom="@dimen/default_margin"
-            bind:setProfileImage="@{viewModel.profileUrl}"
-            android:onClick="@{view -> viewModel.clickProfileImage(context)}"/>
+            android:onClick="@{view -> viewModel.clickProfileImage(context)}"
+            bind:setProfileImage="@{viewModel.profileUrl}" />
 
         <TextView
             android:id="@+id/tv_email"
             style="@android:style/TextAppearance.DeviceDefault.Large"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="@{viewModel.userEmail}" />
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@{viewModel.userEmail}"
+            bind:autoSizeMinTextSize="12sp"
+            bind:autoSizeStepGranularity="2sp"
+            bind:autoSizeTextType="uniform"
+            tool:text="abcd@abcd.com" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -47,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:onClick="@{view -> viewModel.clickLogoutButton()}"
-            android:text="logout" />
+            android:text="@string/button_logout" />
 
 
     </LinearLayout>
