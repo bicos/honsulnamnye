@@ -33,9 +33,9 @@ public class PersonalFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal, container, false);
 
-        TabLayout layout = (TabLayout) view.findViewById(R.id.tab);
+        TabLayout layout = view.findViewById(R.id.tab);
 
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        ViewPager viewPager = view.findViewById(R.id.view_pager);
         PersonalCalendarFragmentAdapter adapter = new PersonalCalendarFragmentAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
 

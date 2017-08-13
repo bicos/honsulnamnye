@@ -1,6 +1,7 @@
 package com.obppamanse.honsulnamnye.user.profile;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,6 +78,30 @@ public class UserProfileActivity extends AppCompatActivity implements UserProfil
     @Override
     public void setUiFailedModifyProfile(Exception e) {
         Toast.makeText(getApplicationContext(), R.string.error_failed_modify_user_info, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showUploadProfileImageProgress() {
+        binding.containerLoadingProgress.setVisibility(View.VISIBLE);
+        binding.msgProgress.setText(R.string.msg_progress_upload_image);
+    }
+
+    @Override
+    public void showUpdateFirebaseUserProfileProgress() {
+        binding.containerLoadingProgress.setVisibility(View.VISIBLE);
+        binding.msgProgress.setText(R.string.msg_progress_update_user_info);
+    }
+
+
+    @Override
+    public void showUpdateUserInfoProgress() {
+        binding.containerLoadingProgress.setVisibility(View.VISIBLE);
+        binding.msgProgress.setText(R.string.msg_progress_update_user_info);
+    }
+
+    @Override
+    public void hideAllProgress() {
+        binding.containerLoadingProgress.setVisibility(View.GONE);
     }
 
     @Override

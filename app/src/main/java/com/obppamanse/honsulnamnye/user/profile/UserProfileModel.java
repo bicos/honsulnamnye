@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.UploadTask;
@@ -39,55 +38,19 @@ public class UserProfileModel implements UserProfileContract.Model {
     }
 
     @Override
-    public void updateProfile(final Activity activity,
-                              final OnSuccessListener<Void> successListener,
-                              final OnFailureListener failureListener) {
-        final UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
-
-        if (modifyProfileImage) {
-            modifyProfileImage = false;
-
-            FirebaseUtils.getProfileStorageRef().child(user.email)
-                    .putFile(Uri.parse(user.profileUri))
-                    .addOnSuccessListener(activity, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            if (taskSnapshot.getDownloadUrl() != null) {
-                                builder.setPhotoUri(taskSnapshot.getDownloadUrl());
-                                user.profileUri = taskSnapshot.getDownloadUrl().toString();
-                                updateProfile(builder, activity, successListener, failureListener);
-                            } else {
-                                failureListener.onFailure(new UserProfileContract.FailureModifyProfileException());
-                            }
-                        }
-                    })
-                    .addOnFailureListener(activity, failureListener);
-        } else {
-            updateProfile(builder, activity, successListener, failureListener);
-        }
+    public UploadTask uploadProfileImage() {
+        return FirebaseUtils.getProfileStorageRef().child(user.email)
+                .putFile(Uri.parse(user.profileUri));
     }
 
-    private void updateProfile(UserProfileChangeRequest.Builder builder, final Activity activity,
-                               final OnSuccessListener<Void> successListener,
-                               final OnFailureListener failureListener) {
+    @Override
+    public Task<Void> updateFirebaseUserProfile(UserProfileChangeRequest.Builder builder) {
+        return firebaseUser.updateProfile(builder.build());
+    }
 
-        if (modifyUserName) {
-            modifyUserName = false;
-            builder.setDisplayName(user.nickName);
-        }
-
-        firebaseUser.updateProfile(builder.build()).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                if (modifyUserGender) {
-                    modifyUserGender = false;
-                }
-
-                FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(user)
-                        .addOnSuccessListener(activity, successListener)
-                        .addOnFailureListener(activity, failureListener);
-            }
-        }).addOnFailureListener(activity, failureListener);
+    @Override
+    public Task<Void> updateProfileDatabase() {
+        return FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(user);
     }
 
     @Override

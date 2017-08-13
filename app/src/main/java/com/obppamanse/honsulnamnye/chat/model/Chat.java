@@ -25,6 +25,13 @@ public class Chat {
         this.userInfo = userInfo;
     }
 
+    public Chat(Chat chat) {
+        userInfo = chat.getUserInfo();
+        timestamp = chat.getTimestamp();
+        msg = chat.getMsg();
+        key = chat.getKey();
+    }
+
     public UserInfo getUserInfo() {
         return userInfo;
     }

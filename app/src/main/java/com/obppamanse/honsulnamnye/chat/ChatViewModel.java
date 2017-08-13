@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.obppamanse.honsulnamnye.R;
+import com.obppamanse.honsulnamnye.chat.model.Chat;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
 /**
@@ -53,11 +54,12 @@ public class ChatViewModel extends BaseObservable {
             return;
         }
 
-        model.requestInputChat(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
+        Chat copiedChat = new Chat(model.getChat());
+        view.clearInputChat();
+        model.requestInputChat(ActivityUtils.getActivity(context), copiedChat, new OnSuccessListener<Void>() {
 
             @Override
             public void onSuccess(Void aVoid) {
-                view.clearInputChat();
                 view.moveScrollToPositionBottom();
             }
         }, new OnFailureListener() {
@@ -65,7 +67,6 @@ public class ChatViewModel extends BaseObservable {
             @Override
             public void onFailure(@NonNull Exception e) {
                 view.showErrorToast(e);
-                view.clearInputChat();
             }
         });
     }

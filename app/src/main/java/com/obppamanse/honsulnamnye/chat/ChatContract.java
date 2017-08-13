@@ -28,7 +28,7 @@ public class ChatContract {
 
     public interface Model {
 
-        void requestInputChat(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+        void requestInputChat(Activity activity, Chat chat, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
         Chat getChat();
 

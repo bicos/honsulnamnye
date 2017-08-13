@@ -39,6 +39,7 @@ public class ChatModel implements ChatContract.Model {
 
     @Override
     public void requestInputChat(final Activity activity,
+                                 Chat chat,
                                  final OnSuccessListener<Void> successListener,
                                  final OnFailureListener failureListener) {
         if (TextUtils.isEmpty(chat.getMsg())) {
@@ -50,6 +51,7 @@ public class ChatModel implements ChatContract.Model {
 
         final String chatKey = chatRef.push().getKey();
         chat.setKey(chatKey);
+
         chatRef.child(chatKey).setValue(chat)
                 .continueWithTask(new Continuation<Void, Task<Void>>() {
                     @Override

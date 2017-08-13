@@ -43,7 +43,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:onClick="@{view -> viewModel.clickInputChat(view.getContext())}"
-            android:text="확인" />
+            android:text="@string/button_ok" />
 
         <ImageButton
             android:onClick="@{view -> viewModel.clickUploadImage()}"

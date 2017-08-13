@@ -3,8 +3,9 @@ package com.obppamanse.honsulnamnye.user.profile;
 import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 
 /**
@@ -23,14 +24,24 @@ public class UserProfileContract {
         void setUiSuccessModifyProfile();
 
         void setUiFailedModifyProfile(Exception e);
+
+        void showUploadProfileImageProgress();
+
+        void showUpdateFirebaseUserProfileProgress();
+
+        void hideAllProgress();
+
+        void showUpdateUserInfoProgress();
     }
 
     public interface Model {
         UserInfo getUser();
 
-        void updateProfile(Activity activity,
-                           OnSuccessListener<Void> successListener,
-                           OnFailureListener failureListener);
+        UploadTask uploadProfileImage();
+
+        Task<Void> updateFirebaseUserProfile(UserProfileChangeRequest.Builder builder);
+
+        Task<Void> updateProfileDatabase();
 
         void withdrawalService(Activity activity, OnCompleteListener<Void> listener);
 

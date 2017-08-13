@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <data>
 
@@ -11,138 +13,190 @@
 
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:clickable="true"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:layout_marginTop="50dp"
-            android:onClick="@{(view) -> viewModel.clickChangeProfileImage()}"
-            bind:setProfileImage="@{viewModel.profileUrl}" />
-
-        <TextView
-            android:id="@+id/tv_email"
-            style="@android:style/TextAppearance.DeviceDefault.Large"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
-            android:text="@{viewModel.userEmail}" />
-
-        <android.support.v7.widget.CardView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/default_margin">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_critical" />
-
-                <EditText
-                    android:id="@+id/et_input_nickname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_input_nickname"
-                    android:inputType="text"
-                    android:onTextChanged="@{(nickName, a,b,c) -> viewModel.inputNickName(nickName.toString())}"
-                    android:text="@{viewModel.profileName}" />
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin">
+            android:layout_height="match_parent"
+            android:background="#ffffff">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:layout_marginTop="50dp"
+                    android:onClick="@{(view) -> viewModel.clickChangeProfileImage()}"
+                    bind:setProfileImage="@{viewModel.profileUrl}" />
+
+                <TextView
+                    android:id="@+id/tv_email"
+                    style="@android:style/TextAppearance.DeviceDefault.Large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_profile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="50dp"
+                    android:text="@{viewModel.userEmail}" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/container_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_email"
+                    android:layout_marginLeft="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/default_margin">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_critical" />
+
+                        <EditText
+                            android:id="@+id/et_input_nickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_input_nickname"
+                            android:inputType="text"
+                            android:onTextChanged="@{(nickName, a,b,c) -> viewModel.inputNickName(nickName.toString())}"
+                            android:text="@{viewModel.profileName}" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/container_optional"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_nickname"
+                    android:layout_marginLeft="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/default_margin">
+
+                        <TextView
+                            android:id="@+id/optional"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/title_optional" />
+
+                        <TextView
+                            android:id="@+id/gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/radio_group_gender"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignTop="@+id/radio_group_gender"
+                            android:layout_toLeftOf="@+id/radio_group_gender"
+                            android:gravity="center_vertical"
+                            android:text="@string/sub_title_gender" />
+
+                        <RadioGroup
+                            android:id="@+id/radio_group_gender"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/optional"
+                            android:checkedButton="@{viewModel.currentUserIsMale() ? @id/radio_man : @id/radio_woman}"
+                            android:onCheckedChanged="@{(group, checkedId) -> viewModel.changeGender(checkedId)}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radio_man"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/txt_mail" />
+
+                            <RadioButton
+                                android:id="@+id/radio_woman"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/txt_femail" />
+
+                        </RadioGroup>
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <Button
+                    android:id="@+id/btn_modify_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/container_optional"
+                    android:layout_marginLeft="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:layout_marginTop="15dp"
+                    android:onClick="@{view -> viewModel.clickModifyProfile(context)}"
+                    android:text="@string/btn_modify_profile" />
+
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btn_modify_profile"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:layout_marginTop="15dp"
+                    android:onClick="@{view -> viewModel.clickWithdrawal(context)}"
+                    android:text="@string/btn_withdrawal" />
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/container_loading_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_progress"
                 android:orientation="vertical"
                 android:padding="@dimen/default_margin">
 
-                <TextView
-                    android:id="@+id/optional"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_optional" />
-
-                <TextView
-                    android:id="@+id/gender"
+                <android.support.v4.widget.ContentLoadingProgressBar
+                    android:id="@+id/loading_progress"
+                    style="@style/Widget.AppCompat.ProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/radio_group_gender"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignTop="@+id/radio_group_gender"
-                    android:layout_toLeftOf="@+id/radio_group_gender"
-                    android:gravity="center_vertical"
-                    android:text="@string/sub_title_gender" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="15dp" />
 
-                <RadioGroup
-                    android:id="@+id/radio_group_gender"
+                <TextView
+                    android:id="@+id/msg_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/optional"
-                    android:checkedButton="@{viewModel.currentUserIsMale() ? @id/radio_man : @id/radio_woman}"
-                    android:onCheckedChanged="@{(group, checkedId) -> viewModel.changeGender(checkedId)}"
-                    android:orientation="horizontal">
+                    tool:text="Loading Message" />
 
-                    <RadioButton
-                        android:id="@+id/radio_man"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_mail" />
-
-                    <RadioButton
-                        android:id="@+id/radio_woman"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_femail" />
-
-                </RadioGroup>
-
-            </RelativeLayout>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
-        <Button
-            android:id="@+id/btn_modify_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="15dp"
-            android:onClick="@{view -> viewModel.clickModifyProfile(context)}"
-            android:text="@string/btn_modify_profile" />
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/btn_logout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_margin"
-            android:layout_marginRight="@dimen/default_margin"
-            android:layout_marginTop="15dp"
-            android:onClick="@{view -> viewModel.clickWithdrawal(context)}"
-            android:text="@string/btn_withdrawal" />
-
-
-    </LinearLayout>
 </layout>

@@ -1,18 +1,23 @@
 package com.obppamanse.honsulnamnye.user.profile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
@@ -25,6 +30,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 
 public class UserProfileViewModel extends BaseObservable {
+
+    private static final String TAG = "UserProfileViewModel";
 
     private UserProfileContract.View view;
 
@@ -89,7 +96,7 @@ public class UserProfileViewModel extends BaseObservable {
 
     public void changeProfileImage(Uri uri) {
         if (uri != null) {
-            model.setModifyProfileImage(!model.getUser().profileUri.equals(uri.toString()));
+            model.setModifyProfileImage(!uri.toString().equals(model.getUser().profileUri));
             model.getUser().profileUri = uri.toString();
             notifyPropertyChanged(BR.profileUrl);
         }
@@ -113,14 +120,93 @@ public class UserProfileViewModel extends BaseObservable {
     }
 
     public void clickModifyProfile(Context context) {
-        model.updateProfile(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
+        Activity activity = ActivityUtils.getActivity(context);
+
+        if (activity == null) {
+            view.setUiFailedModifyProfile(new UserProfileContract.FailureModifyProfileException());
+            return;
+        }
+
+        UploadTask uploadTask = null;
+
+        if (model.isModifyProfileImage()) {
+            view.showUploadProfileImageProgress();
+            uploadTask = model.uploadProfileImage();
+        }
+
+        Task<Void> firebaseProfileUploadTask;
+
+        if (uploadTask != null) { // 수정된 이미지가 있을 경우
+            firebaseProfileUploadTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>() {
+                @Override
+                public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    view.hideAllProgress();
+
+                    if (task.isSuccessful()) {
+                        UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                        builder.setPhotoUri(task.getResult().getDownloadUrl());
+
+                        if (model.isModifyUserName()) {
+                            builder.setDisplayName(model.getUser().nickName);
+                        }
+
+                        view.showUpdateFirebaseUserProfileProgress();
+
+                        return model.updateFirebaseUserProfile(builder);
+                    } else {
+                        throw task.getException();
+                    }
+                }
+            }).addOnFailureListener(activity, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "profile image upload error : ", e);
+                    view.hideAllProgress();
+                    view.setUiFailedWithdrawalService(e);
+                }
+            });
+        } else { // 수정된 이미지가 없을 경우
+            UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+            if (model.isModifyUserName()) {
+                builder.setDisplayName(model.getUser().nickName);
+            }
+            view.showUpdateFirebaseUserProfileProgress();
+            firebaseProfileUploadTask = model.updateFirebaseUserProfile(builder);
+        }
+
+        if (firebaseProfileUploadTask == null) {
+            view.hideAllProgress();
+            view.setUiFailedModifyProfile(new UserProfileContract.FailureModifyProfileException());
+            return;
+        }
+
+        firebaseProfileUploadTask.continueWithTask(new Continuation<Void, Task<Void>>() {
+            @Override
+            public Task<Void> then(@NonNull Task<Void> task) throws Exception {
+                view.hideAllProgress();
+
+                if (task.isSuccessful()) {
+                    view.showUpdateUserInfoProgress();
+                    return model.updateProfileDatabase();
+                } else {
+                    throw new UserProfileContract.FailureModifyProfileException();
+                }
+            }
+        }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                model.setModifyUserName(false);
+                model.setModifyProfileImage(false);
+                model.setModifyUserGender(false);
+
+                view.hideAllProgress();
                 view.setUiSuccessModifyProfile();
             }
-        }, new OnFailureListener() {
+        }).addOnFailureListener(activity, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                view.hideAllProgress();
+                Log.e(TAG, "database update failed : ", e);
                 view.setUiFailedModifyProfile(e);
             }
         });
