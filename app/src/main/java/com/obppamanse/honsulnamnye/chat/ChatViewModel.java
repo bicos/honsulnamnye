@@ -95,7 +95,7 @@ public class ChatViewModel extends BaseObservable {
         return false;
     }
 
-    public void startUploadImage(final Activity activity, @NonNull Uri data) {
+    public void startUploadImage(final Activity activity, @NonNull final Uri data) {
         model.requestUploadPicture(data).addOnProgressListener(activity, new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
@@ -115,7 +115,7 @@ public class ChatViewModel extends BaseObservable {
         }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                view.successUploadImage(Uri.parse(model.getChat().getPictureUrl()));
+                view.successUploadImage(data);
             }
         }).addOnFailureListener(activity, new OnFailureListener() {
             @Override

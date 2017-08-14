@@ -11,10 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.databinding.ActivityChatBinding;
+
+import static android.app.PendingIntent.FLAG_ONE_SHOT;
 
 /**
  * Created by raehyeong.park on 2017. 8. 3..
@@ -89,8 +92,8 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
     public void showUploadProgress(long totalByteCount, long bytesTransferred) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText(getString(R.string.msg_upload_image))
-                .setSubText(totalByteCount + "/" + bytesTransferred)
+                .setContentTitle(getString(R.string.msg_upload_image))
+                .setContentText(totalByteCount + "/" + bytesTransferred)
                 .setProgress((int) totalByteCount, (int) bytesTransferred, false);
 
         manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
@@ -98,18 +101,18 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void successUploadImage(Uri downloadUrl) {
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        new Intent(Intent.ACTION_VIEW, downloadUrl),
-                        0
-                );
+        Log.i("test", "downloadUrl : " + downloadUrl);
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                new Intent(Intent.ACTION_VIEW, downloadUrl),
+                FLAG_ONE_SHOT
+        );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentText(getString(R.string.msg_upload_image))
-                .setSubText(getString(R.string.msg_upload_image_complete))
+                .setContentTitle(getString(R.string.msg_upload_image))
+                .setContentText(getString(R.string.msg_upload_image_complete))
                 .setProgress(0, 0, false)
                 .setContentIntent(resultPendingIntent)
                 .setAutoCancel(true);
