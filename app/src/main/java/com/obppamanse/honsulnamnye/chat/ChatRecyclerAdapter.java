@@ -35,7 +35,7 @@ public class ChatRecyclerAdapter extends FirebaseRecyclerAdapter<Chat, ChatItemV
             throw new IllegalArgumentException("viewType argument not valid");
         }
 
-        return new ChatItemViewHolder(binding, new ChatItemViewModel(parent.getContext()));
+        return new ChatItemViewHolder(binding, new ChatItemViewModel());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.chat;
 
-import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -8,10 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.Transformation;
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.util.DateUtils;
@@ -26,12 +22,9 @@ import static com.obppamanse.honsulnamnye.util.DateUtils.SIMPLE_DATE_FORMAT;
 
 public class ChatItemViewModel extends BaseObservable {
 
-    private Context context;
-
     private Chat mChat;
 
-    public ChatItemViewModel(Context context) {
-        this.context = context;
+    public ChatItemViewModel() {
     }
 
     public void setChat(Chat chat) {
@@ -59,21 +52,22 @@ public class ChatItemViewModel extends BaseObservable {
         return mChat != null && !TextUtils.isEmpty(mChat.getPictureUrl());
     }
 
-    @Bindable
-    public Transformation getProfileTransform() {
-        return new CropCircleTransformation(context);
+    @BindingAdapter("setProfileImage")
+    public static void setProfileImage(ImageView imageView, String url) {
+        Glide.with(imageView.getContext())
+                .load(url)
+                .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                .into(imageView);
     }
 
-    @BindingAdapter({"setImage", "setTransform"})
-    public static void setImage(ImageView imageView, String url, Transformation transformation) {
+    @BindingAdapter("setPicture")
+    public static void setPicture(final ImageView imageView, String url) {
         if (url != null) {
             imageView.setVisibility(View.VISIBLE);
-            DrawableRequestBuilder builder = Glide.with(imageView.getContext())
-                    .load(url);
-            if (transformation != null) {
-                builder.bitmapTransform(transformation);
-            }
-            builder.into(imageView);
+            Glide.with(imageView.getContext())
+                    .load(url)
+                    .fitCenter()
+                    .into(imageView);
         } else {
             imageView.setVisibility(View.GONE);
         }

@@ -24,8 +24,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginRight="10dp"
-            bind:setImage="@{viewModel.userInfo.profileUri}"
-            bind:setTransform="@{viewModel.profileTransform}" />
+            bind:setProfileImage="@{viewModel.userInfo.profileUri}" />
 
         <LinearLayout
             android:id="@+id/container_message"
@@ -58,12 +57,10 @@
 
             <ImageView
                 android:id="@+id/picture"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:maxWidth="300dp"
                 android:visibility="@{viewModel.pictureContent ? View.VISIBLE : View.GONE}"
-                bind:setImage="@{viewModel.chat.pictureUrl}"
-                bind:setTransform="@{null}" />
+                bind:setProfileImage="@{viewModel.chat.pictureUrl}" />
 
             <TextView
                 android:id="@+id/date"
