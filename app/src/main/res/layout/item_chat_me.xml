@@ -5,58 +5,53 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.chat.model.ChatItemViewModel" />
+            type="com.obppamanse.honsulnamnye.chat.ChatItemViewModel" />
 
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/layout_chat_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="vertical"
         android:padding="@dimen/default_margin">
-
-        <ImageView
-            android:layout_alignParentRight="true"
-            android:id="@+id/user_profile"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginLeft="10dp"
-            bind:setProfileImage="@{viewModel.userInfo}" />
-
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/user_profile"
-            android:text="@{viewModel.userInfo.nickName}"
-            tool:text="userName" />
 
         <TextView
             android:id="@+id/msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/user_name"
+            android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_toLeftOf="@+id/user_profile"
             android:background="@drawable/bg_chat_me"
             android:padding="10dp"
             android:text="@{viewModel.chat.msg}"
             android:textColor="#ffffff"
+            android:visibility="@{viewModel.pictureContent ? View.GONE : View.VISIBLE}"
             tool:text="message" />
+
+        <ImageView
+            android:id="@+id/picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="200dp"
+            android:maxWidth="200dp"
+            android:visibility="@{viewModel.pictureContent ? View.VISIBLE : View.GONE}"
+            bind:setImage="@{viewModel.chat.pictureUrl}"
+            bind:setTransform="@{null}" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/msg"
             android:text="@{viewModel.dateStr}"
             android:textSize="10sp"
-            android:layout_alignRight="@+id/msg"
             tool:text="1.1 12:00" />
 
-    </RelativeLayout>
+    </LinearLayout>
 </layout>

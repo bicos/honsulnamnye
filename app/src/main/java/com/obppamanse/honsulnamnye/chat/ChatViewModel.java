@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.chat;
 
+import android.app.Activity;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -13,8 +14,12 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
@@ -49,21 +54,28 @@ public class ChatViewModel extends BaseObservable {
     }
 
     public void clickInputChat(Context context) {
+        Activity activity = ActivityUtils.getActivity(context);
+        if (activity == null) {
+            return;
+        }
+
         if (TextUtils.isEmpty(model.getChat().getMsg())) {
             view.showErrorToast(context.getString(R.string.error_input_text));
             return;
         }
 
+        // copy of value
         Chat copiedChat = new Chat(model.getChat());
-        view.clearInputChat();
-        model.requestInputChat(ActivityUtils.getActivity(context), copiedChat, new OnSuccessListener<Void>() {
 
+        // clear editText
+        view.clearInputChat();
+
+        model.requestUploadChat(activity, copiedChat).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 view.moveScrollToPositionBottom();
             }
-        }, new OnFailureListener() {
-
+        }).addOnFailureListener(activity, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 view.showErrorToast(e);
@@ -83,8 +95,34 @@ public class ChatViewModel extends BaseObservable {
         return false;
     }
 
-    public void addUploadImageUri(Uri data) {
+    public void startUploadImage(final Activity activity, @NonNull Uri data) {
+        model.requestUploadPicture(data).addOnProgressListener(activity, new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                view.showUploadProgress(taskSnapshot.getTotalByteCount(), taskSnapshot.getBytesTransferred());
+            }
+        }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>() {
+            @Override
+            public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (task.isSuccessful() && task.getResult().getDownloadUrl() != null) {
+                    // picture url
+                    model.getChat().setPictureUrl(task.getResult().getDownloadUrl().toString());
+                    return model.requestUploadChat(activity, model.getChat());
+                }
 
+                throw task.getException();
+            }
+        }).addOnSuccessListener(activity, new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                view.successUploadImage(Uri.parse(model.getChat().getPictureUrl()));
+            }
+        }).addOnFailureListener(activity, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                view.failureUploadImage(e);
+            }
+        });
     }
 
     @BindingAdapter("setRecyclerView")

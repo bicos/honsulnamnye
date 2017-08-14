@@ -11,7 +11,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Query;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
-import com.obppamanse.honsulnamnye.chat.model.ChatItemViewModel;
 
 /**
  * Created by raehyeong.park on 2017. 8. 3..
@@ -36,7 +35,7 @@ public class ChatRecyclerAdapter extends FirebaseRecyclerAdapter<Chat, ChatItemV
             throw new IllegalArgumentException("viewType argument not valid");
         }
 
-        return new ChatItemViewHolder(binding, new ChatItemViewModel());
+        return new ChatItemViewHolder(binding, new ChatItemViewModel(parent.getContext()));
     }
 
     @Override

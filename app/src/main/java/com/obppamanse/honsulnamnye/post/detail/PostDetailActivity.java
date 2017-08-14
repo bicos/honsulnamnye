@@ -93,7 +93,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     }
 
     private void showToastError() {
-        Toast.makeText(getContext(), "오류가 발생하였습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.msg_error_showing_post, Toast.LENGTH_SHORT).show();
     }
 
     private void populatePostDetail(Post post) {

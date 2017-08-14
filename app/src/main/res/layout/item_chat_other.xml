@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="com.obppamanse.honsulnamnye.chat.model.ChatItemViewModel" />
+            type="com.obppamanse.honsulnamnye.chat.ChatItemViewModel" />
 
     </data>
 
@@ -22,40 +24,56 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginRight="10dp"
-            bind:setProfileImage="@{viewModel.userInfo}" />
+            bind:setImage="@{viewModel.userInfo.profileUri}"
+            bind:setTransform="@{viewModel.profileTransform}" />
 
-        <TextView
-            android:id="@+id/user_name"
+        <LinearLayout
+            android:id="@+id/container_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/user_profile"
-            android:text="@{viewModel.userInfo.nickName}"
-            tool:text="userName" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/user_name"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_toRightOf="@+id/user_profile"
-            android:background="@drawable/bg_chat_others"
-            android:padding="10dp"
-            android:text="@{viewModel.chat.msg}"
-            android:textColor="#ffffff"
-            tool:text="message" />
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.userInfo.nickName}"
+                tool:text="userName" />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/msg"
-            android:layout_below="@+id/msg"
-            android:text="@{viewModel.dateStr}"
-            android:textSize="10sp"
-            tool:text="1.1 12:00" />
+            <TextView
+                android:id="@+id/msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/user_profile"
+                android:background="@drawable/bg_chat_others"
+                android:padding="10dp"
+                android:text="@{viewModel.chat.msg}"
+                android:textColor="#ffffff"
+                android:visibility="@{viewModel.pictureContent ? View.GONE : View.VISIBLE}"
+                tool:text="message" />
+
+            <ImageView
+                android:id="@+id/picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="300dp"
+                android:visibility="@{viewModel.pictureContent ? View.VISIBLE : View.GONE}"
+                bind:setImage="@{viewModel.chat.pictureUrl}"
+                bind:setTransform="@{null}" />
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.dateStr}"
+                android:textSize="10sp"
+                tool:text="1.1 12:00" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 </layout>

@@ -1,10 +1,11 @@
 package com.obppamanse.honsulnamnye.chat;
 
 import android.app.Activity;
+import android.net.Uri;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
 
 /**
@@ -24,15 +25,23 @@ public class ChatContract {
         void showErrorToast(String msg);
 
         void chooseUploadImage();
+
+        void showUploadProgress(long totalByteCount, long bytesTransferred);
+
+        void successUploadImage(Uri downloadUrl);
+
+        void failureUploadImage(Exception e);
     }
 
     public interface Model {
 
-        void requestInputChat(Activity activity, Chat chat, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
+        Task<Void> requestUploadChat(Activity activity, Chat chat);
 
         Chat getChat();
 
         DatabaseReference getChatRef();
+
+        UploadTask requestUploadPicture(Uri uri);
     }
 
     public static class MessageEmptyException extends Exception {

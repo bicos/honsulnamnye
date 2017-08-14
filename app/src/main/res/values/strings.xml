@@ -67,4 +67,5 @@
     <string name="msg_delete_post">해당 글을 삭제하겠습니까?</string>
     <string name="msg_progress_upload_image">프로필 이미지를 업로드중입니다.</string>
     <string name="msg_progress_update_user_info">유저 정보를 업데이트 중입니다.</string>
+    <string name="msg_error_showing_post">오류가 발생하였습니다. 다시 시도해주세요.</string>
 </resources>

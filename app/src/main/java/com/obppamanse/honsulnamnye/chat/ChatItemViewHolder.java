@@ -4,7 +4,6 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 
 import com.obppamanse.honsulnamnye.chat.model.Chat;
-import com.obppamanse.honsulnamnye.chat.model.ChatItemViewModel;
 import com.obppamanse.honsulnamnye.databinding.ItemChatMeBinding;
 import com.obppamanse.honsulnamnye.databinding.ItemChatOtherBinding;
 

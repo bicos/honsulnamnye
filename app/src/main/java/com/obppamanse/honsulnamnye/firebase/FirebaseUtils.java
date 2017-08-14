@@ -35,10 +35,6 @@ public class FirebaseUtils {
 
     private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";
 
-    public static StorageReference getStorageRef() {
-        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF);
-    }
-
     public static StorageReference getProfileStorageRef() {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("profile");
     }
@@ -48,11 +44,14 @@ public class FirebaseUtils {
      * @return
      */
     public static StorageReference getPostStorageRef(String postKey) {
-        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child("post").child(postKey);
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child(POST_REF).child(postKey);
     }
 
     public static DatabaseReference getChatRef() {
         return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
     }
 
+    public static StorageReference getChatStorageRef(String chatKey) {
+        return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child(CHAT_REF).child(chatKey);
+    }
 }

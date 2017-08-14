@@ -18,6 +18,8 @@ public class Chat {
 
     private String key;
 
+    private String pictureUrl;
+
     public Chat() {
     }
 
@@ -30,6 +32,7 @@ public class Chat {
         timestamp = chat.getTimestamp();
         msg = chat.getMsg();
         key = chat.getKey();
+        pictureUrl = chat.getPictureUrl();
     }
 
     public UserInfo getUserInfo() {
@@ -62,5 +65,20 @@ public class Chat {
 
     public String getKey() {
         return key;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void clear() {
+        timestamp = 0L;
+        msg = "";
+        key = "";
+        pictureUrl = "";
     }
 }

@@ -1,11 +1,15 @@
 package com.obppamanse.honsulnamnye.chat;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
@@ -22,7 +26,15 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     private static final int REQUEST_UPLOAD_IMAGE = 1000;
 
+    private static final int IMAGE_UPLOAD_PROGRESS_ID = 1;
+
+    private static final String CHANEL_IMAGE_UPLOAD_PROGRESS = "image_upload_progress";
+
     private ActivityChatBinding binding;
+
+    private NotificationManager manager;
+
+    private NotificationCompat.Builder builder;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,11 +88,51 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
     }
 
     @Override
+    public void showUploadProgress(long totalByteCount, long bytesTransferred) {
+        if (builder == null) {
+            builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS);
+            builder.setContentText("이미지를 업로드 중입니다.");
+        }
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        builder.setProgress((int) totalByteCount, (int) bytesTransferred, false);
+        manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
+    }
+
+    @Override
+    public void successUploadImage(Uri downloadUrl) {
+        Intent resultIntent = new Intent(Intent.ACTION_VIEW);
+        resultIntent.setData(downloadUrl);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                );
+
+        builder.setContentText("이미지 업로드를 완료하였습니다.");
+        builder.setProgress(0, 0, false);
+        builder.setContentIntent(resultPendingIntent);
+        builder.setAutoCancel(true);
+        manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
+    }
+
+    @Override
+    public void failureUploadImage(Exception e) {
+
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_UPLOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
-            binding.getViewModel().addUploadImageUri(data.getData());
+            if (manager == null) {
+                manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            }
+
+            binding.getViewModel().startUploadImage(this, data.getData());
         }
     }
 
