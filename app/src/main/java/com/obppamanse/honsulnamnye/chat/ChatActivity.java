@@ -34,8 +34,6 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     private NotificationManager manager;
 
-    private NotificationCompat.Builder builder;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,32 +87,33 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void showUploadProgress(long totalByteCount, long bytesTransferred) {
-        if (builder == null) {
-            builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS);
-            builder.setContentText("이미지를 업로드 중입니다.");
-        }
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setProgress((int) totalByteCount, (int) bytesTransferred, false);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentText(getString(R.string.msg_upload_image))
+                .setSubText(totalByteCount + "/" + bytesTransferred)
+                .setProgress((int) totalByteCount, (int) bytesTransferred, false);
+
         manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
     }
 
     @Override
     public void successUploadImage(Uri downloadUrl) {
-        Intent resultIntent = new Intent(Intent.ACTION_VIEW);
-        resultIntent.setData(downloadUrl);
-
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         this,
                         0,
-                        resultIntent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        new Intent(Intent.ACTION_VIEW, downloadUrl),
+                        0
                 );
 
-        builder.setContentText("이미지 업로드를 완료하였습니다.");
-        builder.setProgress(0, 0, false);
-        builder.setContentIntent(resultPendingIntent);
-        builder.setAutoCancel(true);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentText(getString(R.string.msg_upload_image))
+                .setSubText(getString(R.string.msg_upload_image_complete))
+                .setProgress(0, 0, false)
+                .setContentIntent(resultPendingIntent)
+                .setAutoCancel(true);
+
         manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
     }
 
