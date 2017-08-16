@@ -41,7 +41,7 @@ public class PostContract {
 
         long getDueDate();
 
-        long getWriteDate();
+        long getTimestamp();
 
         boolean isWriter();
 
@@ -50,7 +50,7 @@ public class PostContract {
 
     public interface WriteModel extends SetModel {
 
-        void writePost(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener) throws Exception;
+        void writePost(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
         String getPlaceName();
 

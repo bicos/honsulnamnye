@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.net.Uri;
 import android.text.TextUtils;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
@@ -27,6 +30,9 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.obppamanse.honsulnamnye.firebase.FirebaseUtils.POST_FILENAMES_REF;
+import static com.obppamanse.honsulnamnye.firebase.FirebaseUtils.TIMESTAMP_REF;
 
 /**
  * Created by raehyeong.park on 2017. 5. 25..
@@ -47,29 +53,34 @@ public class PostWriteModel implements PostContract.WriteModel {
     }
 
     @Override
-    public void writePost(final Activity activity, final OnSuccessListener<Void> successListener, final OnFailureListener failureListener) throws Exception {
+    public void writePost(final Activity activity, final OnSuccessListener<Void> successListener, final OnFailureListener failureListener) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            throw new PostContract.NotExistAuthUserException();
+            failureListener.onFailure(new PostContract.NotExistAuthUserException());
+            return;
         }
 
         if (post == null) {
-            throw new PostContract.FailureWritePostException();
+            failureListener.onFailure(new PostContract.FailureWritePostException());
+            return;
         }
 
-        if (TextUtils.isEmpty(post.getTitle())){
-            throw new PostContract.EmptyTitlePostException();
+        if (TextUtils.isEmpty(post.getTitle())) {
+            failureListener.onFailure(new PostContract.EmptyTitlePostException());
+            return;
         }
 
         if (TextUtils.isEmpty(post.getDesc())) {
-            throw new PostContract.EmptyDescPostException();
+            failureListener.onFailure(new PostContract.EmptyDescPostException());
+            return;
         }
 
         post.setUid(user.getUid());
 
         final String key = postRef.push().getKey();
         if (TextUtils.isEmpty(key)) {
-            throw new PostContract.FailureWritePostException();
+            failureListener.onFailure(new PostContract.FailureWritePostException());
+            return;
         }
 
         if (uploadUris.isEmpty()) {
@@ -109,44 +120,56 @@ public class PostWriteModel implements PostContract.WriteModel {
         return Observable.create(new ObservableOnSubscribe<UploadTask.TaskSnapshot>() {
             @Override
             public void subscribe(@NonNull final ObservableEmitter<UploadTask.TaskSnapshot> e) throws Exception {
-                final String fileName = key + "_image_"+System.currentTimeMillis();
-                FirebaseUtils.getPostStorageRef(key).child(fileName).putFile(uri).addOnSuccessListener(activity, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        post.addUploadFileName(fileName);
-                        e.onNext(taskSnapshot);
-                        e.onComplete();
-                    }
-                }).addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@android.support.annotation.NonNull Exception exception) {
-                        e.onError(exception);
-                    }
-                });
+                final String fileName = key + "_image_" + System.currentTimeMillis();
+                FirebaseUtils.getPostStorageRef(key).child(fileName).putFile(uri)
+                        .addOnSuccessListener(activity, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                post.addUploadFileName(fileName);
+                                e.onNext(taskSnapshot);
+                                e.onComplete();
+                            }
+                        })
+                        .addOnFailureListener(activity, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@android.support.annotation.NonNull Exception exception) {
+                                e.onError(exception);
+                            }
+                        });
             }
         });
     }
 
     private void uploadPost(final String key, final Activity activity, final OnSuccessListener<Void> successListener, final OnFailureListener failureListener) {
         post.setKey(key);
-        post.setWriteTime(System.currentTimeMillis());
 
-        if (post.getFileNames().isEmpty()) {
-            postRef.child(key).setValue(post)
-                    .addOnSuccessListener(activity, successListener)
-                    .addOnFailureListener(activity, failureListener);
-        } else {
-            postRef.child(key).setValue(post)
-                    .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            postRef.child(key).child("fileNames").setValue(post.getFileNames())
-                                    .addOnSuccessListener(activity, successListener)
-                                    .addOnFailureListener(failureListener);
-                        }
-                    })
-                    .addOnFailureListener(activity, failureListener);
+        Task<Void> task = postRef.child(key).setValue(post);
+
+        if (!post.getFileNames().isEmpty()) {
+            task.continueWithTask(new Continuation<Void, Task<Void>>() {
+                @Override
+                public Task<Void> then(@android.support.annotation.NonNull Task<Void> task) throws Exception {
+                    if (task.isSuccessful()) {
+                        return postRef.child(key).child(POST_FILENAMES_REF).setValue(post.getFileNames());
+                    } else {
+                        throw task.getException();
+                    }
+                }
+            });
         }
+
+        task.continueWithTask(new Continuation<Void, Task<Void>>() {
+            @Override
+            public Task<Void> then(@android.support.annotation.NonNull Task<Void> task) throws Exception {
+                if (task.isSuccessful()) {
+                    return postRef.child(key).child(TIMESTAMP_REF).setValue(ServerValue.TIMESTAMP);
+                } else {
+                    throw task.getException();
+                }
+            }
+        })
+                .addOnSuccessListener(activity, successListener)
+                .addOnFailureListener(activity, failureListener);
     }
 
     @Override

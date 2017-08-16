@@ -26,7 +26,7 @@ public class Post implements Parcelable {
     private String desc;
 
     // 글 쓴 시간
-    private long writeTime;
+    private long timestamp;
 
     // 만날 시간
     private long dueDateTime;
@@ -48,7 +48,7 @@ public class Post implements Parcelable {
         uid = in.readString();
         title = in.readString();
         desc = in.readString();
-        writeTime = in.readLong();
+        timestamp = in.readLong();
         dueDateTime = in.readLong();
         place = in.readParcelable(Place.class.getClassLoader());
         fileNames = in.createStringArrayList();
@@ -60,7 +60,7 @@ public class Post implements Parcelable {
         dest.writeString(uid);
         dest.writeString(title);
         dest.writeString(desc);
-        dest.writeLong(writeTime);
+        dest.writeLong(timestamp);
         dest.writeLong(dueDateTime);
         dest.writeParcelable(place, flags);
         dest.writeStringList(fileNames);
@@ -115,12 +115,12 @@ public class Post implements Parcelable {
         this.desc = desc;
     }
 
-    public long getWriteTime() {
-        return writeTime;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setWriteTime(long writeTime) {
-        this.writeTime = writeTime;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public long getDueDateTime() {
@@ -162,7 +162,7 @@ public class Post implements Parcelable {
                 ", uid='" + uid + '\'' +
                 ", title='" + title + '\'' +
                 ", desc='" + desc + '\'' +
-                ", writeTime=" + writeTime +
+                ", timestamp=" + timestamp +
                 ", dueDateTime=" + dueDateTime +
                 ", place=" + place +
                 ", fileNames=" + fileNames +

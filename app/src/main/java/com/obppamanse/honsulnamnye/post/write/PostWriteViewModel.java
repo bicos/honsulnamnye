@@ -83,24 +83,20 @@ public class PostWriteViewModel extends BaseObservable {
 
     public void clickWritePost(Context context) {
         mView.showProgress();
-        try {
-            mModel.writePost(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    mView.dismissProgress();
-                    mView.successWritePost();
-                }
-            }, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    mView.dismissProgress();
-                    mView.failureWritePost(e);
-                }
-            });
-        } catch (Exception e) {
-            mView.dismissProgress();
-            mView.failureWritePost(e);
-        }
+
+        mModel.writePost(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mView.dismissProgress();
+                mView.successWritePost();
+            }
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mView.dismissProgress();
+                mView.failureWritePost(e);
+            }
+        });
     }
 
     public void clickDueDate(Context context) {

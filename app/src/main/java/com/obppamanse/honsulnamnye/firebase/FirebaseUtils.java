@@ -17,9 +17,13 @@ public class FirebaseUtils {
 
     private static final String POST_REF = "post";
 
+    public static final String POST_FILENAMES_REF = "fileNames";
+
     public static final String PARTICIPANT_LIST_REF = "participantList";
 
     public static final String PUSH_TOKEN_REF = "pushToken";
+
+    public static final String TIMESTAMP_REF = "timestamp";
 
     public static DatabaseReference getUserRef() {
         return FirebaseDatabase.getInstance().getReference().child(USER_REF);

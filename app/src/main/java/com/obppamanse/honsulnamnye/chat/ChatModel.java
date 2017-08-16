@@ -51,7 +51,7 @@ public class ChatModel implements ChatContract.Model {
                     @Override
                     public Task<Void> then(@NonNull Task<Void> task) throws Exception {
                         if (task.isSuccessful()) {
-                            return chatRef.child(chat.getKey()).child("timestamp").setValue(ServerValue.TIMESTAMP);
+                            return chatRef.child(chat.getKey()).child(FirebaseUtils.TIMESTAMP_REF).setValue(ServerValue.TIMESTAMP);
                         }
                         throw task.getException();
                     }

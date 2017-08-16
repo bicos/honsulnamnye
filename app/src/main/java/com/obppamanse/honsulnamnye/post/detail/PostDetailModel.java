@@ -58,8 +58,8 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     @Override
-    public long getWriteDate() {
-        return post.getWriteTime();
+    public long getTimestamp() {
+        return post.getTimestamp();
     }
 
     @Override

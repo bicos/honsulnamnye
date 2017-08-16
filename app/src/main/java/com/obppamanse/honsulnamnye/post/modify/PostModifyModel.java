@@ -67,8 +67,8 @@ public class PostModifyModel implements PostContract.ModifyModel {
     }
 
     @Override
-    public long getWriteDate() {
-        return post.getWriteTime();
+    public long getTimestamp() {
+        return post.getTimestamp();
     }
 
     @Override
