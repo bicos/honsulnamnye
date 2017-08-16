@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
+import com.obppamanse.honsulnamnye.post.model.Post;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 import com.obppamanse.honsulnamnye.util.UiUtils;
@@ -47,12 +49,20 @@ public class PostWriteViewModel extends BaseObservable {
 
     @Bindable
     public String getDueDateTxt() {
-        return mModel.getDueDate() != 0L ? DateUtils.getDateStr(mModel.getDueDate()) : "만날 날짜를 선택하여 주세요";
+        return mModel.getPost().getDueDateTime() != 0L ?
+                DateUtils.getDateStr(mModel.getPost().getDueDateTime()) :
+                "만날 날짜를 선택하여 주세요";
     }
 
     @Bindable
     public String getPlaceName() {
-        return mModel.getPlaceName() != null ? mModel.getPlaceName() : "만날 장소를 선택하여 주세요.";
+        String placeName = null;
+
+        if (mModel.getPost().getPlace() != null) {
+            placeName = mModel.getPost().getPlace().getName();
+        }
+
+        return TextUtils.isEmpty(placeName) ? "만날 장소를 선택하여 주세요." : placeName;
     }
 
     @Bindable
@@ -102,8 +112,8 @@ public class PostWriteViewModel extends BaseObservable {
     public void clickDueDate(Context context) {
         Calendar prevSelectDate = Calendar.getInstance();
 
-        if (mModel.getDueDate() != 0L) {
-            prevSelectDate.setTimeInMillis(mModel.getDueDate());
+        if (mModel.getPost().getDueDateTime() != 0L) {
+            prevSelectDate.setTimeInMillis(mModel.getPost().getDueDateTime());
         }
 
         DatePickerDialog dialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
@@ -153,6 +163,10 @@ public class PostWriteViewModel extends BaseObservable {
         } else {
             ((SimpleImageAdapter)recyclerView.getAdapter()).setUriList(uploadImageList);
         }
+    }
+
+    public Post getPost() {
+        return mModel.getPost();
     }
 
     private static class SimpleImageAdapter extends RecyclerView.Adapter<SimpleImageViewHolder> {

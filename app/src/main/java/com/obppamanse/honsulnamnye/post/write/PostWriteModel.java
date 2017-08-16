@@ -173,16 +173,6 @@ public class PostWriteModel implements PostContract.WriteModel {
     }
 
     @Override
-    public String getPlaceName() {
-        return post != null && post.getPlace() != null ? post.getPlace().getName() : null;
-    }
-
-    @Override
-    public long getDueDate() {
-        return post != null ? post.getDueDateTime() : 0L;
-    }
-
-    @Override
     public void addUploadImageUri(Uri data) {
         uploadUris.add(data);
     }
@@ -190,6 +180,11 @@ public class PostWriteModel implements PostContract.WriteModel {
     @Override
     public List<Uri> getUploadImageUri() {
         return uploadUris;
+    }
+
+    @Override
+    public Post getPost() {
+        return post;
     }
 
     @Override

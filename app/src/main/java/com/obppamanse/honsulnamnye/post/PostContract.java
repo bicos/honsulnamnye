@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
+import com.obppamanse.honsulnamnye.post.model.Post;
 
 import java.util.List;
 
@@ -52,13 +53,11 @@ public class PostContract {
 
         void writePost(Activity activity, OnSuccessListener<Void> successListener, OnFailureListener failureListener);
 
-        String getPlaceName();
-
-        long getDueDate();
-
         void addUploadImageUri(Uri data);
 
         List<Uri> getUploadImageUri();
+
+        Post getPost();
     }
 
     public interface ModifyModel extends GetModel, SetModel {

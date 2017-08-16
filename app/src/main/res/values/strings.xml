@@ -70,4 +70,11 @@
     <string name="msg_error_showing_post">오류가 발생하였습니다. 다시 시도해주세요.</string>
     <string name="msg_upload_image">이미지 업로드</string>
     <string name="msg_upload_image_complete">이미지 업로드를 완료하였습니다.</string>
+    <string name="msg_search_address">장소 검색</string>
+    <string name="title_input_address_name">위치 설명 입력</string>
+    <string name="hint_input_address_name">만날 장소명을 입력해주세요.</string>
+    <string name="error_address_name_empty">정확한 장소명을 입력해주세요.</string>
+    <string name="error_select_place">장소 선택이 취소되었습니다.</string>
+    <string name="msg_input_address_name">정확한 위치명을 입력해주세요.</string>
+    <string name="error_invalid_due_date">잘못된 약속 날짜입니다. 오늘 날짜보다 큰 날짜를 선택해주세요.</string>
 </resources>

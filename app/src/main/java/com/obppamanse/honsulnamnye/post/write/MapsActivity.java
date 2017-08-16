@@ -12,8 +12,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -58,6 +60,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private Marker selectMarker;
 
+    private TextView tvSearchAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +74,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_maps);
+
+        tvSearchAddress = findViewById(R.id.tv_search_address);
+        tvSearchAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLocationPermissionGranted) {
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "위치 설정에 동의하셔야 위치 검색이 가능합니다.", Toast.LENGTH_SHORT).show();
+                    ActivityCompat.requestPermissions(MapsActivity.this,
+                            new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                }
+            }
+        });
 
         // Build the Play services client for use by the Fused Place Provider and the Places API.
         // Use the addApi() method to request the Google Places API and the Fused Place Provider.
