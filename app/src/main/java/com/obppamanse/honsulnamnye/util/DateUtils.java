@@ -10,7 +10,7 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    private static final String COMMON_DATE_FORMAT = "yyyy년 MM월 dd일 (EEEE)";
+    private static final String COMMON_DATE_FORMAT = "yyyy년 MM월 dd일 (EEEE) a hh:mm";
 
     public static final String SIMPLE_DATE_FORMAT = "MM.dd kk:mm:ss";
 

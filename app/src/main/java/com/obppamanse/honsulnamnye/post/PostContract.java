@@ -8,6 +8,7 @@ import android.net.Uri;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
@@ -61,7 +62,7 @@ public class PostContract {
     }
 
     public interface ModifyModel extends GetModel, SetModel {
-        void modifyPost(Activity activity, OnCompleteListener<Void> listener) throws Exception;
+        Task<Void> modifyPost();
     }
 
     public interface DetailModel extends GetModel {

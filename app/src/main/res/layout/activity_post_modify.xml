@@ -39,8 +39,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
                             android:hint="@string/hint_input_title"
-                            android:text="@{viewModel.title}"
-                            android:onTextChanged="@{(title,a,b,c) -> viewModel.updateTitle(title.toString())}" />
+                            android:onTextChanged="@{(title,a,b,c) -> viewModel.updateTitle(title.toString())}"
+                            android:text="@{viewModel.title}" />
 
                         <EditText
                             android:id="@+id/et_input_desc"
@@ -48,9 +48,9 @@
                             android:layout_height="wrap_content"
                             android:gravity="top"
                             android:hint="@string/hint_input_desc"
-                            android:text="@{viewModel.desc}"
                             android:maxLines="10"
-                            android:onTextChanged="@{(desc,a,b,c) -> viewModel.updateDesc(desc.toString())}" />
+                            android:onTextChanged="@{(desc,a,b,c) -> viewModel.updateDesc(desc.toString())}"
+                            android:text="@{viewModel.desc}" />
 
                     </LinearLayout>
 
@@ -61,7 +61,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/default_margin"
                     android:layout_marginLeft="@dimen/default_margin"
-                    android:layout_marginRight="@dimen/default_margin">
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:onClick="@{(view) -> viewModel.clickDueDate(context)}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -70,8 +71,8 @@
                         android:padding="@dimen/default_margin">
 
                         <TextView
-                            style="@style/TextAppearance.AppCompat.Title"
                             android:id="@+id/tv_title_due_date"
+                            style="@style/TextAppearance.AppCompat.Title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
@@ -82,7 +83,6 @@
                             style="@style/TextAppearance.AppCompat.Body1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{(view) -> viewModel.clickDueDate(context)}"
                             android:text="@{viewModel.dueDateTxt}" />
 
                     </LinearLayout>
@@ -94,7 +94,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/default_margin"
                     android:layout_marginLeft="@dimen/default_margin"
-                    android:layout_marginRight="@dimen/default_margin">
+                    android:layout_marginRight="@dimen/default_margin"
+                    android:onClick="@{(view) -> viewModel.clickSelectLocation()}">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -103,8 +104,8 @@
                         android:padding="@dimen/default_margin">
 
                         <TextView
-                            style="@style/TextAppearance.AppCompat.Title"
                             android:id="@+id/tv_title_location"
+                            style="@style/TextAppearance.AppCompat.Title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
@@ -115,7 +116,6 @@
                             style="@style/TextAppearance.AppCompat.Body1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:onClick="@{(view) -> viewModel.clickSelectLocation()}"
                             android:text="@{viewModel.placeName}" />
 
                     </LinearLayout>
@@ -140,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </RelativeLayout>
 

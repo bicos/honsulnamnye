@@ -1,7 +1,9 @@
 package com.obppamanse.honsulnamnye.post.write;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TimePicker;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -109,18 +112,19 @@ public class PostWriteViewModel extends BaseObservable {
         });
     }
 
-    public void clickDueDate(Context context) {
+    public void clickDueDate(final Context context) {
         Calendar prevSelectDate = Calendar.getInstance();
 
         if (mModel.getPost().getDueDateTime() != 0L) {
             prevSelectDate.setTimeInMillis(mModel.getPost().getDueDateTime());
         }
 
+        final Calendar selectDate = Calendar.getInstance();
+
         DatePickerDialog dialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 Calendar today = Calendar.getInstance();
-                Calendar selectDate = Calendar.getInstance();
                 selectDate.set(i, i1, i2);
 
                 if (today.after(selectDate)) {
@@ -132,6 +136,25 @@ public class PostWriteViewModel extends BaseObservable {
                 notifyPropertyChanged(BR.dueDateTxt);
             }
         }, prevSelectDate.get(Calendar.YEAR), prevSelectDate.get(Calendar.MONTH), prevSelectDate.get(Calendar.DAY_OF_MONTH));
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                showTimePicker(context, selectDate);
+            }
+        });
+        dialog.show();
+    }
+
+    private void showTimePicker(Context context, final Calendar calendar) {
+        TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                calendar.set(Calendar.HOUR_OF_DAY, i);
+                calendar.set(Calendar.MINUTE, i1);
+                mModel.setDueDate(calendar.getTimeInMillis());
+                notifyPropertyChanged(BR.dueDateTxt);
+            }
+        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
 

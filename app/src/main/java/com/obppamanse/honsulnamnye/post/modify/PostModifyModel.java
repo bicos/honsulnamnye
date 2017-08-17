@@ -3,6 +3,7 @@ package com.obppamanse.honsulnamnye.post.modify;
 import android.app.Activity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -83,7 +84,7 @@ public class PostModifyModel implements PostContract.ModifyModel {
     }
 
     @Override
-    public void modifyPost(Activity activity, OnCompleteListener<Void> listener) throws Exception {
-        postRef.setValue(post).addOnCompleteListener(activity, listener);
+    public Task<Void> modifyPost() {
+        return postRef.setValue(post);
     }
 }

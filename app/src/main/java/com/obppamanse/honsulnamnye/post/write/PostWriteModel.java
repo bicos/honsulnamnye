@@ -167,8 +167,7 @@ public class PostWriteModel implements PostContract.WriteModel {
                     throw task.getException();
                 }
             }
-        })
-                .addOnSuccessListener(activity, successListener)
+        }).addOnSuccessListener(activity, successListener)
                 .addOnFailureListener(activity, failureListener);
     }
 

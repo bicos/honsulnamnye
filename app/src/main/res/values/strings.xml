@@ -19,6 +19,18 @@
     <string name="action_delete">삭제</string>
     <string name="title_activity_maps">위치 선택</string>
 
+    <string name="btn_modify_profile">회원정보 수정</string>
+    <string name="btn_withdrawal">회원탈퇴</string>
+
+    <string name="msg_error_showing_post">오류가 발생하였습니다. 다시 시도해주세요.</string>
+    <string name="error_invalid_due_date">잘못된 약속 날짜입니다. 오늘 날짜보다 큰 날짜를 선택해주세요.</string>
+    <string name="error_input_text">메세지를 입력하여 주세요.</string>
+    <string name="error_failed_modify_user_info">유저 정보를 업데이트를 실패하였습니다.</string>
+    <string name="error_withdrawal_service">서비스 탈퇴를 실패하였습니다.</string>
+    <string name="error_not_exist_user_info">유저 정보가 존재하지 않습니다.</string>
+    <string name="error_address_name_empty">정확한 장소명을 입력해주세요.</string>
+    <string name="error_select_place">장소 선택이 취소되었습니다.</string>
+
     <string name="msg_guide_move_sign_up">해당 유저는 혼술남녀에 가입되어 있지 않습니다. 가입 화면으로 이동하시겠습니까?</string>
     <string name="hint_input_title">제목을 입력해주세요.</string>
     <string name="hint_input_desc">내용을 입력해주세요.</string>
@@ -26,17 +38,11 @@
     <string name="title_location">만날 장소</string>
     <string name="success_modify_post">글 수정을 성공하였습니다.</string>
     <string name="failure_modify_post">글 수정을 실패하였습니다.</string>
-    <string name="error_wrong_due_date">잘못된 약속 날짜입니다. 오늘 날짜 이상을 선택해주세요.</string>
     <string name="title_modify_post">글 수정</string>
     <string name="title_profile">프로필</string>
     <string name="action_modify">수정</string>
-    <string name="btn_modify_profile">회원정보 수정</string>
-    <string name="btn_withdrawal">회원탈퇴</string>
-    <string name="error_not_exist_user_info">유저 정보가 존재하지 않습니다.</string>
     <string name="msg_withdrawal_service">서비스를 탈퇴하였습니다.</string>
-    <string name="error_withdrawal_service">서비스 탈퇴를 실패하였습니다.</string>
     <string name="msg_success_modify_user_info">유저 정보를 업데이트하였습니다.</string>
-    <string name="error_failed_modify_user_info">유저 정보를 업데이트를 실패하였습니다.</string>
     <string name="msg_logout">로그아웃 되었습니다. 다시 로그인해주세요.</string>
     <string name="title_alert">알림</string>
     <string name="button_ok">확인</string>
@@ -55,7 +61,7 @@
     <string name="button_picture_upload">사진 업로드</string>
     <string name="button_create_post">모임 만들기</string>
     <string name="title_chat">채팅</string>
-    <string name="error_input_text">메세지를 입력하여 주세요.</string>
+
     <string name="button_logout">logout</string>
     <string name="msg_success_delete_post">글을 삭제하였습니다.</string>
     <string name="msg_delete_post_failed">글 삭제를 실패하였습니다.</string>
@@ -67,14 +73,11 @@
     <string name="msg_delete_post">해당 글을 삭제하겠습니까?</string>
     <string name="msg_progress_upload_image">프로필 이미지를 업로드중입니다.</string>
     <string name="msg_progress_update_user_info">유저 정보를 업데이트 중입니다.</string>
-    <string name="msg_error_showing_post">오류가 발생하였습니다. 다시 시도해주세요.</string>
+
     <string name="msg_upload_image">이미지 업로드</string>
     <string name="msg_upload_image_complete">이미지 업로드를 완료하였습니다.</string>
     <string name="msg_search_address">장소 검색</string>
     <string name="title_input_address_name">위치 설명 입력</string>
     <string name="hint_input_address_name">만날 장소명을 입력해주세요.</string>
-    <string name="error_address_name_empty">정확한 장소명을 입력해주세요.</string>
-    <string name="error_select_place">장소 선택이 취소되었습니다.</string>
     <string name="msg_input_address_name">정확한 위치명을 입력해주세요.</string>
-    <string name="error_invalid_due_date">잘못된 약속 날짜입니다. 오늘 날짜보다 큰 날짜를 선택해주세요.</string>
 </resources>
