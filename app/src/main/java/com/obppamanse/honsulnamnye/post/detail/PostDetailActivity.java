@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.post.detail;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -93,7 +94,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     }
 
     private void showToastError() {
-        Toast.makeText(getContext(), R.string.msg_error_showing_post, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), R.string.msg_error_showing_post, Toast.LENGTH_SHORT).show();
     }
 
     private void populatePostDetail(Post post) {
@@ -149,7 +150,7 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
     }
 
     @Override
-    public Context getContext() {
+    public Activity getActivity() {
         return this;
     }
 

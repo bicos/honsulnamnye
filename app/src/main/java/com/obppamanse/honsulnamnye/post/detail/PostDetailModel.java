@@ -17,6 +17,7 @@ import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -73,6 +74,11 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     @Override
+    public List<String> getFileNames() {
+        return post != null ? post.getFileNames() : Collections.<String>emptyList();
+    }
+
+    @Override
     public void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception {
         reference.removeValue().addOnCompleteListener(activity, listener);
     }
@@ -124,19 +130,6 @@ public class PostDetailModel implements PostContract.DetailModel {
                 listener.isMember(false);
             }
         });
-    }
-
-    @Override
-    public List<StorageReference> getImageUrlList() {
-        List<StorageReference> list = new ArrayList<>();
-
-        if (post != null) {
-            for (String url : post.getFileNames()) {
-                list.add(FirebaseUtils.getPostStorageRef(post.getKey()).child(url));
-            }
-        }
-
-        return list;
     }
 
     public interface MemberExistListener {

@@ -7,29 +7,40 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.BindingAdapter;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.BR;
+import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
+import com.obppamanse.honsulnamnye.post.SimpleImageAdapter;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
  * Created by raehyeong.park on 2017. 7. 11..
  */
 
-public class PostModifyViewModel extends BaseObservable {
+public class PostModifyViewModel extends BaseObservable implements SimpleImageAdapter.RemoveItemListener<StorageReference> {
 
     private static final String TAG = "PostModifyViewModel";
 
@@ -37,9 +48,20 @@ public class PostModifyViewModel extends BaseObservable {
 
     private PostContract.ModifyView view;
 
+    private List<StorageReference> uploadList;
+
     public PostModifyViewModel(PostContract.ModifyModel model, PostContract.ModifyView view) {
         this.model = model;
         this.view = view;
+        initUriList();
+    }
+
+    private void initUriList() {
+        uploadList = new ArrayList<>();
+
+        for (String fileName : model.getFileNames()) {
+            uploadList.add(FirebaseUtils.getPostStorageRef(model.getPostKey()).child(fileName));
+        }
     }
 
     @Bindable
@@ -71,6 +93,15 @@ public class PostModifyViewModel extends BaseObservable {
         return getPlace() != null ? getPlace().getName() : "미정";
     }
 
+    @Bindable
+    public List<StorageReference> getUploadList() {
+        return uploadList;
+    }
+
+    public SimpleImageAdapter.RemoveItemListener<StorageReference> getRemoveListener() {
+        return this;
+    }
+
     public void updateTitle(String title) {
         model.setTitle(title);
         notifyPropertyChanged(BR.title);
@@ -88,33 +119,31 @@ public class PostModifyViewModel extends BaseObservable {
     }
 
     public void clickDueDate(final Context context) {
-        Calendar prevSelectDate = Calendar.getInstance();
+        final Calendar prevSelectDate = Calendar.getInstance();
 
         if (model.getDueDate() != 0L) {
             prevSelectDate.setTimeInMillis(model.getDueDate());
         }
 
-        final Calendar selectDate = Calendar.getInstance();
-
         DatePickerDialog dialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 Calendar today = Calendar.getInstance();
-                selectDate.set(i, i1, i2);
+                prevSelectDate.set(i, i1, i2);
 
-                if (today.after(selectDate)) {
+                if (today.after(prevSelectDate)) {
                     view.showErrorWrongDueDate();
                     return;
                 }
 
-                model.setDueDate(selectDate.getTimeInMillis());
+                model.setDueDate(prevSelectDate.getTimeInMillis());
                 notifyPropertyChanged(BR.dueDateTxt);
             }
         }, prevSelectDate.get(Calendar.YEAR), prevSelectDate.get(Calendar.MONTH), prevSelectDate.get(Calendar.DAY_OF_MONTH));
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                showTimePicker(context, selectDate);
+                showTimePicker(context, prevSelectDate);
             }
         });
         dialog.show();
@@ -160,5 +189,99 @@ public class PostModifyViewModel extends BaseObservable {
                 view.failureModifyPost();
             }
         });
+    }
+
+    public void clickUploadFile() {
+        view.chooseUploadImage();
+    }
+
+    public void uploadImage(Activity activity, @NonNull final Uri data) {
+        final String postImageName = model.getPostKey() + "_image_" + System.currentTimeMillis();
+        final StorageReference reference = FirebaseUtils.getPostStorageRef(model.getPostKey()).child(postImageName);
+
+        view.showProgress();
+
+        reference.putFile(data)
+                .addOnProgressListener(activity, new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        view.showUploadProgress(taskSnapshot.getTotalByteCount(), taskSnapshot.getBytesTransferred());
+                    }
+                })
+                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>() {
+                    @Override
+                    public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (task.isSuccessful()) {
+                            model.getFileNames().add(postImageName); // model data
+                            return model.modifyUploadImage(); // start update model
+                        }
+
+                        throw task.getException();
+                    }
+                })
+                .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        uploadList.add(reference); // adapter data
+                        notifyPropertyChanged(BR.uploadList);
+                        view.dismissProgress();
+                        view.successUploadImage(data);
+                    }
+                })
+                .addOnFailureListener(activity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "upload image failed ", e);
+                        reference.delete();
+                        view.dismissProgress();
+                        view.failureUploadImage();
+                    }
+                });
+    }
+
+    @Override
+    public void onItemRemoved(final StorageReference ref) {
+        view.showProgress();
+        ref.delete().continueWithTask(new Continuation<Void, Task<Void>>() {
+            @Override
+            public Task<Void> then(@NonNull Task<Void> task) throws Exception {
+                if (task.isSuccessful()) {
+                    model.removeFileName(ref.getName());
+                    return model.modifyUploadImage();
+                } else {
+                    return task;
+                }
+            }
+        }).addOnSuccessListener(view.getActivity(), new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                view.dismissProgress();
+                view.successDeleteImage();
+            }
+        }).addOnFailureListener(view.getActivity(), new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                view.dismissProgress();
+                view.failureDeleteImage();
+            }
+        });
+    }
+
+    @BindingAdapter({"setUploadImageList", "setRemoveListener"})
+    public static void setUploadImageList(RecyclerView recyclerView, List<StorageReference> uploadImageList, SimpleImageAdapter.RemoveItemListener<StorageReference> listener) {
+        if (uploadImageList == null || listener == null) {
+            return;
+        }
+
+        if (recyclerView.getAdapter() == null) {
+            SimpleImageAdapter<StorageReference> adapter = new SimpleImageAdapter<>(uploadImageList);
+            adapter.setRemoveItemListener(listener);
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.setAdapter(adapter);
+        } else {
+            ((SimpleImageAdapter<StorageReference>) recyclerView.getAdapter()).setDataList(uploadImageList);
+        }
     }
 }

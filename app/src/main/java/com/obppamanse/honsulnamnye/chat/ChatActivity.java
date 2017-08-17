@@ -101,7 +101,6 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void successUploadImage(Uri downloadUrl) {
-        Log.i("test", "downloadUrl : " + downloadUrl);
         PendingIntent resultPendingIntent = PendingIntent.getActivity(
                 this,
                 0,

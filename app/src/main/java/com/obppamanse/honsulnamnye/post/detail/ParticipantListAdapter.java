@@ -146,13 +146,13 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
             FirebaseDatabase.getInstance()
                     .getReference()
                     .updateChildren(updateMap)
-                    .addOnSuccessListener((Activity) view.getContext(), new OnSuccessListener<Void>() {
+                    .addOnSuccessListener(view.getActivity(), new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             view.successCreateChatRoom(newChatKey);
                         }
                     })
-                    .addOnFailureListener((Activity) view.getContext(), new OnFailureListener() {
+                    .addOnFailureListener(view.getActivity(), new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             view.failureCreateChatRoom(e);

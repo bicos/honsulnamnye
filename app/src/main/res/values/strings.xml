@@ -80,4 +80,6 @@
     <string name="title_input_address_name">위치 설명 입력</string>
     <string name="hint_input_address_name">만날 장소명을 입력해주세요.</string>
     <string name="msg_input_address_name">정확한 위치명을 입력해주세요.</string>
+    <string name="error_failed_upload_image">이미지 업로드를 실패하였습니다.</string>
+    <string name="success_image_upload">이미지 업로드를 성공하였습니다.</string>
 </resources>

@@ -48,6 +48,8 @@ public class PostContract {
         boolean isWriter();
 
         String getPostKey();
+
+        List<String> getFileNames();
     }
 
     public interface WriteModel extends SetModel {
@@ -62,7 +64,12 @@ public class PostContract {
     }
 
     public interface ModifyModel extends GetModel, SetModel {
+
         Task<Void> modifyPost();
+
+        Task<Void> modifyUploadImage();
+
+        void removeFileName(String fileName);
     }
 
     public interface DetailModel extends GetModel {
@@ -73,12 +80,10 @@ public class PostContract {
         void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
         void requestIsMember(Activity activity, final PostDetailModel.MemberExistListener listener);
-
-        List<StorageReference> getImageUrlList();
     }
 
     public interface View {
-        Context getContext();
+        Activity getActivity();
 
         void showProgress();
 
@@ -105,6 +110,18 @@ public class PostContract {
         void showErrorWrongDueDate();
 
         void startSelectLocation();
+
+        void chooseUploadImage();
+
+        void failureUploadImage();
+
+        void successUploadImage(Uri data);
+
+        void showUploadProgress(long totalByteCount, long bytesTransferred);
+
+        void failureDeleteImage();
+
+        void successDeleteImage();
     }
 
     public interface DetailView extends View {

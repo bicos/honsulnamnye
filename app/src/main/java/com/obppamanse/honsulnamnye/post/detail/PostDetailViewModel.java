@@ -31,6 +31,7 @@ import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -52,7 +53,7 @@ public class PostDetailViewModel extends BaseObservable {
         this.model = model;
 
         view.showProgress();
-        model.requestIsMember((Activity) view.getContext(), new PostDetailModel.MemberExistListener() {
+        model.requestIsMember(view.getActivity(), new PostDetailModel.MemberExistListener() {
             @Override
             public void isMember(boolean isMember) {
                 view.dismissProgress();
@@ -103,7 +104,13 @@ public class PostDetailViewModel extends BaseObservable {
 
     @Bindable
     public List<StorageReference> getImageList() {
-        return model.getImageUrlList();
+        List<StorageReference> list = new ArrayList<>();
+
+        for (String url : model.getFileNames()) {
+            list.add(FirebaseUtils.getPostStorageRef(model.getPostKey()).child(url));
+        }
+
+        return list;
     }
 
     public void clickDeletePost(Activity activity) {

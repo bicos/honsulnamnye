@@ -12,6 +12,10 @@ import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Created by raehyeong.park on 2017. 7. 11..
  */
@@ -84,7 +88,29 @@ public class PostModifyModel implements PostContract.ModifyModel {
     }
 
     @Override
+    public List<String> getFileNames() {
+        return post != null ? post.getFileNames() : Collections.<String>emptyList();
+    }
+
+    @Override
     public Task<Void> modifyPost() {
         return postRef.setValue(post);
+    }
+
+    @Override
+    public Task<Void> modifyUploadImage() {
+        return postRef.child(FirebaseUtils.POST_FILENAMES_REF).setValue(post.getFileNames());
+    }
+
+    @Override
+    public void removeFileName(String fileName) {
+        Iterator<String> iterator = post.getFileNames().iterator();
+
+        while (iterator.hasNext()) {
+            String item = iterator.next();
+            if (item.equals(fileName)) {
+                iterator.remove();
+            }
+        }
     }
 }

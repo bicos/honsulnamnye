@@ -48,18 +48,18 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
 
     @Override
     public void successWritePost() {
-        Toast.makeText(getContext(), "글쓰기를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "글쓰기를 완료하였습니다.", Toast.LENGTH_SHORT).show();
         finish();
     }
 
     @Override
     public void failureWritePost(Exception e) {
-        Toast.makeText(getContext(), "글쓰기를 실패하였습니다.\n[" + e.getMessage() + "]", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "글쓰기를 실패하였습니다.\n[" + e.getMessage() + "]", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showErrorWrongDueDate() {
-        Toast.makeText(getContext(), R.string.error_invalid_due_date, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.error_invalid_due_date, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -139,7 +139,7 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
     }
 
     @Override
-    public Context getContext() {
+    public Activity getActivity() {
         return this;
     }
 

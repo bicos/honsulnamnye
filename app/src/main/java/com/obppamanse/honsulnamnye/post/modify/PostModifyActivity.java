@@ -1,12 +1,16 @@
 package com.obppamanse.honsulnamnye.post.modify;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -24,21 +28,28 @@ import com.obppamanse.honsulnamnye.databinding.ActivityPostModifyBinding;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
-import com.obppamanse.honsulnamnye.post.write.MapsActivity;
 
-import static com.obppamanse.honsulnamnye.post.write.MapsActivity.PARAM_SELECT_PLACE;
+import static android.app.PendingIntent.FLAG_ONE_SHOT;
 
 /**
  * Created by raehyeong.park on 2017. 7. 11..
  */
 
-public class PostModifyActivity extends AppCompatActivity implements PostContract.ModifyView{
+public class PostModifyActivity extends AppCompatActivity implements PostContract.ModifyView {
+
+    private static final int IMAGE_UPLOAD_PROGRESS_ID = 1;
+
+    private static final String CHANEL_IMAGE_UPLOAD_PROGRESS = "image_upload_progress";
 
     public static final String PARAM_POST = "post";
 
     private static final int REQUEST_SELECT_LOCATION = 1000;
 
-    ActivityPostModifyBinding binding;
+    private static final int REQUEST_UPLOAD_IMAGE = 1001;
+
+    private ActivityPostModifyBinding binding;
+
+    private NotificationManager manager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,21 +61,20 @@ public class PostModifyActivity extends AppCompatActivity implements PostContrac
         if (intent != null) {
             post = intent.getParcelableExtra(PARAM_POST);
         } else {
-            showToastError();
+            failureModifyPost();
+            finish();
             return;
         }
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_modify);
         PostContract.ModifyModel model = new PostModifyModel(post);
         binding.setViewModel(new PostModifyViewModel(model, this));
-    }
 
-    private void showToastError() {
-        Toast.makeText(this, R.string.failure_modify_post, Toast.LENGTH_SHORT).show();
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
     @Override
-    public Context getContext() {
+    public Activity getActivity() {
         return this;
     }
 
@@ -91,7 +101,7 @@ public class PostModifyActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void showErrorWrongDueDate() {
-        Toast.makeText(getContext(), R.string.error_invalid_due_date, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.error_invalid_due_date, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,6 +125,64 @@ public class PostModifyActivity extends AppCompatActivity implements PostContrac
     }
 
     @Override
+    public void chooseUploadImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.title_select_image)), REQUEST_UPLOAD_IMAGE);
+    }
+
+    @Override
+    public void failureUploadImage() {
+        Toast.makeText(getApplicationContext(), R.string.error_failed_upload_image, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successUploadImage(Uri data) {
+        if (data != null) {
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    new Intent(Intent.ACTION_VIEW, data),
+                    FLAG_ONE_SHOT
+            );
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(getString(R.string.msg_upload_image))
+                    .setContentText(getString(R.string.msg_upload_image_complete))
+                    .setProgress(0, 0, false)
+                    .setContentIntent(resultPendingIntent)
+                    .setAutoCancel(true);
+
+            manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
+        }
+
+        Toast.makeText(getApplicationContext(), R.string.success_image_upload, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showUploadProgress(long totalByteCount, long bytesTransferred) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANEL_IMAGE_UPLOAD_PROGRESS)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getString(R.string.msg_upload_image))
+                .setContentText(totalByteCount + "/" + bytesTransferred)
+                .setProgress((int) totalByteCount, (int) bytesTransferred, false);
+
+        manager.notify(IMAGE_UPLOAD_PROGRESS_ID, builder.build());
+    }
+
+    @Override
+    public void failureDeleteImage() {
+        Toast.makeText(getApplicationContext(), "이미지 삭제를 실패하였습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void successDeleteImage() {
+        Toast.makeText(getApplicationContext(), "이미지 삭제를 성공하였습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK && data != null) {
@@ -124,6 +192,8 @@ public class PostModifyActivity extends AppCompatActivity implements PostContrac
             } else {
                 Toast.makeText(getApplicationContext(), R.string.error_select_place, Toast.LENGTH_SHORT).show();
             }
+        } else if (requestCode == REQUEST_UPLOAD_IMAGE && resultCode == Activity.RESULT_OK && data != null) {
+            binding.getViewModel().uploadImage(this, data.getData());
         }
     }
 
