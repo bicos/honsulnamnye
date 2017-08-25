@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/input_chat"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/default_margin"
             app:setRecyclerView="@{viewModel}" />
 
         <EditText
@@ -46,13 +48,13 @@
             android:text="@string/button_ok" />
 
         <ImageButton
-            android:onClick="@{view -> viewModel.clickUploadImage()}"
             android:id="@+id/btn_add_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignTop="@+id/input_chat"
             android:layout_marginLeft="5dp"
+            android:onClick="@{view -> viewModel.clickUploadImage()}"
             android:src="@drawable/ic_note_add_white_24dp" />
 
     </RelativeLayout>

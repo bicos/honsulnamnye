@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,8 +11,9 @@
     </data>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:onClick="@{(view) -> viewModel.clickProfileImage(view.getContext())}"
         android:orientation="vertical"
         android:paddingBottom="@dimen/default_margin"
@@ -27,9 +29,12 @@
 
         <TextView
             style="@style/TextAppearance.AppCompat.Body1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:ellipsize="end"
+            android:maxLines="1"
+            tool:text="abcdefghijklmnopqr"
             android:text="@{viewModel.userInfo.nickName}" />
 
     </LinearLayout>

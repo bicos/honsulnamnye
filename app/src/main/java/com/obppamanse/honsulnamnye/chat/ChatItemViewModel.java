@@ -1,5 +1,6 @@
 package com.obppamanse.honsulnamnye.chat;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
+import com.obppamanse.honsulnamnye.image.ImageDetailActivity;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
@@ -50,6 +52,10 @@ public class ChatItemViewModel extends BaseObservable {
     @Bindable
     public boolean isPictureContent() {
         return mChat != null && !TextUtils.isEmpty(mChat.getPictureUrl());
+    }
+
+    public void clickPictureContent(Context context) {
+        ImageDetailActivity.start(context, mChat.getPictureUrl());
     }
 
     @BindingAdapter("setProfileImage")

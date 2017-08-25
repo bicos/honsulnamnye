@@ -17,7 +17,9 @@
         android:id="@+id/layout_other"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_margin">
+        android:paddingLeft="@dimen/default_margin"
+        android:paddingRight="@dimen/default_margin"
+        android:paddingBottom="@dimen/default_margin">
 
         <ImageView
             android:id="@+id/user_profile"
@@ -59,8 +61,9 @@
                 android:id="@+id/picture"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
+                android:onClick="@{view -> viewModel.clickPictureContent(context)}"
                 android:visibility="@{viewModel.pictureContent ? View.VISIBLE : View.GONE}"
-                bind:setProfileImage="@{viewModel.chat.pictureUrl}" />
+                bind:setPicture="@{viewModel.chat.pictureUrl}" />
 
             <TextView
                 android:id="@+id/date"
