@@ -13,6 +13,8 @@ public class FirebaseUtils {
 
     private static final String CHAT_REF = "chat";
 
+    private static final String CHAT_INFO_REF = "chatInfo";
+
     private static final String USER_REF = "user";
 
     private static final String POST_REF = "post";
@@ -53,6 +55,10 @@ public class FirebaseUtils {
 
     public static DatabaseReference getChatRef() {
         return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
+    }
+
+    public static DatabaseReference getChatInfoRef() {
+        return FirebaseDatabase.getInstance().getReference().child(CHAT_INFO_REF);
     }
 
     public static StorageReference getChatStorageRef(String chatKey) {

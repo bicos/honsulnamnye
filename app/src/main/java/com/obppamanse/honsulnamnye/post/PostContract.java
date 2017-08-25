@@ -80,6 +80,12 @@ public class PostContract {
         void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
         void requestIsMember(Activity activity, final PostDetailModel.MemberExistListener listener);
+
+        String getChatKey();
+
+        Task<String> createChatRoom();
+
+        void joinChatRoom(Activity activity, OnSuccessListener<String> successListener, OnFailureListener failureListener);
     }
 
     public interface View {
@@ -143,6 +149,10 @@ public class PostContract {
         void failureCreateChatRoom(Exception e);
 
         void showAlertWithdrawalGroup(DialogInterface.OnClickListener onClickListener);
+
+        void showAlertCreateChatRoom(DialogInterface.OnClickListener onClickListener);
+
+        void failureJoinChatRoom(Exception e);
     }
 
     public static class NotExistAuthUserException extends Exception {
@@ -193,6 +203,15 @@ public class PostContract {
 
     public static class FailureModifyPostException extends Exception {
         private static final String MSG = "글 수정을 실패하였습니다. 다시 시도해주세요.";
+
+        @Override
+        public String getMessage() {
+            return MSG;
+        }
+    }
+
+    public static class FailureJoinChatRoom extends Exception {
+        private static final String MSG = "채팅방 입장을 실패하였습니다. 다시 시도해주세요.";
 
         @Override
         public String getMessage() {

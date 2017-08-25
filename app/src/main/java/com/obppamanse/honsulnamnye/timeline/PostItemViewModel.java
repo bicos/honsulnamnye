@@ -34,6 +34,6 @@ public class PostItemViewModel extends BaseObservable {
     }
 
     public void clickListItem(View view) {
-        PostDetailActivity.startPostDetailActivity(view.getContext(), post);
+        PostDetailActivity.start(view.getContext(), post.getKey());
     }
 }

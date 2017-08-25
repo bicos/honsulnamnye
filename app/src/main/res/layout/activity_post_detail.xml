@@ -75,7 +75,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="설명" />
+                            android:text="@string/title_desc" />
 
                         <TextView
                             android:id="@+id/desc"
@@ -108,7 +108,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="약속 날짜" />
+                            android:text="@string/title_appointment_date" />
 
                         <TextView
                             android:id="@+id/iv_due_date"
@@ -141,7 +141,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/default_margin"
-                            android:text="위치" />
+                            android:text="@string/title_place" />
 
                         <fragment
                             android:id="@+id/place_desc"
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/default_margin">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -171,16 +171,28 @@
                             style="@style/TextAppearance.AppCompat.Title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/default_margin"
+                            android:layout_alignBottom="@+id/btn_join_chat"
+                            android:layout_alignTop="@+id/btn_join_chat"
+                            android:layout_toLeftOf="@+id/btn_join_chat"
+                            android:gravity="center_vertical"
                             android:text="참가자" />
+
+                        <Button
+                            android:id="@+id/btn_join_chat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:onClick="@{view -> viewModel.clickJoinChatRoom(context)}"
+                            android:text="@{viewModel.chatKey != null ? @string/button_join_chat : @string/button_create_chat}" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/participant_list"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/participant_title"
                             bind:setParticipantList="@{viewModel}" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
                 </android.support.v7.widget.CardView>
 
             </LinearLayout>
@@ -198,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{(view) -> viewModel.clickJoinGroup(context)}"
-                android:text="Join this group"
+                android:text="@string/button_join_this_group"
                 android:visibility="@{viewModel.isWriter == false &amp;&amp; viewModel.isMember == false ? View.VISIBLE : View.GONE}" />
 
             <Button
@@ -206,7 +218,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="@{view -> viewModel.clickWithdrawalGroup(context)}"
-                android:text="withdrawal this group"
+                android:text="@string/button_withdrawal_this_group"
                 android:visibility="@{viewModel.isWriter == false &amp;&amp; viewModel.isMember == true ? View.VISIBLE : View.GONE}" />
         </FrameLayout>
 

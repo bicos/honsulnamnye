@@ -1,6 +1,5 @@
 package com.obppamanse.honsulnamnye.post.detail;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.BaseObservable;
@@ -133,7 +132,7 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
 
             final String newChatKey = createChatRoomKey(updateMyInfo.uid, other.uid);
 
-            ChatRoom chatRoom = new ChatRoom(newChatKey);
+            ChatRoom chatRoom = new ChatRoom(newChatKey, "");
 
             chatRoom.userList.put(updateMyInfo.uid, updateMyInfo.uid);
             chatRoom.userList.put(other.uid, other.uid);
@@ -142,6 +141,7 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
 
             updateMap.put("/user/" + updateMyInfo.uid + "/chatList/" + newChatKey, chatRoom.toMap());
             updateMap.put("/user/" + other.uid + "/chatList/" + newChatKey, chatRoom.toMap());
+            updateMap.put("/chatInfo/" + chatRoom.key, chatRoom.toMap());
 
             FirebaseDatabase.getInstance()
                     .getReference()

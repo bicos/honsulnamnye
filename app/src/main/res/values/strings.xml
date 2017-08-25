@@ -82,4 +82,15 @@
     <string name="msg_input_address_name">정확한 위치명을 입력해주세요.</string>
     <string name="error_failed_upload_image">이미지 업로드를 실패하였습니다.</string>
     <string name="success_image_upload">이미지 업로드를 성공하였습니다.</string>
+
+    <string name="error_send_chat">메세지 전송을 실패하였습니다.\n원인[%s]</string>
+    <string name="error_upload_image">이미지 업로드를 실패했습니다. 원인[%s]</string>
+    <string name="button_join_this_group">그룹 가입</string>
+    <string name="button_withdrawal_this_group">그룹 탈퇴</string>
+    <string name="title_desc">설명</string>
+    <string name="title_appointment_date">약속 날짜</string>
+    <string name="title_place">위치</string>
+
+    <string name="button_join_chat">채팅방 참여</string>
+    <string name="button_create_chat">채팅방 생성</string>
 </resources>

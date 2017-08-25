@@ -34,8 +34,6 @@ import com.obppamanse.honsulnamnye.post.modify.PostModifyActivity;
 
 public class PostDetailActivity extends AppCompatActivity implements PostContract.DetailView, OnMapReadyCallback {
 
-    public static final String PARAM_POST = "post";
-
     public static final String PARAM_POST_KEY = "post_key";
 
     private PostDetailViewModel viewModel;
@@ -44,11 +42,14 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
 
     private Post post;
 
+    private String postKey;
+
     private ValueEventListener listener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             dismissProgress();
-            populatePostDetail(dataSnapshot.getValue(Post.class));
+            post = dataSnapshot.getValue(Post.class);
+            populatePostDetail(post);
         }
 
         @Override
@@ -63,33 +64,19 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        if (intent != null) {
-            post = intent.getParcelableExtra(PARAM_POST);
-        } else {
-            showToastError();
-            return;
-        }
-
-        if (post == null) {
-            post = new Post();
-            String postKey = intent.getStringExtra(PARAM_POST_KEY);
-            if (postKey == null) {
-                showToastError();
-                return;
-            }
-            post.setKey(postKey);
-        }
+        postKey = intent.getStringExtra(PARAM_POST_KEY);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_post_detail);
         setSupportActionBar(binding.toolbar);
 
         showProgress();
-        FirebaseUtils.getPostRef().child(post.getKey()).addValueEventListener(listener);
+
+        FirebaseUtils.getPostRef().child(postKey).addValueEventListener(listener);
     }
 
     @Override
     protected void onDestroy() {
-        FirebaseUtils.getPostRef().child(post.getKey()).removeEventListener(listener);
+        FirebaseUtils.getPostRef().child(postKey).removeEventListener(listener);
         super.onDestroy();
     }
 
@@ -215,13 +202,21 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
                 .show();
     }
 
-    public static void startPostDetailActivity(Context context, Post post) {
-        Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra(PARAM_POST, post);
-        context.startActivity(intent);
+    @Override
+    public void showAlertCreateChatRoom(DialogInterface.OnClickListener onClickListener) {
+        new AlertDialog.Builder(this).setTitle(R.string.title_alert)
+                .setMessage("채팅방이 존재하지 않습니다. 채팅방을 만드시겠습니까?")
+                .setPositiveButton(R.string.button_ok, onClickListener)
+                .setNegativeButton(R.string.button_cancel, null)
+                .show();
     }
 
-    public static void startPostDetailActivity(Context context, String postKey) {
+    @Override
+    public void failureJoinChatRoom(Exception e) {
+        Toast.makeText(this, "채팅방 가입을 실패하였습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    public static void start(Context context, String postKey) {
         Intent intent = new Intent(context, PostDetailActivity.class);
         intent.putExtra(PARAM_POST_KEY, postKey);
         context.startActivity(intent);

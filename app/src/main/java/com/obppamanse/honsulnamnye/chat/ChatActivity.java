@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.obppamanse.honsulnamnye.R;
@@ -62,7 +61,7 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void showErrorToast(Exception e) {
-        Toast.makeText(this, "메세지 전송을 실패하였습니다. 원인[" + e.getMessage() + "]", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.error_send_chat, e.getMessage()), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -121,7 +120,7 @@ public class ChatActivity extends AppCompatActivity implements ChatContract.View
 
     @Override
     public void failureUploadImage(Exception e) {
-
+        Toast.makeText(getApplicationContext(), getString(R.string.error_upload_image, e.getMessage()), Toast.LENGTH_SHORT).show();
     }
 
     @Override

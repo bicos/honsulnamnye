@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,9 @@ public class Post implements Parcelable {
     // 가입자
     private Map<String, Participant> participantList;
 
+    // 단체채팅방
+    private String chatKey;
+
     public Post() {
     }
 
@@ -52,6 +56,7 @@ public class Post implements Parcelable {
         dueDateTime = in.readLong();
         place = in.readParcelable(Place.class.getClassLoader());
         fileNames = in.createStringArrayList();
+        chatKey = in.readString();
     }
 
     @Override
@@ -64,6 +69,7 @@ public class Post implements Parcelable {
         dest.writeLong(dueDateTime);
         dest.writeParcelable(place, flags);
         dest.writeStringList(fileNames);
+        dest.writeString(chatKey);
     }
 
     @Override
@@ -155,6 +161,14 @@ public class Post implements Parcelable {
         return fileNames;
     }
 
+    public String getChatKey() {
+        return chatKey;
+    }
+
+    public void setChatKey(String chatKey) {
+        this.chatKey = chatKey;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -168,5 +182,20 @@ public class Post implements Parcelable {
                 ", fileNames=" + fileNames +
                 ", participantList=" + participantList +
                 '}';
+    }
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("key", key);
+        map.put("uid", uid);
+        map.put("title", title);
+        map.put("desc", desc);
+        map.put("timestamp", timestamp);
+        map.put("dueDateTime", dueDateTime);
+        map.put("place", place);
+        map.put("fileNames", fileNames);
+        map.put("participantList", participantList);
+        map.put("chatKey", chatKey);
+        return map;
     }
 }

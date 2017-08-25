@@ -11,6 +11,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,13 +23,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.BR;
+import com.obppamanse.honsulnamnye.chat.ChatActivity;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
+import com.obppamanse.honsulnamnye.util.ActivityUtils;
 import com.obppamanse.honsulnamnye.util.DateUtils;
 
 import java.util.ArrayList;
@@ -113,6 +118,11 @@ public class PostDetailViewModel extends BaseObservable {
         return list;
     }
 
+    @Bindable
+    public String getChatKey() {
+        return model != null ? model.getChatKey() : null;
+    }
+
     public void clickDeletePost(Activity activity) {
         try {
             model.deletePost(activity, new OnCompleteListener<Void>() {
@@ -178,6 +188,47 @@ public class PostDetailViewModel extends BaseObservable {
                 }
             }
         });
+    }
+
+    public void clickJoinChatRoom(Context context) {
+        final Activity activity = ActivityUtils.getActivity(context);
+        if (activity == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(model.getChatKey())) {
+            view.showAlertCreateChatRoom(new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    model.createChatRoom()
+                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
+                                @Override
+                                public void onSuccess(String chatKey) {
+                                    ChatActivity.start(activity, chatKey);
+                                }
+                            })
+                            .addOnFailureListener(activity, new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    view.failureJoinChatRoom(e);
+                                }
+                            });
+                }
+            });
+        } else {
+            model.joinChatRoom(activity, new OnSuccessListener<String>() {
+                @Override
+                public void onSuccess(String chatKey) {
+                    ChatActivity.start(activity, chatKey);
+                }
+            }, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    view.failureJoinChatRoom(e);
+                }
+            });
+        }
     }
 
     public void updateGoogleMap(GoogleMap googleMap) {
