@@ -39,7 +39,7 @@ public class Post implements Parcelable {
     private List<String> fileNames = new ArrayList<>();
 
     // 가입자
-    private Map<String, Participant> participantList;
+    private Map<String, Participant> participantList = new HashMap<>();
 
     // 단체채팅방
     private String chatKey;
@@ -57,6 +57,12 @@ public class Post implements Parcelable {
         place = in.readParcelable(Place.class.getClassLoader());
         fileNames = in.createStringArrayList();
         chatKey = in.readString();
+        int size = in.readInt();
+        for(int i = 0; i < size; i++){
+            String key = in.readString();
+            Participant value = in.readParcelable(Participant.class.getClassLoader());
+            participantList.put(key,value);
+        }
     }
 
     @Override
@@ -70,6 +76,11 @@ public class Post implements Parcelable {
         dest.writeParcelable(place, flags);
         dest.writeStringList(fileNames);
         dest.writeString(chatKey);
+        dest.writeInt(participantList.size());
+        for(Map.Entry<String,Participant> entry : participantList.entrySet()){
+            dest.writeString(entry.getKey());
+            dest.writeParcelable(entry.getValue(), flags);
+        }
     }
 
     @Override
