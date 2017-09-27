@@ -46,10 +46,15 @@ public class PostWriteModel implements PostContract.WriteModel {
 
     private List<Uri> uploadUris;
 
+    private String tmpHashTag;
+
+    private List<String> hashTagList;
+
     public PostWriteModel() {
         postRef = FirebaseUtils.getPostRef();
         post = new Post();
         uploadUris = new ArrayList<>();
+        hashTagList = new ArrayList<>();
     }
 
     @Override
@@ -187,6 +192,16 @@ public class PostWriteModel implements PostContract.WriteModel {
     }
 
     @Override
+    public List<String> getHashTagList() {
+        return hashTagList;
+    }
+
+    @Override
+    public String getHashTag() {
+        return tmpHashTag;
+    }
+
+    @Override
     public void setTitle(String title) {
         if (post != null) {
             post.setTitle(title);
@@ -210,5 +225,10 @@ public class PostWriteModel implements PostContract.WriteModel {
     @Override
     public void setDueDate(long timeMill) {
         post.setDueDateTime(timeMill);
+    }
+
+    @Override
+    public void setHashTag(String hashTag) {
+        tmpHashTag = hashTag;
     }
 }

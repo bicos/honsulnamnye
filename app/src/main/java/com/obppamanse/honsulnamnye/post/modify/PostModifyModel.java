@@ -26,6 +26,8 @@ public class PostModifyModel implements PostContract.ModifyModel {
 
     private Post post;
 
+    private String tmpHashTag;
+
     public PostModifyModel(Post post) {
         this.postRef = FirebaseUtils.getPostRef().child(post.getKey());
         this.post = post;
@@ -49,6 +51,11 @@ public class PostModifyModel implements PostContract.ModifyModel {
     @Override
     public void setDueDate(long timeMillisecond) {
         post.setDueDateTime(timeMillisecond);
+    }
+
+    @Override
+    public void setHashTag(String hashTag) {
+        tmpHashTag = hashTag;
     }
 
     @Override

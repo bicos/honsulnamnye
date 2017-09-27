@@ -44,6 +44,8 @@ public class Post implements Parcelable {
     // 단체채팅방
     private String chatKey;
 
+    private List<String> hashTags = new ArrayList<>();
+
     public Post() {
     }
 
@@ -63,7 +65,10 @@ public class Post implements Parcelable {
             Participant value = in.readParcelable(Participant.class.getClassLoader());
             participantList.put(key,value);
         }
+        hashTags = in.createStringArrayList();
     }
+
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -81,6 +86,7 @@ public class Post implements Parcelable {
             dest.writeString(entry.getKey());
             dest.writeParcelable(entry.getValue(), flags);
         }
+        dest.writeStringList(hashTags);
     }
 
     @Override
@@ -180,6 +186,18 @@ public class Post implements Parcelable {
         this.chatKey = chatKey;
     }
 
+    public void setFileNames(List<String> fileNames) {
+        this.fileNames = fileNames;
+    }
+
+    public List<String> getHashTags() {
+        return hashTags;
+    }
+
+    public void setHashTags(List<String> hashTags) {
+        this.hashTags = hashTags;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -192,6 +210,8 @@ public class Post implements Parcelable {
                 ", place=" + place +
                 ", fileNames=" + fileNames +
                 ", participantList=" + participantList +
+                ", chatKey='" + chatKey + '\'' +
+                ", hashTags=" + hashTags +
                 '}';
     }
 
@@ -207,6 +227,7 @@ public class Post implements Parcelable {
         map.put("fileNames", fileNames);
         map.put("participantList", participantList);
         map.put("chatKey", chatKey);
+        map.put("hashTags", hashTags);
         return map;
     }
 }

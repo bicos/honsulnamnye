@@ -91,6 +91,11 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
     }
 
     @Override
+    public void showErrorHashTagEmpty() {
+        Toast.makeText(this, "해쉬 태그를 입력해주세요.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SELECT_LOCATION && resultCode == Activity.RESULT_OK && data != null) {

@@ -17,8 +17,10 @@ import android.widget.TimePicker;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.zxing.common.StringUtils;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.post.PostContract;
+import com.obppamanse.honsulnamnye.post.SimpleHashTagAdapter;
 import com.obppamanse.honsulnamnye.post.SimpleImageAdapter;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
@@ -66,6 +68,21 @@ public class PostWriteViewModel extends BaseObservable {
         return mModel.getUploadImageUri();
     }
 
+    @Bindable
+    public List<String> getHashTagList() {
+        return mModel.getHashTagList();
+    }
+
+    @Bindable
+    public String getHashTag(){
+        return mModel.getHashTag();
+    }
+
+    @Bindable
+    public void setHashTag(String hashTag){
+        mModel.setHashTag(hashTag);
+    }
+
     public void updateTitle(CharSequence title) {
         if (title != null) {
             mModel.setTitle(title.toString());
@@ -85,6 +102,19 @@ public class PostWriteViewModel extends BaseObservable {
     public void updatePlace(Place place) {
         mModel.setPlace(place);
         notifyPropertyChanged(BR.placeName);
+    }
+
+    public void clickAddHashTag() {
+        if (TextUtils.isEmpty(mModel.getHashTag())){
+            mView.showErrorHashTagEmpty();
+            return;
+        }
+
+        mModel.getHashTagList().add(mModel.getHashTag());
+        notifyPropertyChanged(BR.hashTagList);
+
+        mModel.setHashTag("");
+        notifyPropertyChanged(BR.hashTag);
     }
 
     public void clickWritePost(Context context) {
@@ -169,13 +199,30 @@ public class PostWriteViewModel extends BaseObservable {
         }
 
         if (recyclerView.getAdapter() == null) {
-            SimpleImageAdapter adapter = new SimpleImageAdapter(uploadImageList);
+            SimpleImageAdapter<Uri> adapter = new SimpleImageAdapter<>(uploadImageList);
             LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
             recyclerView.setLayoutManager(manager);
             recyclerView.setAdapter(adapter);
         } else {
-            ((SimpleImageAdapter)recyclerView.getAdapter()).setDataList(uploadImageList);
+            ((SimpleImageAdapter<Uri>)recyclerView.getAdapter()).setDataList(uploadImageList);
+        }
+    }
+
+    @BindingAdapter("setHashTagList")
+    public static void setHashTagList(RecyclerView recyclerView, List<String> hashTags) {
+        if (hashTags == null) {
+            return;
+        }
+
+        if (recyclerView.getAdapter() == null) {
+            SimpleHashTagAdapter adapter = new SimpleHashTagAdapter(hashTags);
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.setAdapter(adapter);
+        } else {
+            ((SimpleHashTagAdapter)recyclerView.getAdapter()).setDataList(hashTags);
         }
     }
 

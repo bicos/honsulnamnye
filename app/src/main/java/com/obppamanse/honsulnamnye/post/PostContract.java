@@ -31,6 +31,8 @@ public class PostContract {
         void setPlace(Place place);
 
         void setDueDate(long timeMillisecond);
+
+        void setHashTag(String hashTag);
     }
 
     public interface GetModel {
@@ -61,6 +63,10 @@ public class PostContract {
         List<Uri> getUploadImageUri();
 
         Post getPost();
+
+        List<String> getHashTagList();
+
+        String getHashTag();
     }
 
     public interface ModifyModel extends GetModel, SetModel {
@@ -106,6 +112,8 @@ public class PostContract {
         void startSelectLocation();
 
         void chooseUploadImage();
+
+        void showErrorHashTagEmpty();
     }
 
     public interface ModifyView extends View {

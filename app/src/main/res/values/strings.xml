@@ -61,6 +61,7 @@
     <string name="button_picture_upload">사진 업로드</string>
     <string name="button_create_post">모임 만들기</string>
     <string name="title_chat">채팅</string>
+    <string name="subtitle_hash_tag">해쉬태그</string>
 
     <string name="button_logout">logout</string>
     <string name="msg_success_delete_post">글을 삭제하였습니다.</string>
