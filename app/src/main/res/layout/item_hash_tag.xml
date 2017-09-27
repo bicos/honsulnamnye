@@ -7,7 +7,8 @@
     android:layout_marginRight="5dp"
     android:background="@drawable/bg_hash_tag"
     android:drawableRight="@drawable/ic_clear_white_24dp"
-    android:padding="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     android:textColor="#ffffff"
-    android:textSize="12sp"
-    tool:text="TEST" />
+    android:drawablePadding="5dp"
+    tool:text="TESTTESTESTE" />
