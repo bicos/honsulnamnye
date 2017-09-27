@@ -174,12 +174,17 @@ public class PostModifyActivity extends AppCompatActivity implements PostContrac
 
     @Override
     public void failureDeleteImage() {
-        Toast.makeText(getApplicationContext(), "이미지 삭제를 실패하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.failure_image_delete, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void successDeleteImage() {
-        Toast.makeText(getApplicationContext(), "이미지 삭제를 성공하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.success_image_delete, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showErrorHashTagEmpty() {
+        Toast.makeText(getApplicationContext(), R.string.error_hash_tag_empty, Toast.LENGTH_SHORT).show();
     }
 
     @Override

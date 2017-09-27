@@ -96,4 +96,8 @@
     <string name="button_create_chat">채팅방 생성</string>
     <string name="hint_input_hash_tag">해쉬 태그를 입력하세요</string>
     <string name="btn_input">입력</string>
+    <string name="failure_image_delete">이미지 삭제를 실패하였습니다.</string>
+    <string name="success_image_delete">이미지 삭제를 성공하였습니다.</string>
+    <string name="error_hash_tag_empty">해쉬 태그를 입력해주세요.</string>
+    <string name="success_write_post">글쓰기를 완료하였습니다.</string>
 </resources>

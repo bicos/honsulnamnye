@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -98,6 +99,21 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
         return uploadList;
     }
 
+    @Bindable
+    public String getHashTag() {
+        return model.getHashTag();
+    }
+
+    @Bindable
+    public void setHashTag(String hashTag) {
+        model.setHashTag(hashTag);
+    }
+
+    @Bindable
+    public List<String> getHashTagList(){
+        return model.getHashTagList();
+    }
+
     public SimpleImageAdapter.RemoveItemListener<StorageReference> getRemoveListener() {
         return this;
     }
@@ -116,6 +132,19 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
         model.setPlace(place);
         notifyPropertyChanged(BR.place);
         notifyPropertyChanged(BR.placeName);
+    }
+
+    public void clickAddHashTag(){
+        if (TextUtils.isEmpty(model.getHashTag())) {
+            view.showErrorHashTagEmpty();
+            return;
+        }
+
+        model.getHashTagList().add(model.getHashTag());
+        notifyPropertyChanged(BR.hashTagList);
+
+        model.setHashTag("");
+        notifyPropertyChanged(BR.hashTag);
     }
 
     public void clickDueDate(final Context context) {

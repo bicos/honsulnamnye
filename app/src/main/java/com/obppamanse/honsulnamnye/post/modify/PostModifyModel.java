@@ -100,6 +100,11 @@ public class PostModifyModel implements PostContract.ModifyModel {
     }
 
     @Override
+    public List<String> getHashTagList() {
+        return post.getHashTags();
+    }
+
+    @Override
     public Task<Void> modifyPost() {
         return postRef.setValue(post);
     }
@@ -119,5 +124,10 @@ public class PostModifyModel implements PostContract.ModifyModel {
                 iterator.remove();
             }
         }
+    }
+
+    @Override
+    public String getHashTag() {
+        return tmpHashTag;
     }
 }

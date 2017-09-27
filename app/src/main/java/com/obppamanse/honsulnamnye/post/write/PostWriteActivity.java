@@ -48,7 +48,7 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
 
     @Override
     public void successWritePost() {
-        Toast.makeText(getApplicationContext(), "글쓰기를 완료하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.success_write_post, Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -92,7 +92,7 @@ public class PostWriteActivity extends AppCompatActivity implements PostContract
 
     @Override
     public void showErrorHashTagEmpty() {
-        Toast.makeText(this, "해쉬 태그를 입력해주세요.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.error_hash_tag_empty, Toast.LENGTH_SHORT).show();
     }
 
     @Override

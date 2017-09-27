@@ -52,6 +52,8 @@ public class PostContract {
         String getPostKey();
 
         List<String> getFileNames();
+
+        List<String> getHashTagList();
     }
 
     public interface WriteModel extends SetModel {
@@ -76,6 +78,8 @@ public class PostContract {
         Task<Void> modifyUploadImage();
 
         void removeFileName(String fileName);
+
+        String getHashTag();
     }
 
     public interface DetailModel extends GetModel {
@@ -136,6 +140,8 @@ public class PostContract {
         void failureDeleteImage();
 
         void successDeleteImage();
+
+        void showErrorHashTagEmpty();
     }
 
     public interface DetailView extends View {

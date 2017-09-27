@@ -87,6 +87,11 @@ public class PostDetailModel implements PostContract.DetailModel {
     }
 
     @Override
+    public List<String> getHashTagList() {
+        return post.getHashTags();
+    }
+
+    @Override
     public void deletePost(Activity activity, OnCompleteListener<Void> listener) throws Exception {
         reference.removeValue().addOnCompleteListener(activity, listener);
     }
