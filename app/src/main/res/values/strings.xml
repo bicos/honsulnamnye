@@ -94,4 +94,6 @@
 
     <string name="button_join_chat">채팅방 참여</string>
     <string name="button_create_chat">채팅방 생성</string>
+    <string name="hint_input_hash_tag">해쉬 태그를 입력하세요</string>
+    <string name="btn_input">입력</string>
 </resources>

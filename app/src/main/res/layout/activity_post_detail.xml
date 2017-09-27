@@ -83,7 +83,15 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:text="@{viewModel.desc}" />
+                            android:text="@{viewModel.desc}"
+                            android:layout_marginBottom="16dp"/>
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/list_hash_tags"
+                            android:padding="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            bind:setModifyHashTagList="@{viewModel.hashTagRef}"/>
 
                     </LinearLayout>
 

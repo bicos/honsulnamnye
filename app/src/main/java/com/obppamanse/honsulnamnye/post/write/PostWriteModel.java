@@ -32,6 +32,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static com.obppamanse.honsulnamnye.firebase.FirebaseUtils.POST_FILENAMES_REF;
+import static com.obppamanse.honsulnamnye.firebase.FirebaseUtils.POST_HASH_TAG_REF;
 import static com.obppamanse.honsulnamnye.firebase.FirebaseUtils.TIMESTAMP_REF;
 
 /**
@@ -48,13 +49,10 @@ public class PostWriteModel implements PostContract.WriteModel {
 
     private String tmpHashTag;
 
-    private List<String> hashTagList;
-
     public PostWriteModel() {
         postRef = FirebaseUtils.getPostRef();
         post = new Post();
         uploadUris = new ArrayList<>();
-        hashTagList = new ArrayList<>();
     }
 
     @Override
@@ -163,6 +161,15 @@ public class PostWriteModel implements PostContract.WriteModel {
             });
         }
 
+        if (!post.getHashTags().isEmpty()) {
+            task.continueWithTask(new Continuation<Void, Task<Void>>() {
+                @Override
+                public Task<Void> then(@android.support.annotation.NonNull Task<Void> task) throws Exception {
+                    return postRef.child(key).child(POST_HASH_TAG_REF).setValue(post.getHashTags());
+                }
+            });
+        }
+
         task.continueWithTask(new Continuation<Void, Task<Void>>() {
             @Override
             public Task<Void> then(@android.support.annotation.NonNull Task<Void> task) throws Exception {
@@ -193,7 +200,7 @@ public class PostWriteModel implements PostContract.WriteModel {
 
     @Override
     public List<String> getHashTagList() {
-        return hashTagList;
+        return post.getHashTags();
     }
 
     @Override

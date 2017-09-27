@@ -84,7 +84,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_title_tag"
-                            android:hint="해쉬 태그를 입력하세요"
+                            android:hint="@string/hint_input_hash_tag"
                             android:layout_toLeftOf="@+id/btn_add_hash_tag"
                             android:layout_marginRight="@dimen/default_margin"
                             android:text="@={viewModel.hashTag}"/>
@@ -95,7 +95,7 @@
                             android:id="@+id/btn_add_hash_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="입력"
+                            android:text="@string/btn_input"
                             android:onClick="@{view -> viewModel.clickAddHashTag()}"/>
 
                         <android.support.v7.widget.RecyclerView

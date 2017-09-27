@@ -21,6 +21,8 @@ public class FirebaseUtils {
 
     public static final String POST_FILENAMES_REF = "fileNames";
 
+    public static final String POST_HASH_TAG_REF = "hashTags";
+
     public static final String PARTICIPANT_LIST_REF = "participantList";
 
     public static final String PUSH_TOKEN_REF = "pushToken";

@@ -31,6 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.chat.ChatActivity;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
+import com.obppamanse.honsulnamnye.post.HashTagListModifyAdapter;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
@@ -121,6 +122,11 @@ public class PostDetailViewModel extends BaseObservable {
     @Bindable
     public String getChatKey() {
         return model != null ? model.getChatKey() : null;
+    }
+
+    @Bindable
+    public DatabaseReference getHashTagRef(){
+        return FirebaseUtils.getPostRef().child(model.getPostKey()).child(FirebaseUtils.POST_HASH_TAG_REF);
     }
 
     public void clickDeletePost(Activity activity) {
@@ -275,6 +281,18 @@ public class PostDetailViewModel extends BaseObservable {
         } else {
             ImageViewPagerAdapter adapter = (ImageViewPagerAdapter) pager.getAdapter();
             adapter.setImageUrlList(imgUrlList);
+        }
+    }
+
+    @BindingAdapter("setModifyHashTagList")
+    public static void setModifyHashTagList(RecyclerView recyclerView, DatabaseReference hashTagRef) {
+        if (recyclerView != null && recyclerView.getAdapter() == null && hashTagRef != null) {
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            recyclerView.setLayoutManager(manager);
+
+            HashTagListModifyAdapter adapter = new HashTagListModifyAdapter(hashTagRef, false);
+            recyclerView.setAdapter(adapter);
         }
     }
 
