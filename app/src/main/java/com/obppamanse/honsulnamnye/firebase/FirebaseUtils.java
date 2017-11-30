@@ -19,6 +19,8 @@ public class FirebaseUtils {
 
     private static final String POST_REF = "post";
 
+    private static final String CATEGORY_REF = "category";
+
     public static final String POST_FILENAMES_REF = "fileNames";
 
     public static final String POST_HASH_TAG_REF = "hashTags";
@@ -41,6 +43,18 @@ public class FirebaseUtils {
         return getPostRef().child(postKey).child(PARTICIPANT_LIST_REF);
     }
 
+    public static DatabaseReference getChatRef() {
+        return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
+    }
+
+    public static DatabaseReference getChatInfoRef() {
+        return FirebaseDatabase.getInstance().getReference().child(CHAT_INFO_REF);
+    }
+
+    public static DatabaseReference getCategoryRef() {
+        return FirebaseDatabase.getInstance().getReference().child(CATEGORY_REF);
+    }
+
     private static final String STORAGE_REF = "gs://honsulnamnyeo.appspot.com";
 
     public static StorageReference getProfileStorageRef() {
@@ -55,15 +69,9 @@ public class FirebaseUtils {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child(POST_REF).child(postKey);
     }
 
-    public static DatabaseReference getChatRef() {
-        return FirebaseDatabase.getInstance().getReference().child(CHAT_REF);
-    }
-
-    public static DatabaseReference getChatInfoRef() {
-        return FirebaseDatabase.getInstance().getReference().child(CHAT_INFO_REF);
-    }
-
     public static StorageReference getChatStorageRef(String chatKey) {
         return FirebaseStorage.getInstance().getReferenceFromUrl(STORAGE_REF).child(CHAT_REF).child(chatKey);
     }
+
+
 }

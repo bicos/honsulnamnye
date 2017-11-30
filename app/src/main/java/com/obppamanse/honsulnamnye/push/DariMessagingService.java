@@ -32,9 +32,4 @@ public class DariMessagingService extends FirebaseMessagingService {
     public void onSendError(String s, Exception e) {
         super.onSendError(s, e);
     }
-
-    @Override
-    public void handleIntent(Intent intent) {
-        super.handleIntent(intent);
-    }
 }

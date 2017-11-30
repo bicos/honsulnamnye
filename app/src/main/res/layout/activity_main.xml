@@ -38,43 +38,8 @@
             android:layout_gravity="bottom|end"
             android:layout_marginBottom="@dimen/fab_margin_bottom"
             android:layout_marginRight="@dimen/fab_margin"
-            app:layout_anchor="@+id/footer_layout"
             app:layout_anchorGravity="right"
             app:srcCompat="@android:drawable/ic_dialog_email" />
-
-        <LinearLayout
-            android:id="@+id/footer_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            app:layout_behavior="com.obppamanse.honsulnamnye.main.FooterBehavior">
-
-            <Button
-                android:id="@+id/btn_time_line"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="clickTimeLine"
-                android:text="타임라인" />
-
-            <Button
-                android:id="@+id/btn_personal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="clickPersonal"
-                android:text="개인화면" />
-
-            <Button
-                android:id="@+id/btn_search"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="clickSearch"
-                android:text="검색" />
-
-        </LinearLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

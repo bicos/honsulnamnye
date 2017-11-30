@@ -15,19 +15,14 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.SplashActivity;
-import com.obppamanse.honsulnamnye.personal.PersonalFragment;
+import com.obppamanse.honsulnamnye.main.model.Category;
 import com.obppamanse.honsulnamnye.post.write.PostWriteActivity;
-import com.obppamanse.honsulnamnye.search.SearchFragment;
 import com.obppamanse.honsulnamnye.timeline.TimeLineFragment;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int INDEX_TIMELINE = 0;
-    private static final int INDEX_PERSONAL = 1;
-    private static final int INDEX_SEARCH = 2;
-
-    private int currentIndex = 0;
+    private static final String PARAM_CATEGORY = "category";
 
     private FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -62,19 +57,28 @@ public class MainActivity extends AppCompatActivity {
                 layout, toolbar, R.string.open_drawer, R.string.close_drawer);
         toggle.syncState();
 
-        if (savedInstanceState != null) {
-            selectTab(savedInstanceState.getInt("current_index"));
-        } else {
-            selectTab(INDEX_TIMELINE);
-        }
-
         FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
+        ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                CategorySelectFragment.newInstance(),
+                R.id.container_main,
+                MainActivity.class.getSimpleName());
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt("current_index", currentIndex);
-        super.onSaveInstanceState(outState);
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        Category category = null;
+
+        if (intent.hasExtra(PARAM_CATEGORY)) {
+            category = intent.getParcelableExtra(PARAM_CATEGORY);
+        }
+
+        ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
+                TimeLineFragment.newInstance(category),
+                R.id.container_main,
+                MainActivity.class.getSimpleName());
     }
 
     @Override
@@ -83,37 +87,15 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void selectTab(int index) {
-        if (INDEX_TIMELINE == index) {
-            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
-                    TimeLineFragment.newInstance(),
-                    R.id.container_main);
-        } else if (INDEX_PERSONAL == index) {
-            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
-                    PersonalFragment.newInstance(),
-                    R.id.container_main);
-        } else if (INDEX_SEARCH == index) {
-            ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
-                    SearchFragment.newInstance(),
-                    R.id.container_main);
-        }
-        currentIndex = index;
-    }
-
-    public void clickTimeLine(View view) {
-        selectTab(INDEX_TIMELINE);
-    }
-
-    public void clickPersonal(View view) {
-        selectTab(INDEX_PERSONAL);
-    }
-
-    public void clickSearch(View view) {
-        selectTab(INDEX_SEARCH);
-    }
-
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void moveCategory(Context context, Category category) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra(MainActivity.PARAM_CATEGORY, category);
         context.startActivity(intent);
     }
 }
