@@ -44,9 +44,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_title"
+                    android:layout_marginBottom="8dp"
                     android:maxLines="3"
                     android:text="@{viewModel.desc}"
                     tool:text="Desc area" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_desc"
+                    tool:text="Date area"
+                    android:text="@{viewModel.date}"/>
+
+                <TextView
+                    android:id="@+id/tv_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_date"
+                    tool:text="Place area"
+                    android:text="@{viewModel.placeName}"/>
+
+                <TextView
+                    android:id="@+id/tv_participants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_place"
+                    tool:text="Participant area"
+                    android:text="@{viewModel.participantsDesc}"/>
 
             </RelativeLayout>
 
