@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +22,11 @@ import com.obppamanse.honsulnamnye.post.write.PostWriteActivity;
 import com.obppamanse.honsulnamnye.timeline.TimeLineFragment;
 import com.obppamanse.honsulnamnye.util.ActivityUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
 
     private static final String PARAM_CATEGORY = "category";
+
+    FloatingActionButton fab;
 
     private FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -43,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         FirebaseAuth.getInstance().addAuthStateListener(authStateListener);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
 
         ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
                 CategorySelectFragment.newInstance(),
@@ -97,5 +103,15 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(MainActivity.PARAM_CATEGORY, category);
         context.startActivity(intent);
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_main);
+        if (currentFragment instanceof CategorySelectFragment) {
+            fab.hide();
+        } else {
+            fab.show();
+        }
     }
 }

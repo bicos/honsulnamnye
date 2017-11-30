@@ -2,7 +2,7 @@ package com.obppamanse.honsulnamnye.timeline;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.obppamanse.honsulnamnye.main.model.Category;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * Created by raehyeong.park on 2017. 11. 30..
  */
 
-public class TimeLinePagerAdapter extends FragmentPagerAdapter {
+public class TimeLinePagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Category> categoryList;
 

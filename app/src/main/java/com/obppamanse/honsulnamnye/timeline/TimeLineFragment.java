@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
@@ -23,9 +24,11 @@ import java.util.List;
  * Created by raehyeong.park on 2017. 11. 30..
  */
 
-public class TimeLineFragment extends Fragment implements ValueEventListener {
+public class TimeLineFragment extends Fragment implements ValueEventListener, ViewPager.OnPageChangeListener {
 
     public static final String PARAM_CATEGORY = "category";
+
+    private DatabaseReference reference;
 
     private List<Category> categoryList;
 
@@ -59,6 +62,9 @@ public class TimeLineFragment extends Fragment implements ValueEventListener {
         if (bundle != null) {
             selectCategory = bundle.getParcelable(PARAM_CATEGORY);
         }
+
+        categoryList = new ArrayList<>();
+        reference = FirebaseUtils.getCategoryRef();
     }
 
     @Nullable
@@ -68,7 +74,11 @@ public class TimeLineFragment extends Fragment implements ValueEventListener {
 
         categoryTab = view.findViewById(R.id.tab_category);
         categoryPager = view.findViewById(R.id.tab_pager);
+        adapter = new TimeLinePagerAdapter(getFragmentManager(), categoryList);
+        categoryPager.setAdapter(adapter);
         categoryTab.setupWithViewPager(categoryPager, true);
+
+        categoryPager.addOnPageChangeListener(this);
 
         return view;
     }
@@ -77,13 +87,12 @@ public class TimeLineFragment extends Fragment implements ValueEventListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        FirebaseUtils.getCategoryRef().addValueEventListener(this);
+        reference.addListenerForSingleValueEvent(this);
     }
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         if (dataSnapshot.exists()) {
-            categoryList = new ArrayList<>();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 Category category = snapshot.getValue(Category.class);
                 if (category == null) {
@@ -96,9 +105,7 @@ public class TimeLineFragment extends Fragment implements ValueEventListener {
 
                 categoryList.add(category);
             }
-            adapter = new TimeLinePagerAdapter(getFragmentManager(), categoryList);
-            categoryPager.setAdapter(adapter);
-
+            adapter.notifyDataSetChanged();
             categoryPager.setCurrentItem(getCurrentIndex(selectCategory));
         }
     }
@@ -119,6 +126,21 @@ public class TimeLineFragment extends Fragment implements ValueEventListener {
 
     @Override
     public void onCancelled(DatabaseError databaseError) {
+        // do nothing
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // do nothing
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        selectCategory = categoryList.get(position);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
         // do nothing
     }
 }
