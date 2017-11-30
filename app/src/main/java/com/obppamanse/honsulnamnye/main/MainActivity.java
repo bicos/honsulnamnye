@@ -67,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
         ActivityUtils.replaceFragmentToActivity(getSupportFragmentManager(),
                 CategorySelectFragment.newInstance(),
-                R.id.container_main,
-                MainActivity.class.getSimpleName());
+                R.id.container_main);
     }
 
     @Override
@@ -91,6 +90,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     protected void onDestroy() {
         FirebaseAuth.getInstance().removeAuthStateListener(authStateListener);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public static void start(Context context) {
