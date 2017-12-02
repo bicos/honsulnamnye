@@ -28,6 +28,8 @@ public class TimeLineListFragment extends Fragment {
 
     private TimeLineRecyclerAdapter adapter;
 
+    private ContentLoadingProgressBar progressBar;
+
     public static TimeLineListFragment newInstance(Category category) {
 
         Bundle args = new Bundle();
@@ -47,6 +49,35 @@ public class TimeLineListFragment extends Fragment {
         if (bundle != null) {
             category = bundle.getParcelable(PARAM_CATEGORY);
         }
+
+        Query query = category == null || Category.ALL.equals(category.getCode()) ?
+                FirebaseUtils.getPostRef() :
+                FirebaseUtils.getPostRef().orderByChild("category").equalTo(category.getCode());
+
+        adapter = new TimeLineRecyclerAdapter(query) {
+
+            @Override
+            public void startListening() {
+                super.startListening();
+                if (progressBar != null && progressBar.isShown()) {
+                    progressBar.show();
+                }
+            }
+
+            @Override
+            public void onDataChanged() {
+                if (progressBar != null && progressBar.isShown()) {
+                    progressBar.hide();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                if (progressBar != null && progressBar.isShown()) {
+                    progressBar.hide();
+                }
+            }
+        };
     }
 
     @Nullable
@@ -57,29 +88,13 @@ public class TimeLineListFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recycler_post);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        final ContentLoadingProgressBar progressBar = view.findViewById(R.id.loading_progress);
-        progressBar.show();
+        progressBar = view.findViewById(R.id.loading_progress);
 
-        Query query = Category.ALL.equals(category.getCode()) ?
-                FirebaseUtils.getPostRef() :
-                FirebaseUtils.getPostRef().orderByChild("category").equalTo(category.getCode());
-
-        adapter = new TimeLineRecyclerAdapter(query) {
-            @Override
-            public void onDataChanged() {
-                if (progressBar.isShown()) {
-                    progressBar.hide();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                if (progressBar.isShown()) {
-                    progressBar.hide();
-                }
-            }
-        };
         recyclerView.setAdapter(adapter);
+
+        if (adapter.getItemCount() == 0) {
+            adapter.startListening();
+        }
 
         return view;
     }

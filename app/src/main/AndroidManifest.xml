@@ -52,7 +52,9 @@
             android:label="@string/title_chat"
             android:windowSoftInputMode="adjustResize" />
 
-        <activity android:name=".image.ImageDetailActivity" />
+        <activity
+            android:name=".image.ImageDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name="com.facebook.CustomTabActivity"
