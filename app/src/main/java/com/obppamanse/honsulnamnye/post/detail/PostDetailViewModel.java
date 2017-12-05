@@ -22,15 +22,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.chat.ChatActivity;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
+import com.obppamanse.honsulnamnye.main.model.Category;
 import com.obppamanse.honsulnamnye.post.HashTagListModifyAdapter;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.model.Place;
@@ -54,17 +54,32 @@ public class PostDetailViewModel extends BaseObservable {
 
     private boolean isMember;
 
+    private String categoryName;
+
     public PostDetailViewModel(final PostContract.DetailView view, PostContract.DetailModel model) {
         this.view = view;
         this.model = model;
 
         view.showProgress();
-        model.requestIsMember(view.getActivity(), new PostDetailModel.MemberExistListener() {
+
+        model.requestIsMember(isMember -> {
+            view.dismissProgress();
+            PostDetailViewModel.this.isMember = isMember;
+            notifyPropertyChanged(BR.isMember);
+        });
+
+        model.requestCategoryName(new ValueEventListener() {
             @Override
-            public void isMember(boolean isMember) {
-                view.dismissProgress();
-                PostDetailViewModel.this.isMember = isMember;
-                notifyPropertyChanged(BR.isMember);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Category category = dataSnapshot.getValue(Category.class);
+                if (category != null) {
+                    setCategoryName(category.getName());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }
@@ -125,20 +140,17 @@ public class PostDetailViewModel extends BaseObservable {
     }
 
     @Bindable
-    public DatabaseReference getHashTagRef(){
+    public DatabaseReference getHashTagRef() {
         return FirebaseUtils.getPostRef().child(model.getPostKey()).child(FirebaseUtils.POST_HASH_TAG_REF);
     }
 
     public void clickDeletePost(Activity activity) {
         try {
-            model.deletePost(activity, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        view.successDeletePost();
-                    } else {
-                        view.failureDeletePost(task.getException());
-                    }
+            model.deletePost(activity, task -> {
+                if (task.isSuccessful()) {
+                    view.successDeletePost();
+                } else {
+                    view.failureDeletePost(task.getException());
                 }
             });
         } catch (Exception e) {
@@ -148,18 +160,15 @@ public class PostDetailViewModel extends BaseObservable {
 
     public void clickJoinGroup(Context context) {
         try {
-            model.joinGroup((Activity) context, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        isMember = true;
-                        view.successJoinGroup();
-                    } else {
-                        isMember = false;
-                        view.failureJoinGroup(task.getException());
-                    }
-                    notifyChange();
+            model.joinGroup((Activity) context, task -> {
+                if (task.isSuccessful()) {
+                    isMember = true;
+                    view.successJoinGroup();
+                } else {
+                    isMember = false;
+                    view.failureJoinGroup(task.getException());
                 }
+                notifyChange();
             });
         } catch (Exception e) {
             view.failureJoinGroup(e);
@@ -167,30 +176,23 @@ public class PostDetailViewModel extends BaseObservable {
     }
 
     public void clickWithdrawalGroup(final Context context) {
-        view.showAlertWithdrawalGroup(new DialogInterface.OnClickListener() {
+        view.showAlertWithdrawalGroup((dialogInterface, i) -> {
+            if (i == DialogInterface.BUTTON_POSITIVE) {
+                try {
+                    model.withdrawalGroup((Activity) context, task -> {
 
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (i == DialogInterface.BUTTON_POSITIVE) {
-                    try {
-                        model.withdrawalGroup((Activity) context, new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            isMember = false;
+                            view.successWithdrawalGroup();
+                        } else {
+                            isMember = true;
+                            view.failureWithdrawalGroup(task.getException());
+                        }
+                        notifyChange();
 
-                                if (task.isSuccessful()) {
-                                    isMember = false;
-                                    view.successWithdrawalGroup();
-                                } else {
-                                    isMember = true;
-                                    view.failureWithdrawalGroup(task.getException());
-                                }
-                                notifyChange();
-
-                            }
-                        });
-                    } catch (Exception e) {
-                        view.failureJoinGroup(e);
-                    }
+                    });
+                } catch (Exception e) {
+                    view.failureJoinGroup(e);
                 }
             }
         });
@@ -203,37 +205,11 @@ public class PostDetailViewModel extends BaseObservable {
         }
 
         if (TextUtils.isEmpty(model.getChatKey())) {
-            view.showAlertCreateChatRoom(new DialogInterface.OnClickListener() {
-
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    model.createChatRoom()
-                            .addOnSuccessListener(activity, new OnSuccessListener<String>() {
-                                @Override
-                                public void onSuccess(String chatKey) {
-                                    ChatActivity.start(activity, chatKey);
-                                }
-                            })
-                            .addOnFailureListener(activity, new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    view.failureJoinChatRoom(e);
-                                }
-                            });
-                }
-            });
+            view.showAlertCreateChatRoom((dialogInterface, i) -> model.createChatRoom()
+                    .addOnSuccessListener(activity, chatKey -> ChatActivity.start(activity, chatKey))
+                    .addOnFailureListener(activity, e -> view.failureJoinChatRoom(e)));
         } else {
-            model.joinChatRoom(activity, new OnSuccessListener<String>() {
-                @Override
-                public void onSuccess(String chatKey) {
-                    ChatActivity.start(activity, chatKey);
-                }
-            }, new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    view.failureJoinChatRoom(e);
-                }
-            });
+            model.joinChatRoom(activity, chatKey -> ChatActivity.start(activity, chatKey), e -> view.failureJoinChatRoom(e));
         }
     }
 
@@ -294,6 +270,16 @@ public class PostDetailViewModel extends BaseObservable {
             HashTagListModifyAdapter adapter = new HashTagListModifyAdapter(hashTagRef, false);
             recyclerView.setAdapter(adapter);
         }
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+        notifyPropertyChanged(BR.categoryName);
+    }
+
+    @Bindable
+    public String getCategoryName() {
+        return categoryName;
     }
 
     private static class ImageViewPagerAdapter extends PagerAdapter {

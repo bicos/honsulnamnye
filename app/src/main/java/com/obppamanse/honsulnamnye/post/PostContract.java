@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ValueEventListener;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
@@ -92,7 +93,9 @@ public class PostContract {
 
         void withdrawalGroup(Activity activity, OnCompleteListener<Void> listener) throws Exception;
 
-        void requestIsMember(Activity activity, final PostDetailModel.MemberExistListener listener);
+        void requestIsMember(final PostDetailModel.MemberExistListener listener);
+
+        void requestCategoryName(ValueEventListener listener);
 
         String getChatKey();
 

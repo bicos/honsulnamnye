@@ -1,9 +1,8 @@
 package com.obppamanse.honsulnamnye.post.detail;
 
 import android.app.Activity;
-import android.support.annotation.NonNull;
+import android.text.TextUtils;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -129,7 +128,8 @@ public class PostDetailModel implements PostContract.DetailModel {
                 .addOnCompleteListener(activity, listener);
     }
 
-    public void requestIsMember(Activity activity, final MemberExistListener listener) {
+    @Override
+    public void requestIsMember(final MemberExistListener listener) {
         if (user == null) {
             listener.isMember(false);
             return;
@@ -148,6 +148,13 @@ public class PostDetailModel implements PostContract.DetailModel {
                 listener.isMember(false);
             }
         });
+    }
+
+    @Override
+    public void requestCategoryName(ValueEventListener listener) {
+        if (!TextUtils.isEmpty(post.getCategory())) {
+            FirebaseUtils.getCategoryRef().child(post.getCategory()).addListenerForSingleValueEvent(listener);
+        }
     }
 
     @Override
