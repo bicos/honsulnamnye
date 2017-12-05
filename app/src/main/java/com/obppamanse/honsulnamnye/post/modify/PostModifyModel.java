@@ -59,6 +59,11 @@ public class PostModifyModel implements PostContract.ModifyModel {
     }
 
     @Override
+    public void setCategory(String categoryCode) {
+        post.setCategory(categoryCode);
+    }
+
+    @Override
     public String getTitle() {
         return post.getTitle();
     }
@@ -102,6 +107,11 @@ public class PostModifyModel implements PostContract.ModifyModel {
     @Override
     public List<String> getHashTagList() {
         return post.getHashTags();
+    }
+
+    @Override
+    public String getCategory() {
+        return post.getCategory();
     }
 
     @Override

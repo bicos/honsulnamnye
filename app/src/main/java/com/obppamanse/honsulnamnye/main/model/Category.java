@@ -13,6 +13,7 @@ public class Category implements Parcelable {
 
     private String code;
     private String name;
+    private int index;
 
     public Category() {
     }
@@ -20,12 +21,14 @@ public class Category implements Parcelable {
     protected Category(Parcel in) {
         code = in.readString();
         name = in.readString();
+        index = in.readInt();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(code);
         dest.writeString(name);
+        dest.writeInt(index);
     }
 
     @Override
@@ -59,5 +62,13 @@ public class Category implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

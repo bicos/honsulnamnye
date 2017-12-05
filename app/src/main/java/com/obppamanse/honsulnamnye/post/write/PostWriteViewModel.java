@@ -3,22 +3,17 @@ package com.obppamanse.honsulnamnye.post.write;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import android.widget.Spinner;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.zxing.common.StringUtils;
 import com.obppamanse.honsulnamnye.BR;
+import com.obppamanse.honsulnamnye.post.CategorySelectAdapter;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.SimpleHashTagAdapter;
 import com.obppamanse.honsulnamnye.post.SimpleImageAdapter;
@@ -120,18 +115,12 @@ public class PostWriteViewModel extends BaseObservable {
     public void clickWritePost(Context context) {
         mView.showProgress();
 
-        mModel.writePost(ActivityUtils.getActivity(context), new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                mView.dismissProgress();
-                mView.successWritePost();
-            }
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mView.dismissProgress();
-                mView.failureWritePost(e);
-            }
+        mModel.writePost(ActivityUtils.getActivity(context), (aVoid) -> {
+            mView.dismissProgress();
+            mView.successWritePost();
+        }, e -> {
+            mView.dismissProgress();
+            mView.failureWritePost(e);
         });
     }
 
@@ -142,39 +131,28 @@ public class PostWriteViewModel extends BaseObservable {
             prevSelectDate.setTimeInMillis(mModel.getPost().getDueDateTime());
         }
 
-        DatePickerDialog dialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                Calendar today = Calendar.getInstance();
-                prevSelectDate.set(i, i1, i2);
+        DatePickerDialog dialog = new DatePickerDialog(context, (datePicker, i, i1, i2) -> {
+            Calendar today = Calendar.getInstance();
+            prevSelectDate.set(i, i1, i2);
 
-                if (today.after(prevSelectDate)) {
-                    mView.showErrorWrongDueDate();
-                    return;
-                }
-
-                mModel.setDueDate(prevSelectDate.getTimeInMillis());
-                notifyPropertyChanged(BR.dueDateTxt);
+            if (today.after(prevSelectDate)) {
+                mView.showErrorWrongDueDate();
+                return;
             }
+
+            mModel.setDueDate(prevSelectDate.getTimeInMillis());
+            notifyPropertyChanged(BR.dueDateTxt);
         }, prevSelectDate.get(Calendar.YEAR), prevSelectDate.get(Calendar.MONTH), prevSelectDate.get(Calendar.DAY_OF_MONTH));
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                showTimePicker(context, prevSelectDate);
-            }
-        });
+        dialog.setOnDismissListener(dialogInterface -> showTimePicker(context, prevSelectDate));
         dialog.show();
     }
 
     private void showTimePicker(Context context, final Calendar calendar) {
-        TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                calendar.set(Calendar.HOUR_OF_DAY, i);
-                calendar.set(Calendar.MINUTE, i1);
-                mModel.setDueDate(calendar.getTimeInMillis());
-                notifyPropertyChanged(BR.dueDateTxt);
-            }
+        TimePickerDialog dialog = new TimePickerDialog(context, (timePicker, i, i1) -> {
+            calendar.set(Calendar.HOUR_OF_DAY, i);
+            calendar.set(Calendar.MINUTE, i1);
+            mModel.setDueDate(calendar.getTimeInMillis());
+            notifyPropertyChanged(BR.dueDateTxt);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
@@ -224,6 +202,19 @@ public class PostWriteViewModel extends BaseObservable {
         } else {
             ((SimpleHashTagAdapter)recyclerView.getAdapter()).setDataList(hashTags);
         }
+    }
+
+    @BindingAdapter("setCategoryList")
+    public static void setCategoryList(Spinner spinner, PostWriteViewModel viewModel) {
+        if (spinner.getAdapter() == null) {
+            CategorySelectAdapter adapter = new CategorySelectAdapter(spinner.getContext(), viewModel.getWriteModel());
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(adapter);
+        }
+    }
+
+    private PostContract.WriteModel getWriteModel() {
+        return mModel;
     }
 
     public Post getPost() {

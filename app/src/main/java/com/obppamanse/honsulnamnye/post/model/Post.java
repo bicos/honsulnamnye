@@ -46,6 +46,8 @@ public class Post implements Parcelable {
 
     private List<String> hashTags = new ArrayList<>();
 
+    private String category;
+
     public Post() {
     }
 
@@ -66,6 +68,7 @@ public class Post implements Parcelable {
             participantList.put(key,value);
         }
         hashTags = in.createStringArrayList();
+        category = in.readString();
     }
 
 
@@ -87,6 +90,7 @@ public class Post implements Parcelable {
             dest.writeParcelable(entry.getValue(), flags);
         }
         dest.writeStringList(hashTags);
+        dest.writeString(category);
     }
 
     @Override
@@ -198,6 +202,14 @@ public class Post implements Parcelable {
         this.hashTags = hashTags;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
@@ -212,6 +224,7 @@ public class Post implements Parcelable {
                 ", participantList=" + participantList +
                 ", chatKey='" + chatKey + '\'' +
                 ", hashTags=" + hashTags +
+                ", category='" + category + '\'' +
                 '}';
     }
 
@@ -228,6 +241,7 @@ public class Post implements Parcelable {
         map.put("participantList", participantList);
         map.put("chatKey", chatKey);
         map.put("hashTags", hashTags);
+        map.put("category", category);
         return map;
     }
 }

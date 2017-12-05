@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.post.detail.PostDetailModel;
 import com.obppamanse.honsulnamnye.post.model.Place;
 import com.obppamanse.honsulnamnye.post.model.Post;
@@ -33,6 +32,8 @@ public class PostContract {
         void setDueDate(long timeMillisecond);
 
         void setHashTag(String hashTag);
+
+        void setCategory(String categoryCode);
     }
 
     public interface GetModel {
@@ -54,6 +55,8 @@ public class PostContract {
         List<String> getFileNames();
 
         List<String> getHashTagList();
+
+        String getCategory();
     }
 
     public interface WriteModel extends SetModel {

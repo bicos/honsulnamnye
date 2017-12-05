@@ -100,4 +100,5 @@
     <string name="success_image_delete">이미지 삭제를 성공하였습니다.</string>
     <string name="error_hash_tag_empty">해쉬 태그를 입력해주세요.</string>
     <string name="success_write_post">글쓰기를 완료하였습니다.</string>
+    <string name="subtitle_category">카테고리</string>
 </resources>

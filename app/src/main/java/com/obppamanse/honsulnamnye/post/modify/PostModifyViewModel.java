@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
@@ -14,18 +13,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import android.widget.Spinner;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.obppamanse.honsulnamnye.BR;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
+import com.obppamanse.honsulnamnye.main.model.Category;
+import com.obppamanse.honsulnamnye.post.CategorySelectAdapter;
 import com.obppamanse.honsulnamnye.post.PostContract;
 import com.obppamanse.honsulnamnye.post.SimpleImageAdapter;
 import com.obppamanse.honsulnamnye.post.model.Place;
@@ -154,40 +151,29 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
             prevSelectDate.setTimeInMillis(model.getDueDate());
         }
 
-        DatePickerDialog dialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                Calendar today = Calendar.getInstance();
-                prevSelectDate.set(i, i1, i2);
+        DatePickerDialog dialog = new DatePickerDialog(context, (datePicker, i, i1, i2) -> {
+            Calendar today = Calendar.getInstance();
+            prevSelectDate.set(i, i1, i2);
 
-                if (today.after(prevSelectDate)) {
-                    view.showErrorWrongDueDate();
-                    return;
-                }
-
-                model.setDueDate(prevSelectDate.getTimeInMillis());
-                notifyPropertyChanged(BR.dueDateTxt);
+            if (today.after(prevSelectDate)) {
+                view.showErrorWrongDueDate();
+                return;
             }
+
+            model.setDueDate(prevSelectDate.getTimeInMillis());
+            notifyPropertyChanged(BR.dueDateTxt);
         }, prevSelectDate.get(Calendar.YEAR), prevSelectDate.get(Calendar.MONTH), prevSelectDate.get(Calendar.DAY_OF_MONTH));
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                showTimePicker(context, prevSelectDate);
-            }
-        });
+        dialog.setOnDismissListener(dialogInterface -> showTimePicker(context, prevSelectDate));
         dialog.show();
     }
 
     private void showTimePicker(Context context, final Calendar calendar) {
-        TimePickerDialog dialog = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                calendar.set(Calendar.HOUR_OF_DAY, i);
-                calendar.set(Calendar.MINUTE, i1);
+        TimePickerDialog dialog = new TimePickerDialog(context, (timePicker, i, i1) -> {
+            calendar.set(Calendar.HOUR_OF_DAY, i);
+            calendar.set(Calendar.MINUTE, i1);
 
-                model.setDueDate(calendar.getTimeInMillis());
-                notifyPropertyChanged(BR.dueDateTxt);
-            }
+            model.setDueDate(calendar.getTimeInMillis());
+            notifyPropertyChanged(BR.dueDateTxt);
         }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
         dialog.show();
     }
@@ -204,19 +190,13 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
             return;
         }
 
-        model.modifyPost().addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                view.dismissProgress();
-                view.successModifyPost();
-            }
-        }).addOnFailureListener(activity, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "post modify error", e);
-                view.dismissProgress();
-                view.failureModifyPost();
-            }
+        model.modifyPost().addOnSuccessListener(activity, aVoid -> {
+            view.dismissProgress();
+            view.successModifyPost();
+        }).addOnFailureListener(activity, e -> {
+            Log.e(TAG, "post modify error", e);
+            view.dismissProgress();
+            view.failureModifyPost();
         });
     }
 
@@ -231,68 +211,46 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
         view.showProgress();
 
         reference.putFile(data)
-                .addOnProgressListener(activity, new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        view.showUploadProgress(taskSnapshot.getTotalByteCount(), taskSnapshot.getBytesTransferred());
+                .addOnProgressListener(activity, taskSnapshot ->
+                        view.showUploadProgress(taskSnapshot.getTotalByteCount(), taskSnapshot.getBytesTransferred()))
+                .continueWithTask(task -> {
+                    if (task.isSuccessful()) {
+                        model.getFileNames().add(postImageName); // model data
+                        return model.modifyUploadImage(); // start update model
                     }
-                })
-                .continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Void>>() {
-                    @Override
-                    public Task<Void> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            model.getFileNames().add(postImageName); // model data
-                            return model.modifyUploadImage(); // start update model
-                        }
 
-                        throw task.getException();
-                    }
+                    throw task.getException();
                 })
-                .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        uploadList.add(reference); // adapter data
-                        notifyPropertyChanged(BR.uploadList);
-                        view.dismissProgress();
-                        view.successUploadImage(data);
-                    }
+                .addOnSuccessListener(activity, aVoid -> {
+                    uploadList.add(reference); // adapter data
+                    notifyPropertyChanged(BR.uploadList);
+                    view.dismissProgress();
+                    view.successUploadImage(data);
                 })
-                .addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "upload image failed ", e);
-                        reference.delete();
-                        view.dismissProgress();
-                        view.failureUploadImage();
-                    }
+                .addOnFailureListener(activity, e -> {
+                    Log.e(TAG, "upload image failed ", e);
+                    reference.delete();
+                    view.dismissProgress();
+                    view.failureUploadImage();
                 });
     }
 
     @Override
     public void onItemRemoved(final StorageReference ref) {
         view.showProgress();
-        ref.delete().continueWithTask(new Continuation<Void, Task<Void>>() {
-            @Override
-            public Task<Void> then(@NonNull Task<Void> task) throws Exception {
-                if (task.isSuccessful()) {
-                    model.removeFileName(ref.getName());
-                    return model.modifyUploadImage();
-                } else {
-                    return task;
-                }
+        ref.delete().continueWithTask(task -> {
+            if (task.isSuccessful()) {
+                model.removeFileName(ref.getName());
+                return model.modifyUploadImage();
+            } else {
+                return task;
             }
-        }).addOnSuccessListener(view.getActivity(), new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                view.dismissProgress();
-                view.successDeleteImage();
-            }
-        }).addOnFailureListener(view.getActivity(), new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                view.dismissProgress();
-                view.failureDeleteImage();
-            }
+        }).addOnSuccessListener(view.getActivity(), aVoid -> {
+            view.dismissProgress();
+            view.successDeleteImage();
+        }).addOnFailureListener(view.getActivity(), e -> {
+            view.dismissProgress();
+            view.failureDeleteImage();
         });
     }
 
@@ -312,5 +270,36 @@ public class PostModifyViewModel extends BaseObservable implements SimpleImageAd
         } else {
             ((SimpleImageAdapter<StorageReference>) recyclerView.getAdapter()).setDataList(uploadImageList);
         }
+    }
+
+    @BindingAdapter("setCategoryList")
+    public static void setCategoryList(Spinner spinner, PostModifyViewModel viewModel) {
+        if (spinner.getAdapter() == null) {
+            CategorySelectAdapter adapter = new CategorySelectAdapter(spinner.getContext(), viewModel.getModifyModel());
+            spinner.setAdapter(adapter);
+            spinner.setOnItemSelectedListener(adapter);
+
+            if (!TextUtils.isEmpty(viewModel.getModifyModel().getCategory())) {
+                FirebaseUtils.getCategoryRef().child(viewModel.getModifyModel().getCategory())
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Category category = dataSnapshot.getValue(Category.class);
+                                if (category != null) {
+                                    spinner.setSelection(category.getIndex());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+            }
+        }
+    }
+
+    private PostContract.ModifyModel getModifyModel() {
+        return model;
     }
 }

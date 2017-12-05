@@ -83,12 +83,17 @@ public class PostDetailModel implements PostContract.DetailModel {
 
     @Override
     public List<String> getFileNames() {
-        return post != null ? post.getFileNames() : Collections.<String>emptyList();
+        return post != null ? post.getFileNames() : Collections.emptyList();
     }
 
     @Override
     public List<String> getHashTagList() {
         return post.getHashTags();
+    }
+
+    @Override
+    public String getCategory() {
+        return post.getCategory();
     }
 
     @Override
@@ -165,14 +170,11 @@ public class PostDetailModel implements PostContract.DetailModel {
         updateMap.put("/post/" + post.getKey() +"/chatKey", newChatKey);
 
         return FirebaseDatabase.getInstance().getReference().updateChildren(updateMap)
-                .continueWith(new Continuation<Void, String>() {
-                    @Override
-                    public String then(@NonNull Task<Void> task) throws Exception {
-                        if (task.isSuccessful()) {
-                            return newChatKey;
-                        }
-                        throw task.getException();
+                .continueWith(task -> {
+                    if (task.isSuccessful()) {
+                        return newChatKey;
                     }
+                    throw task.getException();
                 });
     }
 
@@ -199,15 +201,12 @@ public class PostDetailModel implements PostContract.DetailModel {
                     updateMap.put("/chatInfo/" + chatRoom.key, chatRoom.toMap());
 
                     FirebaseDatabase.getInstance().getReference().updateChildren(updateMap)
-                            .continueWith(new Continuation<Void, String>() {
-                                @Override
-                                public String then(@NonNull Task<Void> task) throws Exception {
-                                    if (task.isSuccessful()) {
-                                        return chatRoom.key;
-                                    }
-
-                                    throw task.getException();
+                            .continueWith(task -> {
+                                if (task.isSuccessful()) {
+                                    return chatRoom.key;
                                 }
+
+                                throw task.getException();
                             })
                             .addOnSuccessListener(successListener)
                             .addOnFailureListener(failureListener);

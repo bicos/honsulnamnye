@@ -72,6 +72,39 @@
                         android:padding="@dimen/default_margin">
 
                         <TextView
+                            android:id="@+id/tv_title_category"
+                            style="@style/TextAppearance.AppCompat.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/default_margin"
+                            android:text="@string/subtitle_category" />
+
+                        <Spinner
+                            android:layout_below="@+id/tv_title_category"
+                            android:layout_centerVertical="true"
+                            android:id="@+id/spinner_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:setCategoryList="@{viewModel}"/>
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_margin"
+                    android:layout_marginLeft="@dimen/default_margin"
+                    android:layout_marginRight="@dimen/default_margin">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="@dimen/default_margin">
+
+                        <TextView
                             android:id="@+id/tv_title_tag"
                             style="@style/TextAppearance.AppCompat.Title"
                             android:layout_width="match_parent"
@@ -84,27 +117,27 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/tv_title_tag"
-                            android:hint="@string/hint_input_hash_tag"
-                            android:layout_toLeftOf="@+id/btn_add_hash_tag"
                             android:layout_marginRight="@dimen/default_margin"
-                            android:text="@={viewModel.hashTag}"/>
+                            android:layout_toLeftOf="@+id/btn_add_hash_tag"
+                            android:hint="@string/hint_input_hash_tag"
+                            android:text="@={viewModel.hashTag}" />
 
                         <Button
-                            android:layout_alignParentRight="true"
-                            android:layout_below="@+id/tv_title_tag"
                             android:id="@+id/btn_add_hash_tag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/btn_input"
-                            android:onClick="@{view -> viewModel.clickAddHashTag()}"/>
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/tv_title_tag"
+                            android:onClick="@{view -> viewModel.clickAddHashTag()}"
+                            android:text="@string/btn_input" />
 
                         <android.support.v7.widget.RecyclerView
-                            android:padding="5dp"
                             android:id="@+id/list_hash_tags"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/btn_add_hash_tag"
-                            app:setHashTagList="@{viewModel.hashTagList}"/>
+                            android:padding="5dp"
+                            app:setHashTagList="@{viewModel.hashTagList}" />
 
                     </RelativeLayout>
 
