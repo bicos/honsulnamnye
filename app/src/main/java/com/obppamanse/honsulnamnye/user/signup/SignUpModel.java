@@ -50,28 +50,22 @@ public class SignUpModel implements SignUpContract.Model {
         }
 
         firebaseUser.updateProfile(builder.build())
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            requestUpdateOptionalData(activity, listener);
-                        } else {
-                            listener.onFailed(task.getException());
-                        }
+                .addOnCompleteListener(activity, task -> {
+                    if (task.isSuccessful()) {
+                        requestUpdateOptionalData(activity, listener);
+                    } else {
+                        listener.onFailed(task.getException());
                     }
                 });
     }
 
     private void requestUpdateOptionalData(Activity activity, final SignUpContract.SignUpCompleteListener listener) {
         FirebaseUtils.getUserRef().child(firebaseUser.getUid()).setValue(userInfo)
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            listener.onSuccess();
-                        } else {
-                            listener.onFailed(task.getException());
-                        }
+                .addOnCompleteListener(activity, task -> {
+                    if (task.isSuccessful()) {
+                        listener.onSuccess();
+                    } else {
+                        listener.onFailed(task.getException());
                     }
                 });
     }

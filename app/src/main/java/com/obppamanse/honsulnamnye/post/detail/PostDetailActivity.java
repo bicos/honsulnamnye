@@ -120,12 +120,8 @@ public class PostDetailActivity extends AppCompatActivity implements PostContrac
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.title_alert)
                         .setMessage(R.string.msg_delete_post)
-                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                viewModel.clickDeletePost(PostDetailActivity.this);
-                            }
-                        })
+                        .setPositiveButton(R.string.button_ok, (dialogInterface, i) ->
+                                viewModel.clickDeletePost(PostDetailActivity.this))
                         .setNegativeButton(R.string.button_cancel, null)
                         .show();
                 return true;

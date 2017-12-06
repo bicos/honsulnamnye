@@ -58,7 +58,7 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
     private void imageLoadError() {
-        Toast.makeText(getApplicationContext(), "이미지를 읽어올 수 없습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.error_load_image, Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -68,7 +68,13 @@ public class ImageDetailActivity extends AppCompatActivity {
             intent.setData(Uri.parse(url));
             context.startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(context, "이미지를 읽어올 수 없습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_load_image, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public static void start(Context context, Uri uri) {
+        Intent intent = new Intent(context, ImageDetailActivity.class);
+        intent.setData(uri);
+        context.startActivity(intent);
     }
 }

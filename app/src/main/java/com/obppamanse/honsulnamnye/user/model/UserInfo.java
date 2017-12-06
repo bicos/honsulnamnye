@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.PropertyName;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class UserInfo implements Parcelable {
 
     public String gender;
 
-    public String profileUri;
+    public String profileUri = "https://firebasestorage.googleapis.com/v0/b/honsulnamnyeo.appspot.com/o/profile%2Fprofile_blank.png?alt=media&token=306850ed-d06d-4174-a157-2288f06ee7a7";
 
     public String interestingCategory;
 

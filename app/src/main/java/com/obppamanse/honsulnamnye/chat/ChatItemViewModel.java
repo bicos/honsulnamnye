@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.chat.model.Chat;
 import com.obppamanse.honsulnamnye.image.ImageDetailActivity;
 import com.obppamanse.honsulnamnye.user.model.UserInfo;
@@ -63,6 +64,8 @@ public class ChatItemViewModel extends BaseObservable {
         Glide.with(imageView.getContext())
                 .load(url)
                 .bitmapTransform(new CropCircleTransformation(imageView.getContext()))
+                .placeholder(R.drawable.profile_blank)
+                .error(R.drawable.profile_blank)
                 .into(imageView);
     }
 

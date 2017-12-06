@@ -96,16 +96,13 @@ public class SignUpViewModel extends BaseObservable implements SignUpContract.Si
 
     public void setProfileImage(final Uri profileImage) {
         if (profileImage != null) {
-            model.uploadProfile(profileImage, view.getActivity(), new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        model.setProfileUri(profileImage);
-                        model.setProfileImageUrl(task.getResult().getDownloadUrl());
-                        notifyPropertyChanged(BR.profileUri);
-                    } else {
-                        view.showException(task.getException());
-                    }
+            model.uploadProfile(profileImage, view.getActivity(), task -> {
+                if (task.isSuccessful()) {
+                    model.setProfileUri(profileImage);
+                    model.setProfileImageUrl(task.getResult().getDownloadUrl());
+                    notifyPropertyChanged(BR.profileUri);
+                } else {
+                    view.showException(task.getException());
                 }
             });
 

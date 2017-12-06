@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
@@ -28,8 +29,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.obppamanse.honsulnamnye.BR;
+import com.obppamanse.honsulnamnye.R;
 import com.obppamanse.honsulnamnye.chat.ChatActivity;
 import com.obppamanse.honsulnamnye.firebase.FirebaseUtils;
+import com.obppamanse.honsulnamnye.image.ImageDetailActivity;
 import com.obppamanse.honsulnamnye.main.model.Category;
 import com.obppamanse.honsulnamnye.post.HashTagListModifyAdapter;
 import com.obppamanse.honsulnamnye.post.PostContract;
@@ -293,10 +296,14 @@ public class PostDetailViewModel extends BaseObservable {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = new ImageView(container.getContext());
+            imageView.setOnClickListener(v ->
+                    imageUrlList.get(position).getDownloadUrl()
+                            .addOnSuccessListener(uri -> ImageDetailActivity.start(v.getContext(), uri))
+                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), R.string.error_load_image, Toast.LENGTH_SHORT).show()));
+
             Glide.with(container.getContext())
                     .using(new FirebaseImageLoader())
                     .load(imageUrlList.get(position))
-                    .bitmapTransform(new BlurTransformation(container.getContext()))
                     .centerCrop()
                     .into(imageView);
             container.addView(imageView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

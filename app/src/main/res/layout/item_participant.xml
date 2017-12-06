@@ -33,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:singleLine="true"
+            android:gravity="center"
             tool:text="abcdefghijklmnopqr"
             android:text="@{viewModel.userInfo.nickName}" />
 

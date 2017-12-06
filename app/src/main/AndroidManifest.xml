@@ -37,7 +37,8 @@
         <activity
             android:name=".post.detail.PostDetailActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".main.MainActivity"/>
         <activity
             android:name=".post.write.MapsActivity"
             android:label="@string/title_activity_maps" />

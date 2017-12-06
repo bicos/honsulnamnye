@@ -116,12 +116,7 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
                 new AlertDialog.Builder(context)
                         .setTitle(R.string.title_alert)
                         .setMessage("해당 사용자와 채팅을 시작하시겠습니까?")
-                        .setPositiveButton(R.string.button_ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                startChat();
-                            }
-                        })
+                        .setPositiveButton(R.string.button_ok, (dialogInterface, i) -> startChat())
                         .setNegativeButton(R.string.button_cancel, null)
                         .show();
             }
@@ -146,18 +141,8 @@ public class ParticipantListAdapter extends FirebaseRecyclerAdapter<Participant,
             FirebaseDatabase.getInstance()
                     .getReference()
                     .updateChildren(updateMap)
-                    .addOnSuccessListener(view.getActivity(), new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            view.successCreateChatRoom(newChatKey);
-                        }
-                    })
-                    .addOnFailureListener(view.getActivity(), new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            view.failureCreateChatRoom(e);
-                        }
-                    });
+                    .addOnSuccessListener(view.getActivity(), aVoid -> view.successCreateChatRoom(newChatKey))
+                    .addOnFailureListener(view.getActivity(), e -> view.failureCreateChatRoom(e));
         }
 
         private String createChatRoomKey(String myUid, String otherUid) {

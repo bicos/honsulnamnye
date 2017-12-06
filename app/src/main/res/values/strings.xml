@@ -101,4 +101,6 @@
     <string name="error_hash_tag_empty">해쉬 태그를 입력해주세요.</string>
     <string name="success_write_post">글쓰기를 완료하였습니다.</string>
     <string name="subtitle_category">카테고리</string>
+    <string name="title_group_image">모임 이미지</string>
+    <string name="error_load_image">이미지를 읽어올 수 없습니다.</string>
 </resources>
